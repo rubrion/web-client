@@ -8,17 +8,17 @@ import PostDetail from './pages/PostDetails';
 import NotFound from './pages/NotFound';
 
 const App: React.FC = () => {
-    return (
-        <Router>
-            <Routes>
-                <Route path={ROUTES.PUBLIC.HOME.path} element={<Home />} />
-                <Route path={ROUTES.PUBLIC.ABOUT.path} element={<About />} />
-                <Route path={ROUTES.BLOG.LIST.path} element={<Blog />} />
-                <Route path={ROUTES.BLOG.POST_DETAIL({ id: ':id' })} element={<PostDetail />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path={ROUTES.PUBLIC.HOME.path} element={<Home />} />
+        <Route path={ROUTES.PUBLIC.ABOUT.path} element={<About />} />
+        <Route path={ROUTES.BLOG.LIST.path} element={<Blog />} />
+        <Route path={ROUTES.BLOG.POST_DETAIL({ id: ':id' })} element={<PostDetail />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;
