@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchBlogPostById } from '../api/blogService';
+import { fetchBlogPostById } from '../services/blogService';
 
 interface BlogPost {
     id: string;
