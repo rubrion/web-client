@@ -19,15 +19,25 @@ const mockPostContent = `
 `;
 
 interface MockedBlogPost {
-    id: string;
-    title: string;
-    summary: string;
-    content: string;
-  }
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+}
 
-  export const generateBlogPost = (id: string) => { return { id: id, title: `Post ${id}`, summary: `This is the post ${id}.`, content: mockPostContent,}};
+export const generateBlogPost = (id: string) => {
+  return {
+    id: id,
+    title: `Post ${id}`,
+    summary: `This is the post ${id}.`,
+    content: mockPostContent,
+  };
+};
 
-  export const mockBlogPosts: MockedBlogPost[] = Array.from({length: 10}, (_, i) => {
+export const mockBlogPosts: MockedBlogPost[] = Array.from(
+  { length: 10 },
+  (_, i) => {
     const id = (i + 1).toString();
     return generateBlogPost(id);
-});
+  }
+);

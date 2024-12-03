@@ -4,4 +4,6 @@ export type RouteObject = {
   description?: string;
 };
 
-export type DynamicRoute<T extends Record<string, string | number>> = (params: T) => string;
+export type DynamicRoute<T extends Record<string, string | number>> = (
+  params: T
+) => string;
