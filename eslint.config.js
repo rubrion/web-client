@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
+import vitest from 'eslint-plugin-vitest';
 
 export default [
   {
@@ -49,6 +50,25 @@ export default [
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    files: [
+      '**/*.test.{ts,tsx,js,jsx}',
+      '**/__tests__/*.{ts,tsx,js,jsx}',
+      '**/setupTests.ts',
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...vitest.environments.env.globals,
+      },
+    },
+    plugins: {
+      vitest,
+    },
+    rules: {
+      ...vitest.configs.recommended.rules,
     },
   },
 ];
