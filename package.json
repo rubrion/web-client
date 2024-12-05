@@ -16,6 +16,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@typescript-eslint/utils": "^8.17.0",
     "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
