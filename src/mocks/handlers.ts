@@ -1,12 +1,18 @@
 import { http, HttpResponse } from 'msw';
-import { mockBlogPosts as mockPosts, generateBlogPost } from './mockBlogPosts';
+import { mockBlogPosts, generateBlogPost } from './mockBlogPosts';
+
 export const handlers = [
-  http.get('/posts', () => {
-    return HttpResponse.json(mockPosts, { status: 200 });
-  }),
+  http.get('/posts', () => HttpResponse.json(mockBlogPosts, { status: 200 })),
 
   http.get('/posts/:id', ({ params }) => {
     const { id } = params;
-    return HttpResponse.json(generateBlogPost(id as string), { status: 200 });
+    if (!id) {
+      return HttpResponse.json(
+        { error: 'Post ID is required' },
+        { status: 400 }
+      );
+    }
+    const post = generateBlogPost(id as string);
+    return HttpResponse.json(post, { status: 200 });
   }),
 ];
