@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { mockBlogPosts, generateBlogPost } from './mockBlogPosts';
+import { generateBlogPost, mockBlogPosts } from './mockBlogPosts';
 
 export const handlers = [
   http.get('/posts', () => HttpResponse.json(mockBlogPosts, { status: 200 })),

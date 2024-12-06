@@ -1,4 +1,4 @@
-import { RouteObject, DynamicRoute } from './types';
+import { DynamicRoute, RouteObject } from './types';
 
 const BLOG_ROUTES = {
   LIST: {

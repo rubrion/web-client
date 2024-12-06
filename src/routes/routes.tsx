@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import ROUTES from './index';
+import { Route, Routes } from 'react-router-dom';
 import PageHelmet from '../components/PageHelmet';
+import ROUTES from './index';
 
 const Home = React.lazy(() => import('../pages/Home'));
 const About = React.lazy(() => import('../pages/About'));
