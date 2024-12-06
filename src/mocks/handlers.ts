@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+
 import { generateBlogPost, mockBlogPosts } from './mockBlogPosts';
 
 export const handlers = [

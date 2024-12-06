@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import PageHelmet from '../components/PageHelmet';
 import ROUTES from './index';
 
