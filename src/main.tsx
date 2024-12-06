@@ -1,12 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
 import App from './App.tsx';
+import './index.css';
+import { worker } from './mocks/browser';
 
 if (process.env.NODE_ENV === 'development') {
-  import('./mocks/browser')
-    .then(({ worker }) => {
-      worker.start();
+  worker
+    .start({
+      onUnhandledRequest: 'bypass',
     })
     .catch((error) => {
       console.error('Failed to start the mock service worker:', error);
