@@ -1,23 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-import ROUTES from '../routes';
+import BaseLayout from '../components/layout/BaseLayout';
+import Navbar from '../components/Navbar';
+import HeroSection from '../components/sections/HeroSection';
+import WhoWeServeSection from '../components/sections/WhoWeServeSection';
+import WhatWeDeliverAndServicesSection from '../components/sections/WhatWeDeliverAndServicesSection';
+import DeliveryLifecycleSection from '../components/sections/DeliveryLifecycleSection';
+import ContactSection from '../components/sections/ContactSection';
 
 const Home: React.FC = () => {
   return (
-    <div>
-      <h1>Welcome to Rubrion</h1>
-      <p>
-        <Link to={ROUTES.PUBLIC.HOME.path}>Home</Link>.
-      </p>
-      <p>
-        <Link to={ROUTES.PUBLIC.ABOUT.path}>About</Link>.
-      </p>
-      <p>
-        <Link to={ROUTES.PUBLIC.CONTACT.path}>Contact Us</Link>.
-      </p>
-      <Link to={ROUTES.BLOG.LIST.path}>Go to Blog</Link>
-    </div>
+    <BaseLayout>
+      <Navbar />
+      <main className="w-full">
+        <HeroSection />
+        <WhoWeServeSection />
+        <WhatWeDeliverAndServicesSection />
+        <DeliveryLifecycleSection />
+        <ContactSection />
+      </main>
+    </BaseLayout>
   );
 };
 

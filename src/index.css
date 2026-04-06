@@ -1,68 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* stylelint-disable-next-line at-rule-no-unknown */
+@theme {
+  /* Neon Red Hacker Palette */
+  --color-primary: #ff0040;
+  --color-rubrion: #ff0040;
+
+  /* Neon Red Scale */
+  --color-rubrion-50: #fff0f3;
+  --color-rubrion-100: #ffe0e6;
+  --color-rubrion-200: #ffc0cc;
+  --color-rubrion-300: #ff8099;
+  --color-rubrion-400: #ff4066;
+  --color-rubrion-500: #ff0040;
+  --color-rubrion-600: #e6003a;
+  --color-rubrion-700: #cc0033;
+  --color-rubrion-800: #b3002d;
+  --color-rubrion-900: #990026;
+
+  /* Dark Hacker Surfaces */
+  --color-surface-base: #000000;
+  --color-surface-raised: #0a0a0a;
+  --color-surface-elevated: #141414;
+
+  /* Neon Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #ff0040;
+  --color-text-muted: #666666;
+
+  /* Neon Borders */
+  --color-border-default: #333333;
+  --color-border-neon: #ff0040;
+
+  /* Hacker Accents */
+  --color-accent-green: #00ff41;
+  --color-accent-cyan: #00ffff;
+
+  /* Status Colors */
+  --color-success: #00ff41;
+  --color-warning: #ffff00;
+  --color-danger: #ff0040;
+
+  /* Font Families */
+  --font-mono: 'Fira Code', 'Courier New', monospace;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+* {
+  box-sizing: border-box;
 }
-a:hover {
-  color: #535bf2;
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  background-color: #000000;
+  color: #ffffff;
+  line-height: 1.6;
+  font-weight: 400;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #ff0040;
+  outline-offset: 2px;
+  box-shadow: 0 0 10px #ff0040;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff0040;
+  box-shadow: 0 0 5px #ff0040;
+}
+
+/* Hacker aesthetic effects */
+.neon-text {
+  color: #ff0040;
+  text-shadow: 0 0 5px #ff0040, 0 0 10px #ff0040, 0 0 15px #ff0040;
+}
+
+.neon-border {
+  border: 1px solid #ff0040;
+  box-shadow: 0 0 5px #ff0040, inset 0 0 5px #ff0040;
+}
+
+.typing-cursor::after {
+  content: '|';
+  color: #ff0040;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  50% {
+    opacity: 1;
   }
-  button {
-    background-color: #f9f9f9;
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.glitch {
+  position: relative;
+  color: #ffffff;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff0040;
+  z-index: -1;
+}
+
+.glitch::after {
+  animation: glitch-2 0.5s infinite;
+  color: #00ff41;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+
+  0%,
+  14%,
+  15%,
+  49%,
+  50%,
+  99%,
+  100% {
+    transform: translate(0);
+  }
+
+  15%,
+  49% {
+    transform: translate(-2px, -1px);
+  }
+}
+
+@keyframes glitch-2 {
+
+  0%,
+  20%,
+  21%,
+  62%,
+  63%,
+  99%,
+  100% {
+    transform: translate(0);
+  }
+
+  21%,
+  62% {
+    transform: translate(2px, 1px);
+  }
+}
+
+/* Hide reCAPTCHA badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Mobile scroll optimization */
+@media (max-width: 768px) {
+  html {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent scroll bounce on mobile */
+  body,
+  html {
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Ensure touch scrolling works properly */
+  * {
+    -webkit-overflow-scrolling: touch;
   }
 }

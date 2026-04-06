@@ -5,10 +5,6 @@ import PageHelmet from '../components/PageHelmet';
 import ROUTES from './index';
 
 const Home = React.lazy(() => import('../pages/Home'));
-const About = React.lazy(() => import('../pages/About'));
-const Blog = React.lazy(() => import('../pages/Blog'));
-const PostDetail = React.lazy(() => import('../pages/PostDetails'));
-const Contact = React.lazy(() => import('../pages/Contact'));
 const NotFound = React.lazy(() => import('../pages/NotFound'));
 
 const AppRoutes: React.FC = () => {
@@ -21,52 +17,14 @@ const AppRoutes: React.FC = () => {
             <PageHelmet
               title={ROUTES.PUBLIC.HOME.label}
               description={ROUTES.PUBLIC.HOME.description}
+              keywords="white-label saas, ai-powered solutions, no vendor lock-in, transparent pricing, kubernetes, terraform, cms, ecommerce, lms, multi-tenant, artificial intelligence, saas platform, cloud infrastructure, devops automation"
+              ogTitle="Rubrion AI - Code-free, cloud-fee | AI-Powered White-Label SaaS"
+              ogDescription="Revolutionary AI-powered white-label SaaS modules with transparent infrastructure costs. Deploy in 6-10 weeks with Kubernetes, Terraform automation. No vendor lock-in, no hidden fees."
+              ogImage="https://rubrion.ai/og-image.png"
+              ogUrl="https://rubrion.ai/"
+              canonicalUrl="https://rubrion.ai/"
             >
               <Home />
-            </PageHelmet>
-          }
-        />
-        <Route
-          path={ROUTES.PUBLIC.ABOUT.path}
-          element={
-            <PageHelmet
-              title={ROUTES.PUBLIC.ABOUT.label}
-              description={ROUTES.PUBLIC.ABOUT.description}
-            >
-              <About />
-            </PageHelmet>
-          }
-        />
-        <Route
-          path={ROUTES.BLOG.LIST.path}
-          element={
-            <PageHelmet
-              title={ROUTES.BLOG.LIST.label}
-              description={ROUTES.BLOG.LIST.description}
-            >
-              <Blog />
-            </PageHelmet>
-          }
-        />
-        <Route
-          path={ROUTES.BLOG.POST_DETAIL_STATIC}
-          element={
-            <PageHelmet
-              title="Blog Post Details"
-              description="Detailed view of the selected blog post."
-            >
-              <PostDetail />
-            </PageHelmet>
-          }
-        />
-        <Route
-          path={ROUTES.PUBLIC.CONTACT.path}
-          element={
-            <PageHelmet
-              title={ROUTES.PUBLIC.CONTACT.label}
-              description={ROUTES.PUBLIC.CONTACT.description}
-            >
-              <Contact />
             </PageHelmet>
           }
         />

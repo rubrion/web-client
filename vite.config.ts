@@ -1,31 +1,89 @@
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
-import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Rubrion Web Client',
-        short_name: 'Rubrion',
-        description: 'Rubrion Web Client Application',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
+    react({
+      // Enable Fast Refresh for better development experience
+      fastRefresh: true,
     }),
+    tailwindcss(),
   ],
+  build: {
+    // Enable source maps for better debugging in production
+    sourcemap: false,
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+    // Advanced rollup options for better performance
+    rollupOptions: {
+      output: {
+        // Advanced code splitting for optimal loading
+        manualChunks: {
+          // Core React libraries
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          // Animation libraries
+          animations: ['framer-motion', 'gsap', 'lenis'],
+          // UI and styling
+          ui: ['lucide-react'],
+          // Email and forms
+          forms: ['@emailjs/browser', 'react-google-recaptcha'],
+        },
+        // Optimize asset naming for better caching
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.') ?? [];
+          let extType = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType ?? '')) {
+            extType = 'img';
+          } else if (/woff2?|eot|ttf|otf/i.test(extType ?? '')) {
+            extType = 'fonts';
+          }
+          return `assets/${extType}/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      },
+    },
+    // Minification options
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+      },
+    },
+  },
+  // Performance optimizations
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'framer-motion',
+      'gsap',
+      'lenis',
+      'lucide-react',
+      '@emailjs/browser',
+    ],
+  },
+  // Server configuration for development
+  server: {
+    // Enable compression
+    compress: true,
+    // Optimize headers for better caching
+    headers: {
+      'Cache-Control': 'public, max-age=31536000',
+    },
+  },
+  // Preview server configuration
+  preview: {
+    headers: {
+      'Cache-Control': 'public, max-age=31536000',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'X-XSS-Protection': '1; mode=block',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+    },
+  },
 });
