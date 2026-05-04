@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import React, { useEffect, useState } from 'react';
@@ -25,9 +25,17 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
+  const shouldReduceMotion = useReducedMotion();
 
   // Transform scroll progress to width percentage
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+
+  const arrowPulse = shouldReduceMotion
+    ? {}
+    : { x: [0, 3, 0] };
+  const arrowPulseTransition = shouldReduceMotion
+    ? undefined
+    : { duration: 2, repeat: Infinity, ease: 'easeInOut' as const };
 
   useEffect(() => {
     // Handle scroll state for navbar background
@@ -204,12 +212,8 @@ const Navbar: React.FC = () => {
               >
                 <motion.span
                   className="inline-block"
-                  animate={{ x: [0, 3, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
+                  animate={arrowPulse}
+                  transition={arrowPulseTransition}
                 >
                   &gt;
                 </motion.span>
@@ -292,12 +296,8 @@ const Navbar: React.FC = () => {
             >
               <motion.span
                 className="inline-block"
-                animate={{ x: [0, 3, 0] }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
+                animate={arrowPulse}
+                transition={arrowPulseTransition}
               >
                 &gt;
               </motion.span>

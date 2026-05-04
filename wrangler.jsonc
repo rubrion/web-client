@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rubrion-landing",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2024-12-30",
+
+  // Public build-time env vars for Cloudflare Pages.
+  // Vite inlines anything prefixed with VITE_ at build time, so these are baked
+  // into the bundle and visible to anyone — only put non-secret values here.
+  // (Turnstile *secret* key is set on the support-email-worker via `wrangler secret put`.)
+  "vars": {
+    "VITE_SUPPORT_WORKER_URL": "https://support-email-worker.rubrion.workers.dev/submit",
+    "VITE_TURNSTILE_SITE_KEY": "0x4AAAAAADEAz2L_EVpiTBsg"
+  }
+}

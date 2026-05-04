@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FileText, ShoppingCart, Target, BookOpen, MessageSquare, BarChart3, Rocket, Settings, Hammer } from 'lucide-react';
 import { scrollToElement } from '../../lib/scroll';
 
@@ -34,8 +34,35 @@ const scaleIn = {
 
 const WhatWeDeliverAndServicesSection: React.FC = () => {
     const ref = useRef<HTMLElement>(null);
+    const rainRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const isRainInView = useInView(rainRef, { margin: '200px 0px' });
     const [activeTab, setActiveTab] = useState(0);
+
+    const rainCount = useMemo(() => {
+        if (typeof window === 'undefined') return 30;
+        return window.matchMedia('(max-width: 768px)').matches ? 10 : 30;
+    }, []);
+
+    const rainLines = useMemo(
+        () =>
+            Array.from({ length: rainCount }).map(() => ({
+                left: Math.random() * 100,
+                delay: Math.random() * 4,
+                duration: 1 + Math.random() * 2,
+            })),
+        [rainCount]
+    );
+
+    const [renderRain, setRenderRain] = useState(false);
+    useEffect(() => {
+        if (isRainInView) {
+            setRenderRain(true);
+            return;
+        }
+        const id = window.setTimeout(() => setRenderRain(false), 500);
+        return () => window.clearTimeout(id);
+    }, [isRainInView]);
 
     const modules = [
         {
@@ -126,126 +153,77 @@ const WhatWeDeliverAndServicesSection: React.FC = () => {
             id="what-we-deliver"
             className="relative z-20 overflow-hidden"
         >
-            {/* Extended Space acceleration rain effect covering both sections */}
-            <div className="absolute inset-0 space-rain" style={{ minHeight: '200vh' }}>
-                {Array.from({ length: 80 }).map((_, i) => (
+            {/* Space acceleration rain effect — gated to viewport */}
+            <div ref={rainRef} className="absolute inset-0 space-rain" style={{ minHeight: '200vh' }}>
+                {renderRain && rainLines.map((line, i) => (
                     <div
                         key={i}
                         className="rain-line"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 4}s`,
-                            animationDuration: `${1 + Math.random() * 2}s`
+                            left: `${line.left}%`,
+                            animationDelay: `${line.delay}s`,
+                            animationDuration: `${line.duration}s`
                         }}
                     />
                 ))}
             </div>
 
-            {/* CSS for extended space rain effect */}
             <style dangerouslySetInnerHTML={{
                 __html: `
                     .space-rain {
                         pointer-events: none;
                         z-index: 1;
+                        contain: layout paint;
                     }
-                    
+
                     .rain-line {
                         position: absolute;
+                        top: 0;
                         width: 2px;
                         height: 25px;
                         background: linear-gradient(to bottom, transparent, #ff0040, transparent);
                         opacity: 0.25;
                         animation: rainFallExtended linear infinite;
-                        transform-origin: center top;
+                        will-change: transform;
+                        transform: translate3d(0, -180vh, 0);
                     }
-                    
+
                     .rain-line:nth-child(odd) {
                         width: 1.5px;
                         height: 20px;
                         opacity: 0.2;
                     }
-                    
+
                     .rain-line:nth-child(3n) {
                         width: 2.5px;
                         height: 30px;
                         opacity: 0.3;
                         background: linear-gradient(to bottom, transparent, #ff0040, #ff004080, transparent);
                     }
-                    
+
                     .rain-line:nth-child(5n) {
                         width: 3px;
                         height: 35px;
                         opacity: 0.35;
                         background: linear-gradient(to bottom, transparent, #ff0040, #ff004060, #ff004040, transparent);
                     }
-                    
-                    .rain-line:nth-child(7n) {
-                        width: 3.5px;
-                        height: 40px;
-                        opacity: 0.4;
-                        background: linear-gradient(to bottom, transparent, #ff0040, #ff004080, #ff004060, #ff004040, transparent);
-                    }
-                    
-                    /* Mobile adjustments */
+
                     @media (max-width: 768px) {
-                        .space-rain {
-                            height: 200vh; /* Ensure rain covers both sections on mobile */
-                        }
-                        
-                        .rain-line {
-                            opacity: 0.15;
-                        }
-                        
-                        .rain-line:nth-child(odd) {
-                            opacity: 0.1;
-                        }
-                        
-                        .rain-line:nth-child(3n) {
-                            opacity: 0.2;
-                        }
-                        
-                        .rain-line:nth-child(5n) {
-                            opacity: 0.25;
-                        }
-                        
-                        .rain-line:nth-child(7n) {
-                            opacity: 0.3;
-                        }
+                        .rain-line { opacity: 0.15; }
+                        .rain-line:nth-child(odd) { opacity: 0.1; }
+                        .rain-line:nth-child(3n) { opacity: 0.2; }
+                        .rain-line:nth-child(5n) { opacity: 0.25; }
                     }
 
                     @keyframes rainFallExtended {
-                        0% {
-                            transform: translateY(-180vh) scaleY(0.3);
-                            opacity: 0;
-                        }
-                        3% {
-                            opacity: 0.1;
-                            transform: translateY(-170vh) scaleY(0.5);
-                        }
-                        8% {
-                            opacity: 0.2;
-                            transform: translateY(-150vh) scaleY(0.8);
-                        }
-                        15% {
-                            opacity: 0.3;
-                            transform: translateY(-100vh) scaleY(1);
-                        }
-                        80% {
-                            opacity: 0.3;
-                            transform: translateY(180vh) scaleY(3);
-                        }
-                        90% {
-                            opacity: 0.2;
-                            transform: translateY(200vh) scaleY(4);
-                        }
-                        95% {
-                            opacity: 0.1;
-                            transform: translateY(220vh) scaleY(4.5);
-                        }
-                        100% {
-                            transform: translateY(240vh) scaleY(5);
-                            opacity: 0;
-                        }
+                        0%   { transform: translate3d(0, -180vh, 0); opacity: 0; }
+                        10%  { opacity: 0.3; }
+                        90%  { opacity: 0.3; }
+                        100% { transform: translate3d(0, 220vh, 0); opacity: 0; }
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        .rain-line { display: none; }
                     }
                 `
             }} />
@@ -321,17 +299,7 @@ const WhatWeDeliverAndServicesSection: React.FC = () => {
                                 boxShadow: '0 0 20px rgba(255, 0, 64, 0.3), inset 0 0 20px rgba(255, 0, 64, 0.1)'
                             }}
                         >
-                            <motion.span
-                                className="inline-block"
-                                animate={{ x: [0, 3, 0] }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                            >
-                                &gt;
-                            </motion.span>
+                            <span className="inline-block">&gt;</span>
                             <span className="ml-1">request_demo</span>
                         </motion.button>
                     </motion.div>

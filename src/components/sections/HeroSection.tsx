@@ -51,7 +51,6 @@ const HeroSection: React.FC = () => {
         if (!heroRef.current) return;
 
         const ctx = gsap.context(() => {
-            // Animação do background
             ScrollTrigger.create({
                 trigger: heroRef.current,
                 start: 'top center',
@@ -66,40 +65,6 @@ const HeroSection: React.FC = () => {
                     });
                 }
             });
-
-            // Animação de lançamento suave das linhas cruzadas
-            const launchAnimation = () => {
-                const directions = [
-                    { x: 150, y: 0 },     // Direita
-                    { x: -150, y: 0 },    // Esquerda  
-                    { x: 0, y: 150 },     // Baixo
-                    { x: 0, y: -150 },    // Cima
-                    { x: 100, y: 100 },   // Diagonal direita-baixo
-                    { x: -100, y: -100 }, // Diagonal esquerda-cima
-                    { x: 100, y: -100 },  // Diagonal direita-cima
-                    { x: -100, y: 100 }   // Diagonal esquerda-baixo
-                ];
-
-                const direction = gsap.utils.random(directions);
-
-                gsap.to('.hero-grid', {
-                    backgroundPosition: `${direction.x}px ${direction.y}px`,
-                    duration: gsap.utils.random(6, 12),
-                    ease: 'power3.out',
-                    onComplete: () => {
-                        gsap.to('.hero-grid', {
-                            backgroundPosition: '0px 0px',
-                            duration: gsap.utils.random(3, 6),
-                            ease: 'power2.inOut',
-                            onComplete: () => {
-                                gsap.delayedCall(gsap.utils.random(1, 3), launchAnimation);
-                            }
-                        });
-                    }
-                });
-            };
-
-            gsap.delayedCall(2, launchAnimation);
         }, heroRef);
 
         return () => ctx.revert();
@@ -133,17 +98,20 @@ const HeroSection: React.FC = () => {
         >
             <div className="hero-bg absolute inset-0 opacity-20 w-full h-full">
                 <div className="absolute inset-0 bg-primary/8" />
-                <div
-                    className="hero-grid absolute inset-0"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(90deg, transparent 95%, #ff0040 96%, transparent 100%),
-                            linear-gradient(0deg, transparent 95%, #ff0040 96%, transparent 100%)
-                        `,
-                        backgroundSize: '100px 100px',
-                        filter: 'drop-shadow(0 0 2px #ff0040)',
-                    }}
-                />
+                <div className="hero-grid-wrap absolute inset-0 overflow-hidden">
+                    <div
+                        className="hero-grid absolute"
+                        style={{
+                            inset: '-100px',
+                            backgroundImage: `
+                                linear-gradient(90deg, transparent 95%, #ff0040 96%, transparent 100%),
+                                linear-gradient(0deg, transparent 95%, #ff0040 96%, transparent 100%)
+                            `,
+                            backgroundSize: '100px 100px',
+                            filter: 'drop-shadow(0 0 2px #ff0040)',
+                        }}
+                    />
+                </div>
             </div>
 
             <div className="relative z-10 w-full max-w-4xl mx-auto px-4 text-center" style={{ maxWidth: 'min(1024px, 90vw)' }}>

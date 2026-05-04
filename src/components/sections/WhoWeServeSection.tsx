@@ -72,47 +72,52 @@ const WhoWeServeSection: React.FC = () => {
         <section
             ref={ref}
             id="who-we-serve"
-            className="py-20 px-4 relative z-20 bg-surface-base overflow-hidden"
+            className="lazy-paint py-20 px-4 relative z-20 bg-surface-base overflow-hidden"
         >
-            {/* Zigzag borders using specific PNG images for each side - Responsive */}
-            <motion.div
-                className="absolute left-0 top-0 w-8 h-full hidden md:block"
-                style={{
-                    backgroundImage: 'url(/zigzag_black_transparent_left.png)',
-                    backgroundRepeat: 'repeat-y',
-                    backgroundSize: 'contain',
-                    filter: 'invert(18%) sepia(100%) saturate(7500%) hue-rotate(345deg) brightness(100%) contrast(120%) drop-shadow(0 0 5px #ff0040)',
-                    animation: 'zigzagMove 1.5s linear infinite'
-                }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 0.6, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-            />
+            {/* Zigzag borders — only mounted when section is in view, transform-only animation */}
+            {isInView && (
+                <>
+                    <motion.div
+                        className="zigzag-strip absolute left-0 top-0 w-8 h-full hidden md:block"
+                        style={{
+                            backgroundImage: 'url(/zigzag_black_transparent_left.png)',
+                            backgroundRepeat: 'repeat-y',
+                            backgroundSize: 'contain',
+                        }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 0.6, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    />
 
-            <motion.div
-                className="absolute right-0 top-0 w-8 h-full hidden md:block"
-                style={{
-                    backgroundImage: 'url(/zigzag_black_transparent_right.png)',
-                    backgroundRepeat: 'repeat-y',
-                    backgroundSize: 'contain',
-                    filter: 'invert(18%) sepia(100%) saturate(7500%) hue-rotate(345deg) brightness(100%) contrast(120%) drop-shadow(0 0 5px #ff0040)',
-                    animation: 'zigzagMove 1.5s linear infinite reverse'
-                }}
-                initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 0.6, x: 0 } : { opacity: 0, x: 20 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-            />
+                    <motion.div
+                        className="zigzag-strip zigzag-strip--reverse absolute right-0 top-0 w-8 h-full hidden md:block"
+                        style={{
+                            backgroundImage: 'url(/zigzag_black_transparent_right.png)',
+                            backgroundRepeat: 'repeat-y',
+                            backgroundSize: 'contain',
+                        }}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 0.6, x: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                    />
+                </>
+            )}
 
-            {/* CSS Animation for zigzag movement */}
             <style dangerouslySetInnerHTML={{
                 __html: `
+                    .zigzag-strip {
+                        will-change: transform;
+                        animation: zigzagMove 1.5s linear infinite;
+                    }
+                    .zigzag-strip--reverse {
+                        animation-direction: reverse;
+                    }
                     @keyframes zigzagMove {
-                        from {
-                            background-position: 0 0;
-                        }
-                        to {
-                            background-position: 0 100px;
-                        }
+                        from { transform: translate3d(0, 0, 0); }
+                        to   { transform: translate3d(0, -100px, 0); }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                        .zigzag-strip { animation: none; }
                     }
                 `
             }} />

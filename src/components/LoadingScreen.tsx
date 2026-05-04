@@ -5,42 +5,80 @@ interface LoadingScreenProps {
     onComplete: () => void;
 }
 
+const LOADER_SEEN_KEY = 'rubrion:loader-seen';
+
+const prefersReducedMotion = (): boolean => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+};
+
+const hasSeenLoader = (): boolean => {
+    if (typeof window === 'undefined') return true;
+    try {
+        return window.sessionStorage.getItem(LOADER_SEEN_KEY) === '1';
+    } catch {
+        return false;
+    }
+};
+
+const markLoaderSeen = (): void => {
+    if (typeof window === 'undefined') return;
+    try {
+        window.sessionStorage.setItem(LOADER_SEEN_KEY, '1');
+    } catch {
+        /* ignore */
+    }
+};
+
 const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
+    const [shouldRender] = useState(() => !hasSeenLoader() && !prefersReducedMotion());
     const [progress, setProgress] = useState(0);
     const [showComplete, setShowComplete] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        // Simulate loading progress
+        if (!shouldRender) {
+            markLoaderSeen();
+            const id = window.requestAnimationFrame(onComplete);
+            return () => window.cancelAnimationFrame(id);
+        }
+    }, [shouldRender, onComplete]);
+
+    useEffect(() => {
+        if (!shouldRender) return;
+
         const interval = setInterval(() => {
             setProgress((prev) => {
                 if (prev >= 100) {
                     clearInterval(interval);
                     return 100;
                 }
-                // Randomize progress increments for more realistic feel
-                const increment = Math.random() * 8 + 2; // 2-10% increments
+                const increment = Math.random() * 8 + 2;
                 return Math.min(prev + increment, 100);
             });
-        }, 150); // Update every 150ms
+        }, 150);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [shouldRender]);
 
     useEffect(() => {
-        if (progress >= 100) {
-            // Show completion message
-            setTimeout(() => {
-                setShowComplete(true);
-            }, 500);
+        if (!shouldRender) return;
+        if (progress < 100) return;
 
-            // Hide loading screen and call onComplete
-            setTimeout(() => {
-                setIsVisible(false);
-                setTimeout(onComplete, 500);
-            }, 2500);
-        }
-    }, [progress, onComplete]);
+        const completeTimer = setTimeout(() => setShowComplete(true), 250);
+        const exitTimer = setTimeout(() => {
+            setIsVisible(false);
+            markLoaderSeen();
+            setTimeout(onComplete, 400);
+        }, 900);
+
+        return () => {
+            clearTimeout(completeTimer);
+            clearTimeout(exitTimer);
+        };
+    }, [progress, onComplete, shouldRender]);
+
+    if (!shouldRender) return null;
 
     const loadingMessages = [
         'Initializing systems...',
@@ -63,18 +101,19 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                     className="fixed inset-0 z-50 bg-surface-base flex items-center justify-center"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.4 }}
                 >
                     {/* Matrix-style background effect */}
                     <div className="absolute inset-0 overflow-hidden">
                         <div className="absolute inset-0 opacity-10">
-                            {Array.from({ length: 20 }).map((_, i) => (
+                            {Array.from({ length: 10 }).map((_, i) => (
                                 <motion.div
                                     key={i}
                                     className="absolute text-primary font-mono text-xs"
                                     style={{
                                         left: `${Math.random() * 100}%`,
                                         top: `${Math.random() * 100}%`,
+                                        willChange: 'transform, opacity',
                                     }}
                                     animate={{
                                         y: [0, -20, 0],
@@ -135,9 +174,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                                     opacity: 1
                                                 }}
                                                 transition={{
-                                                    duration: 2,
+                                                    duration: 1.4,
                                                     ease: "easeInOut",
-                                                    delay: 0.5
+                                                    delay: 0.3
                                                 }}
                                             />
 
@@ -153,9 +192,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                                     scale: 1
                                                 }}
                                                 transition={{
-                                                    duration: 0.5,
+                                                    duration: 0.4,
                                                     ease: "easeOut",
-                                                    delay: 2.5
+                                                    delay: 1.6
                                                 }}
                                             />
                                         </svg>
@@ -167,7 +206,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                     className="text-center mb-8"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.5 }}
+                                    transition={{ delay: 0.4 }}
                                 >
                                     <h1 className="text-2xl font-mono font-bold text-primary neon-text mb-2">
                                         RUBRION SYSTEM
@@ -182,7 +221,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                     className="mb-6"
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.8 }}
+                                    transition={{ delay: 0.6 }}
                                 >
                                     <div className="bg-surface-raised border border-border-default rounded-lg p-4 neon-border">
                                         {/* Progress Bar */}
@@ -235,7 +274,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                     className="bg-surface-base border border-border-default rounded-lg p-3 font-mono text-xs"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 1.2 }}
+                                    transition={{ delay: 0.9 }}
                                 >
                                     <div className="text-accent-green mb-1">
                                         $ rubrion --init --verbose
@@ -257,7 +296,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                 className="text-center"
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: 0.4 }}
                             >
                                 <motion.div
                                     className="text-4xl mb-4"
@@ -276,7 +315,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                     className="text-2xl font-mono font-bold text-primary neon-text mb-2"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
+                                    transition={{ delay: 0.15 }}
                                 >
                                     Coding experience completed!
                                 </motion.h2>
@@ -284,7 +323,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
                                     className="text-text-secondary font-mono text-sm"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
+                                    transition={{ delay: 0.3 }}
                                 >
                                     &gt; Welcome to Rubrion
                                 </motion.p>

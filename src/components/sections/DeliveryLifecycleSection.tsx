@@ -69,7 +69,7 @@ const DeliveryLifecycleSection: React.FC = () => {
         <section
             ref={ref}
             id="delivery-lifecycle"
-            className="py-20 px-4 bg-surface-base"
+            className="lazy-paint py-20 px-4 bg-surface-base"
         >
             <div className="max-w-7xl mx-auto">
                 <motion.div

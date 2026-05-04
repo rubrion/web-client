@@ -1,13 +1,14 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
+import type Lenis from 'lenis';
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
 let lenis: Lenis | null = null;
+let lenisRafCallback: ((time: number) => void) | null = null;
 
-export const initializeScrollSystem = () => {
+export const initializeScrollSystem = async (): Promise<Lenis | null> => {
   // Check if user prefers reduced motion
   const prefersReducedMotion = window.matchMedia(
     '(prefers-reduced-motion: reduce)'
@@ -18,24 +19,25 @@ export const initializeScrollSystem = () => {
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   if (prefersReducedMotion || (isMobile && isTouchDevice)) {
-    // Use native scroll for mobile and reduced motion
+    // Use native scroll for mobile and reduced motion — Lenis is never loaded
     ScrollTrigger.config({
       autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
       ignoreMobileResize: true,
     });
-    
-    // Add smooth scroll behavior to body for mobile
+
     document.documentElement.style.scrollBehavior = 'smooth';
-    
+
     return null;
   }
 
-  // Initialize Lenis only for desktop
-  lenis = new Lenis({
+  // Lazy-load Lenis only for desktop, after the browser is idle if possible
+  const { default: LenisCtor } = await import('lenis');
+
+  lenis = new LenisCtor({
     duration: 1.2,
     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
-    smoothTouch: false, // Disable smooth touch to prevent conflicts
+    smoothTouch: false,
     touchMultiplier: 2,
     infinite: false,
     autoResize: true,
@@ -44,27 +46,28 @@ export const initializeScrollSystem = () => {
     wheelMultiplier: 1,
   });
 
-  // Bind Lenis scroll to GSAP ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update);
 
-  // Configure ScrollTrigger for smooth scrolling
   ScrollTrigger.config({
     autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load',
     ignoreMobileResize: true,
   });
 
-  // Update ScrollTrigger on Lenis scroll
-  gsap.ticker.add((time) => {
+  lenisRafCallback = (time: number) => {
     lenis?.raf(time * 1000);
-  });
+  };
+  gsap.ticker.add(lenisRafCallback);
 
-  // Disable lag smoothing for better performance with ScrollTrigger
   gsap.ticker.lagSmoothing(0);
 
   return lenis;
 };
 
 export const destroyScrollSystem = () => {
+  if (lenisRafCallback) {
+    gsap.ticker.remove(lenisRafCallback);
+    lenisRafCallback = null;
+  }
   if (lenis) {
     lenis.destroy();
     lenis = null;

@@ -1,7 +1,6 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import React, { useRef, useState, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
-import { Mail, Globe, Rocket, CheckCircle, X } from 'lucide-react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { Mail, Globe, Rocket, CheckCircle } from 'lucide-react';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 60 },
@@ -23,19 +22,34 @@ const staggerContainer = {
     },
 };
 
-// Declare grecaptcha globally
 declare global {
     interface Window {
-        grecaptcha: {
-            ready: (callback: () => void) => void;
-            execute: (siteKey: string, options: { action: string }) => Promise<string>;
+        turnstile?: {
+            render: (
+                container: HTMLElement | string,
+                options: {
+                    sitekey: string;
+                    callback?: (token: string) => void;
+                    'expired-callback'?: () => void;
+                    'error-callback'?: () => void;
+                    theme?: 'light' | 'dark' | 'auto';
+                    size?: 'normal' | 'flexible' | 'compact';
+                }
+            ) => string;
+            reset: (widgetId?: string) => void;
+            remove: (widgetId?: string) => void;
         };
     }
 }
 
+const WORKER_URL = import.meta.env.VITE_SUPPORT_WORKER_URL as string | undefined;
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+
 const ContactSection: React.FC = () => {
     const ref = useRef<HTMLElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
+    const turnstileContainerRef = useRef<HTMLDivElement>(null);
+    const turnstileWidgetIdRef = useRef<string | null>(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
     const [formData, setFormData] = useState({
@@ -44,37 +58,57 @@ const ContactSection: React.FC = () => {
         company: '',
         message: '',
     });
+    const [honeypot, setHoneypot] = useState('');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
-    const isDev = import.meta.env.DEV;
-    const RECAPTCHA_SITE_KEY = '6Lc13cMrAAAAANoY7v1-XZivX8BmlppVXnWJDDyt';
+    const captchaRequired = Boolean(TURNSTILE_SITE_KEY);
 
-    // Load reCAPTCHA v3 script
+    const renderTurnstile = useCallback(() => {
+        if (!captchaRequired) return;
+        if (!turnstileContainerRef.current) return;
+        if (!window.turnstile) return;
+        if (turnstileWidgetIdRef.current) return;
+
+        turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+            sitekey: TURNSTILE_SITE_KEY!,
+            theme: 'dark',
+            callback: (token: string) => setTurnstileToken(token),
+            'expired-callback': () => setTurnstileToken(null),
+            'error-callback': () => setTurnstileToken(null),
+        });
+    }, [captchaRequired]);
+
     useEffect(() => {
-        if (isDev) return; // Skip in development
+        if (!captchaRequired) return;
+        if (!isInView) return;
 
-        const loadRecaptcha = () => {
-            if (window.grecaptcha) {
-                setRecaptchaLoaded(true);
-                return;
+        renderTurnstile();
+        if (turnstileWidgetIdRef.current) return;
+
+        const interval = window.setInterval(() => {
+            if (window.turnstile) {
+                renderTurnstile();
+                if (turnstileWidgetIdRef.current) {
+                    window.clearInterval(interval);
+                }
             }
+        }, 250);
 
-            const script = document.createElement('script');
-            script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-            script.onload = () => {
-                window.grecaptcha.ready(() => {
-                    setRecaptchaLoaded(true);
-                });
-            };
-            document.head.appendChild(script);
+        return () => window.clearInterval(interval);
+    }, [captchaRequired, isInView, renderTurnstile]);
+
+    useEffect(() => {
+        return () => {
+            if (turnstileWidgetIdRef.current && window.turnstile) {
+                window.turnstile.remove(turnstileWidgetIdRef.current);
+                turnstileWidgetIdRef.current = null;
+            }
         };
-
-        loadRecaptcha();
-    }, [isDev]);
+    }, []);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -86,78 +120,94 @@ const ContactSection: React.FC = () => {
         if (error) setError(null);
     };
 
+    const resetCaptcha = () => {
+        if (turnstileWidgetIdRef.current && window.turnstile) {
+            window.turnstile.reset(turnstileWidgetIdRef.current);
+        }
+        setTurnstileToken(null);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
 
-        // Validar campos obrigatórios
         if (!formData.name || !formData.email || !formData.message) {
             setError('Please fill in all required fields.');
             return;
         }
 
-        // Se for dev, enviar direto
-        if (isDev) {
-            await sendEmail();
+        if (!WORKER_URL) {
+            setError('Form endpoint is not configured. Please contact us directly.');
             return;
         }
 
-        // Se não for dev, executar reCAPTCHA v3
-        if (!recaptchaLoaded) {
-            setError('reCAPTCHA not loaded. Please try again.');
+        if (captchaRequired && !turnstileToken) {
+            setError('Please complete the captcha challenge.');
             return;
         }
 
-        try {
-            console.log('🔐 Executing reCAPTCHA v3 verification...');
-            const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, {
-                action: 'contact_form_submit'
-            });
-            console.log('✅ reCAPTCHA token generated successfully');
-            await sendEmail(token);
-        } catch (error) {
-            console.error('❌ reCAPTCHA error:', error);
-            setError('reCAPTCHA verification failed. Please try again.');
-        }
-    };
-
-    const sendEmail = async (recaptchaToken?: string) => {
         setIsSubmitting(true);
-        setError(null);
+
+        const composedMessage = formData.company
+            ? `Company: ${formData.company}\n\n${formData.message}`
+            : formData.message;
+
+        const payload = {
+            name: formData.name,
+            email: formData.email,
+            subject: 'New contact form submission',
+            message: composedMessage,
+            turnstileToken: turnstileToken ?? '',
+            honeypot,
+        };
 
         try {
-            // Prepare template parameters for EmailJS
-            const templateParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                company: formData.company || 'Not specified',
-                message: formData.message,
-                recaptcha_token: recaptchaToken || 'dev-mode',
-            };
+            const response = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
 
-            const result = await emailjs.send(
-                'service_ift91as',
-                'template_ub3pkzj',
-                templateParams,
-                'imzEB4bH-aZiVSHBI'
-            );
+            if (!response.ok) {
+                let message = 'Failed to send message. Please try again or contact us directly.';
+                try {
+                    const data = await response.json();
+                    if (data?.error) message = data.error;
+                } catch {
+                    /* keep default */
+                }
+                setError(message);
+                resetCaptcha();
+                return;
+            }
+
             setIsSubmitted(true);
-
             setTimeout(() => {
                 setIsSubmitted(false);
                 setFormData({ name: '', email: '', company: '', message: '' });
+                setHoneypot('');
+                resetCaptcha();
             }, 4000);
-
-        } catch (error) {
-            console.error('Failed to send email:', error);
-            setError('Failed to send message. Please try again or contact us directly.');
+        } catch (submitError) {
+            console.error('Failed to send message:', submitError);
+            setError('Network error. Please try again or contact us directly.');
+            resetCaptcha();
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const submitDisabled =
+        isSubmitting || (captchaRequired && !turnstileToken);
+
+    const submitLabel = isSubmitting
+        ? '>sending...'
+        : captchaRequired && !turnstileToken
+            ? '>verifying...'
+            : '>send_message';
+
     return (
-        <section ref={ref} id="contact" className="py-20 px-4 bg-surface-raised">
+        <section ref={ref} id="contact" className="lazy-paint py-20 px-4 bg-surface-raised">
             <div className="max-w-4xl mx-auto">
                 <motion.div
                     initial="hidden"
@@ -258,6 +308,36 @@ const ContactSection: React.FC = () => {
                                     />
                                 </div>
 
+                                {/* Honeypot — hidden from real users, bots fill it; worker silently rejects */}
+                                <div
+                                    aria-hidden="true"
+                                    style={{
+                                        position: 'absolute',
+                                        left: '-10000px',
+                                        width: '1px',
+                                        height: '1px',
+                                        overflow: 'hidden',
+                                    }}
+                                >
+                                    <label htmlFor="company-website">Website</label>
+                                    <input
+                                        type="text"
+                                        id="company-website"
+                                        name="honeypot"
+                                        tabIndex={-1}
+                                        autoComplete="off"
+                                        value={honeypot}
+                                        onChange={(e) => setHoneypot(e.target.value)}
+                                    />
+                                </div>
+
+                                {captchaRequired && (
+                                    <div
+                                        ref={turnstileContainerRef}
+                                        className="flex justify-center"
+                                    />
+                                )}
+
                                 <AnimatePresence mode="wait">
                                     {error && (
                                         <motion.div
@@ -276,7 +356,7 @@ const ContactSection: React.FC = () => {
 
                                 <motion.button
                                     type="submit"
-                                    disabled={isSubmitting || (!isDev && !recaptchaLoaded)}
+                                    disabled={submitDisabled}
                                     className="w-full bg-primary text-surface-base py-3 rounded-lg font-mono font-semibold neon-border transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     whileHover={{
                                         scale: isSubmitting ? 1 : 1.02,
@@ -288,14 +368,7 @@ const ContactSection: React.FC = () => {
                                         boxShadow: isSubmitting ? 'none' : '0 0 20px rgba(255, 0, 64, 0.5)'
                                     }}
                                 >
-                                    <span>
-                                        {isSubmitting
-                                            ? '>sending...'
-                                            : (!isDev && !recaptchaLoaded)
-                                                ? '>loading_security...'
-                                                : '>send_message'
-                                        }
-                                    </span>
+                                    <span>{submitLabel}</span>
                                 </motion.button>
                             </form>
                         ) : (

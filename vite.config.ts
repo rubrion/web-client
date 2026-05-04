@@ -22,12 +22,12 @@ export default defineConfig({
         manualChunks: {
           // Core React libraries
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          // Animation libraries
-          animations: ['framer-motion', 'gsap', 'lenis'],
+          // Animation libraries. `lenis` is intentionally NOT here — it's
+          // dynamically imported only on desktop (see lib/scroll.ts), so
+          // letting Vite split it keeps the mobile bundle slimmer.
+          animations: ['framer-motion', 'gsap'],
           // UI and styling
           ui: ['lucide-react'],
-          // Email and forms
-          forms: ['@emailjs/browser', 'react-google-recaptcha'],
         },
         // Optimize asset naming for better caching
         assetFileNames: (assetInfo) => {
@@ -62,9 +62,7 @@ export default defineConfig({
       'react-router-dom',
       'framer-motion',
       'gsap',
-      'lenis',
       'lucide-react',
-      '@emailjs/browser',
     ],
   },
   // Server configuration for development
