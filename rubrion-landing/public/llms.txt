@@ -1,0 +1,46 @@
+# Rubrion
+
+> Rubrion delivers managed white-label SaaS modules — CMS, e-commerce, LMS, knowledge base, communications, analytics — on Kubernetes and Terraform. Deploy in 6-10 weeks. Transparent infrastructure cost plus a flat managed-service fee. No vendor lock-in. Source access on request.
+
+## What we do
+
+- **Infrastructure Management** — Production-grade Kubernetes clusters and Terraform-managed infrastructure, deployed and operated by Rubrion. Includes monitoring, security hardening, and on-call response. [/#what-we-deliver](https://rubrion.ai/#what-we-deliver)
+- **White-Label Software** — Pre-built modules (CMS, E-Commerce, Learning Management, Knowledge Base, Communication Hub, Analytics) deployed as isolated multi-tenant instances under client branding. [/#service-lines](https://rubrion.ai/#service-lines)
+- **Custom Build & Integration** — Bespoke module development, third-party integrations, API customization, performance optimization on top of the Rubrion platform. [/#delivery-lifecycle](https://rubrion.ai/#delivery-lifecycle)
+
+## Who we serve
+
+- **SMBs & Startups** — fast deployment, predictable costs, scalable architecture.
+- **Schools & Nonprofits** — cost-effective, community-focused, education discounts.
+- **Enterprises** — custom integrations, enterprise-grade security, dedicated support.
+
+## Pricing model
+
+Infrastructure cost (passthrough to the client cloud account) plus a flat managed-service fee. No per-seat fees. No proprietary licensing. No offboarding penalty. When usage grows, only the underlying cloud bill grows with it.
+
+## Delivery lifecycle
+
+Every engagement runs the same six stages over 6-10 weeks:
+
+1. **Discovery & Planning** (1-2 weeks) — Requirements analysis and architecture design.
+2. **Infrastructure Setup** (1 week) — Kubernetes cluster and CI/CD pipeline deployment.
+3. **Module Deployment** (1-2 weeks) — Core modules installation and configuration.
+4. **Customization** (2-4 weeks) — Branding, integrations, and custom features.
+5. **Testing & QA** (1 week) — Comprehensive testing and performance optimization.
+6. **Go Live & Support** (Ongoing) — Production deployment and ongoing monitoring.
+
+## Technology
+
+Kubernetes, Terraform, open-source module foundations, API-first interfaces. Deploys on AWS, GCP, or Azure. Standard observability, identity, and CI/CD tooling.
+
+## Contact
+
+- Email: [hello@rubrion.ai](mailto:hello@rubrion.ai)
+- Form: [https://rubrion.ai/#contact](https://rubrion.ai/#contact)
+- Response time: within 24 hours.
+
+## Optional
+
+- [Portuguese (BR) version](https://rubrion.com.br/)
+- [Sitemap](https://rubrion.ai/sitemap-index.xml)
+- [Schema.org structured data](https://rubrion.ai/) — Organization (Corporation), WebSite, FAQPage are embedded in the home page.

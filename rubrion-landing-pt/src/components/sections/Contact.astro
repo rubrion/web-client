@@ -1,0 +1,75 @@
+---
+import { Globe, Mail, Rocket } from 'lucide-react';
+
+import ContactForm from '@/components/islands/ContactForm.tsx';
+import { BLUF, SUPPORT_EMAIL } from '@/data/seo';
+---
+<section id="contact" class="lazy-paint py-20 px-4 bg-surface-raised">
+  <div class="max-w-4xl mx-auto">
+    <header class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+        Pronto para começar?
+      </h2>
+      <p class="bluf mx-auto">{BLUF.contact}</p>
+      <p class="text-xl text-text-secondary max-w-2xl mx-auto mt-6">
+        Vamos conversar sobre como a Rubrion pode acelerar sua transformação digital
+      </p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="bg-surface-base border border-border-default rounded-xl p-8">
+        <ContactForm client:visible />
+      </div>
+
+      <aside class="space-y-8">
+        <div>
+          <h3 class="text-2xl font-bold text-text-primary mb-4">Vamos conversar</h3>
+          <p class="text-text-secondary mb-6">
+            Pronto para transformar seu negócio com soluções SaaS white-label?
+            Estamos aqui para ajudar em cada etapa do caminho.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 bg-surface-raised border border-accent-cyan rounded-lg flex items-center justify-center mr-4"
+            >
+              <Mail className="w-5 h-5 text-accent-cyan" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p class="text-text-primary font-medium">E-mail</p>
+              <a href={`mailto:${SUPPORT_EMAIL}`} class="text-accent-indigo hover:underline">
+                {SUPPORT_EMAIL}
+              </a>
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 bg-surface-raised border border-accent-green rounded-lg flex items-center justify-center mr-4"
+            >
+              <Globe className="w-5 h-5 text-accent-green" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p class="text-text-primary font-medium">Tempo de resposta</p>
+              <p class="text-text-secondary">Em até 24 horas</p>
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <div
+              class="w-10 h-10 bg-surface-raised border border-primary rounded-lg flex items-center justify-center mr-4 neon-border"
+            >
+              <Rocket className="w-5 h-5 text-primary" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p class="text-text-primary font-medium">Deploy</p>
+              <p class="text-text-secondary">6-10 semanas até produção</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

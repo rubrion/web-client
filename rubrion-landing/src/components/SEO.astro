@@ -1,0 +1,80 @@
+---
+import {
+  SITE_NAME,
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  buildOrganizationSchema,
+  buildWebSiteSchema,
+  buildFaqSchema,
+  type SEOProps,
+} from '@/data/seo';
+import {
+  ALT_HTML_LANG,
+  ALT_URL,
+  HTML_LANG,
+  OG_LOCALE,
+  OG_LOCALE_ALT,
+} from '@/data/locale';
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = DEFAULT_OG_IMAGE,
+  keywords = 'white-label saas, infrastructure management, kubernetes, terraform, multi-tenant, cms, ecommerce, lms, no vendor lock-in',
+  extraJsonLd = [],
+} = Astro.props as SEOProps;
+
+const ogTitle = title;
+const ogDescription = description;
+const path = new URL(canonical).pathname;
+const enHref = `https://rubrion.ai${path}`;
+const ptHref = `https://rubrion.com.br${path}`;
+
+const jsonLdBlocks = [
+  buildOrganizationSchema(),
+  buildWebSiteSchema(),
+  buildFaqSchema(),
+  ...extraJsonLd,
+];
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
+<link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang="en" href={enHref} />
+<link rel="alternate" hreflang="pt-BR" href={ptHref} />
+<link rel="alternate" hreflang="x-default" href={enHref} />
+
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="author" content={SITE_NAME} />
+<meta name="theme-color" content="#ff0040" />
+<meta name="color-scheme" content="dark" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="language" content={HTML_LANG} />
+<meta name="geo.region" content="BR" />
+<meta name="geo.placename" content="Brazil" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={ogTitle} />
+<meta property="og:description" content={ogDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={`${title} — ${SITE_NAME}`} />
+<meta property="og:locale" content={OG_LOCALE} />
+<meta property="og:locale:alternate" content={OG_LOCALE_ALT} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={ogTitle} />
+<meta name="twitter:description" content={ogDescription} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:site" content="@rubrion" />
+<meta name="twitter:creator" content="@rubrion" />
+
+<link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={`${SITE_URL}/sitemap-index.xml`} />
+
+{jsonLdBlocks.map((block) => (
+  <script type="application/ld+json" set:html={JSON.stringify(block)} />
+))}

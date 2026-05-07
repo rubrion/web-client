@@ -1,0 +1,25 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "rubrion-landing-pt",
+	"compatibility_date": "2026-05-07",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	// Public build-time env vars. Vite inlines anything prefixed with VITE_ at
+	// build time, so these are baked into the bundle and visible to anyone — only
+	// put non-secret values here. (Turnstile *secret* key is set on the
+	// support-email-worker via `wrangler secret put`.)
+	"vars": {
+		"VITE_SUPPORT_WORKER_URL": "https://support-email-worker.rubrion.workers.dev/submit",
+		"VITE_TURNSTILE_SITE_KEY": "0x4AAAAAADEAz2L_EVpiTBsg"
+	}
+}

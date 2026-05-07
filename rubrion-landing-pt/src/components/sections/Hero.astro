@@ -1,0 +1,79 @@
+---
+import HeroCarousel from '@/components/islands/HeroCarousel.tsx';
+import { BLUF, SITE_TAGLINE } from '@/data/seo';
+---
+<section
+  id="hero"
+  class="relative min-h-screen flex items-center justify-center overflow-hidden z-10 pt-20 w-full"
+  style="max-width: 100vw"
+>
+  <div class="hero-bg absolute inset-0 opacity-20 w-full h-full" aria-hidden="true">
+    <div class="absolute inset-0 bg-primary/8"></div>
+    <div class="hero-grid-wrap absolute inset-0 overflow-hidden">
+      <div
+        class="hero-grid absolute"
+        style={`inset: -100px;
+          background-image:
+            linear-gradient(90deg, transparent 95%, #ff0040 96%, transparent 100%),
+            linear-gradient(0deg, transparent 95%, #ff0040 96%, transparent 100%);
+          background-size: 100px 100px;
+          filter: drop-shadow(0 0 2px #ff0040);`}
+      />
+    </div>
+  </div>
+
+  <div
+    class="relative z-10 w-full max-w-4xl mx-auto px-4 text-center"
+    style="max-width: min(1024px, 90vw)"
+  >
+    <div class="flex justify-center mb-8">
+      <div class="w-24 h-24 md:w-32 md:h-32">
+        <img
+          src="/logo_rubrion_ver4.svg"
+          alt="Rubrion logo"
+          width="128"
+          height="128"
+          loading="eager"
+          decoding="async"
+          class="w-full h-full"
+        />
+      </div>
+    </div>
+
+    <h1
+      class="text-5xl md:text-7xl font-mono font-bold mb-6 text-primary neon-text glitch"
+      data-text={SITE_TAGLINE}
+    >
+      {SITE_TAGLINE}
+    </h1>
+
+    <p class="bluf mx-auto mb-8 text-text-primary">
+      {BLUF.hero}
+    </p>
+
+    <p class="text-xl md:text-2xl font-mono text-text-primary mb-8 max-w-2xl mx-auto">
+      &gt; Módulos SaaS white-label com custo de infraestrutura transparente<br />
+      &gt; Sem vendor lock-in, sem taxa oculta, valor real no serviço
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+      <a
+        href="#contact"
+        class="bg-primary text-surface-base border-2 border-primary px-8 py-4 rounded-lg text-lg font-mono font-bold shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-200 whitespace-nowrap"
+        style="box-shadow: 0 0 20px rgba(255, 0, 64, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3)"
+      >
+        &gt;fale_conosco
+      </a>
+      <a
+        href="#what-we-deliver"
+        class="bg-surface-base border-2 border-primary text-primary px-8 py-4 rounded-lg text-lg font-mono font-bold neon-border hover:bg-primary hover:text-surface-base transition-all duration-200 whitespace-nowrap"
+      >
+        &gt;ver_modulos
+      </a>
+    </div>
+
+    <aside aria-label="Princípios da plataforma">
+      <HeroCarousel client:visible />
+    </aside>
+  </div>
+</section>

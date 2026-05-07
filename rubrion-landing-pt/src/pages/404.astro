@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE_URL } from '@/data/seo';
+---
+<Layout
+  title="Página não encontrada — Rubrion"
+  description="A página solicitada não existe em rubrion.com.br. Volte para a home ou vá direto ao formulário de contato."
+  canonical={`${SITE_URL}/404`}
+>
+  <main class="min-h-screen flex items-center justify-center px-4 pt-32 pb-20">
+    <article class="max-w-2xl text-center">
+      <h1 class="text-6xl md:text-8xl font-mono font-bold text-primary neon-text mb-6">404</h1>
+      <p class="bluf mx-auto mb-8 text-text-primary">
+        A página solicitada não existe. A Rubrion roda uma única landing page no caminho raiz —
+        volte para a home ou vá direto ao formulário de contato para começar uma conversa.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/"
+          class="bg-primary text-surface-base border-2 border-primary px-8 py-4 rounded-lg text-lg font-mono font-bold"
+        >
+          &gt;ir_para_home
+        </a>
+        <a
+          href="/#contact"
+          class="bg-surface-base border-2 border-primary text-primary px-8 py-4 rounded-lg text-lg font-mono font-bold neon-border hover:bg-primary hover:text-surface-base transition-all duration-200"
+        >
+          &gt;fale_conosco
+        </a>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>

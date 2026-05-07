@@ -1,0 +1,30 @@
+---
+import { SITE_NAME, SITE_URL, SUPPORT_EMAIL } from '@/data/seo';
+
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-border-default bg-surface-base py-10 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm font-mono text-text-muted">
+    <div class="flex items-center gap-3">
+      <img src="/logo_rubrion_ver4.svg" width="28" height="28" alt={SITE_NAME} class="h-7 w-7" />
+      <address class="not-italic">
+        <span class="text-text-primary font-bold">{SITE_NAME}</span> ·
+        <a href={`mailto:${SUPPORT_EMAIL}`} class="text-primary hover:underline">{SUPPORT_EMAIL}</a>
+      </address>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+        <li><a href="#who-we-serve" class="hover:text-primary transition-colors">Who We Serve</a></li>
+        <li><a href="#what-we-deliver" class="hover:text-primary transition-colors">What We Deliver</a></li>
+        <li><a href="#delivery-lifecycle" class="hover:text-primary transition-colors">Delivery</a></li>
+        <li><a href="#contact" class="hover:text-primary transition-colors">Contact</a></li>
+        <li>
+          <a href={`${SITE_URL}/llms.txt`} class="hover:text-primary transition-colors">/llms.txt</a>
+        </li>
+      </ul>
+    </nav>
+
+    <p>© {year} {SITE_NAME}. Code-free, cloud-fee.</p>
+  </div>
+</footer>

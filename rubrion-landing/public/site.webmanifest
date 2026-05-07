@@ -1,0 +1,22 @@
+{
+  "name": "Rubrion - White-Label SaaS Solutions",
+  "short_name": "Rubrion",
+  "description": "Code-free, cloud-fee. White-label SaaS modules with transparent infrastructure costs.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#000000",
+  "theme_color": "#ff0040",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/logo_rubrion_ver4.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo_rubrion_ver4.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

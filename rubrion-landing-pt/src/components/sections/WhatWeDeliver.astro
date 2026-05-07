@@ -1,0 +1,101 @@
+---
+import {
+  BarChart3,
+  BookOpen,
+  FileText,
+  MessageSquare,
+  ShoppingCart,
+  Target,
+} from 'lucide-react';
+
+import RainEffect from '@/components/islands/RainEffect.tsx';
+import ServicesTabs from '@/components/islands/ServicesTabs.tsx';
+import { modules } from '@/data/modules';
+import { BLUF } from '@/data/seo';
+
+const MODULE_ICONS = {
+  FileText,
+  ShoppingCart,
+  Target,
+  BookOpen,
+  MessageSquare,
+  BarChart3,
+} as const;
+---
+<section id="what-we-deliver" class="relative z-20 overflow-hidden">
+  <RainEffect client:visible />
+
+  <div class="py-20 px-4 bg-surface-raised">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+          O Que Entregamos
+        </h2>
+        <p class="bluf mx-auto">{BLUF.whatWeDeliver}</p>
+        <p class="text-xl text-text-secondary max-w-3xl mx-auto mt-6">
+          Módulos SaaS prontos para produção que se integram naturalmente com
+          a sua infraestrutura existente
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {modules.map((module) => {
+          const Icon = MODULE_ICONS[module.iconName];
+          return (
+            <article
+              class="bg-surface-base border border-border-default rounded-xl p-6 hover:border-accent-indigo/50 transition-all duration-300 group"
+            >
+              <div class="mb-4 w-8 h-8 overflow-hidden flex items-center justify-center">
+                <div
+                  class="group-hover:scale-110 transition-transform duration-300 flex items-center justify-center"
+                >
+                  <Icon className="w-8 h-8 text-primary" strokeWidth={1.5} />
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-text-primary mb-3 group-hover:text-accent-indigo transition-colors"
+              >
+                {module.title}
+              </h3>
+              <p class="text-text-secondary mb-4 text-sm">{module.description}</p>
+              <ul class="space-y-1">
+                {module.features.map((feature) => (
+                  <li class="flex items-center text-text-muted text-sm">
+                    <span class="w-1.5 h-1.5 bg-accent-teal rounded-full mr-2"></span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="text-center mt-12">
+        <a
+          href="#contact"
+          class="inline-block bg-transparent text-primary border-2 border-primary px-8 py-3 rounded-lg text-base font-mono font-bold neon-border hover:bg-primary hover:text-surface-base hover:shadow-xl transition-all duration-200 whitespace-nowrap relative overflow-hidden"
+          style="box-shadow: 0 0 20px rgba(255, 0, 64, 0.3), inset 0 0 20px rgba(255, 0, 64, 0.1)"
+        >
+          <span class="inline-block">&gt;</span>
+          <span class="ml-1">solicitar_demo</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="service-lines" class="py-20 px-4 bg-surface-raised">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+          Linhas de Serviço
+        </h2>
+        <p class="bluf mx-auto">{BLUF.serviceLines}</p>
+        <p class="text-xl text-text-secondary max-w-3xl mx-auto mt-6">
+          Serviços completos do deploy ao suporte contínuo
+        </p>
+      </div>
+      <ServicesTabs client:visible />
+    </div>
+  </div>
+</section>

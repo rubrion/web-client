@@ -1,0 +1,46 @@
+# Rubrion
+
+> A Rubrion entrega módulos SaaS white-label gerenciados — CMS, e-commerce, LMS, base de conhecimento, comunicação, analytics — em Kubernetes e Terraform. Implantação em 6-10 semanas. Custo de infraestrutura transparente mais taxa fixa de serviço gerenciado. Sem vendor lock-in. Acesso ao código sob solicitação.
+
+## O que fazemos
+
+- **Gestão de Infraestrutura** — Clusters Kubernetes em nível de produção e infraestrutura gerenciada via Terraform, implantados e operados pela Rubrion. Inclui monitoramento, hardening de segurança e resposta on-call. [/#what-we-deliver](https://rubrion.com.br/#what-we-deliver)
+- **Software White-Label** — Módulos prontos (CMS, E-Commerce, Gestão de Aprendizagem, Base de Conhecimento, Hub de Comunicação, Analytics) implantados como instâncias multi-tenant isoladas sob a marca do cliente. [/#service-lines](https://rubrion.com.br/#service-lines)
+- **Desenvolvimento e Integração Sob Medida** — Desenvolvimento de módulos sob medida, integrações com terceiros, customização de API e otimização de performance sobre a plataforma Rubrion. [/#delivery-lifecycle](https://rubrion.com.br/#delivery-lifecycle)
+
+## Quem atendemos
+
+- **PMEs e Startups** — implantação rápida, custos previsíveis, arquitetura escalável.
+- **Escolas e ONGs** — soluções de baixo custo, foco em comunidade, descontos educacionais.
+- **Empresas** — integrações sob medida, segurança de nível corporativo, suporte dedicado.
+
+## Modelo de preço
+
+Custo de infraestrutura (repasse direto para a conta cloud do cliente) mais uma taxa fixa de serviço gerenciado. Sem cobrança por usuário. Sem licenciamento proprietário. Sem multa por offboarding. Quando o uso cresce, só a conta de cloud subjacente cresce junto.
+
+## Ciclo de entrega
+
+Todo projeto segue o mesmo ciclo de seis etapas em 6-10 semanas:
+
+1. **Descoberta e Planejamento** (1-2 semanas) — Análise de requisitos e desenho de arquitetura.
+2. **Setup de Infraestrutura** (1 semana) — Provisionamento do cluster Kubernetes e pipeline CI/CD.
+3. **Deploy dos Módulos** (1-2 semanas) — Instalação e configuração dos módulos principais.
+4. **Customização** (2-4 semanas) — Marca, integrações e funcionalidades específicas.
+5. **Testes e QA** (1 semana) — Testes abrangentes e otimização de performance.
+6. **Go Live e Suporte** (Contínuo) — Deploy em produção e monitoramento contínuo.
+
+## Tecnologia
+
+Kubernetes, Terraform, módulos sobre fundações open-source, interfaces API-first. Roda em AWS, GCP ou Azure. Ferramentas padrão de observabilidade, identidade e CI/CD.
+
+## Contato
+
+- E-mail: [ola@rubrion.com.br](mailto:ola@rubrion.com.br)
+- Formulário: [https://rubrion.com.br/#contact](https://rubrion.com.br/#contact)
+- Tempo de resposta: em até 24 horas.
+
+## Opcional
+
+- [Versão em inglês](https://rubrion.ai/)
+- [Sitemap](https://rubrion.com.br/sitemap-index.xml)
+- [Schema.org structured data](https://rubrion.com.br/) — Organization (Corporation), WebSite e FAQPage estão embutidos na home.

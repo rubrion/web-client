@@ -1,0 +1,33 @@
+---
+import '@/styles/global.css';
+import SEO from '@/components/SEO.astro';
+import LoadingScreen from '@/components/islands/LoadingScreen.tsx';
+import Navbar from '@/components/islands/Navbar.tsx';
+import { HTML_LANG } from '@/data/locale';
+import type { SEOProps } from '@/data/seo';
+
+const props = Astro.props as SEOProps;
+---
+<!doctype html>
+<html lang={HTML_LANG}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo_rubrion_ver4.svg" />
+    <link rel="apple-touch-icon" href="/logo_rubrion_ver4.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" />
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <SEO {...props} />
+  </head>
+  <body class="min-h-screen w-full overflow-x-hidden bg-surface-base text-text-primary">
+    <LoadingScreen client:load />
+    <Navbar client:load />
+    <slot />
+  </body>
+</html>

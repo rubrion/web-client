@@ -1,0 +1,77 @@
+---
+import { Package, Palette, Rocket, Search, Settings, TestTube } from 'lucide-react';
+
+import { lifecycle } from '@/data/lifecycle';
+import { BLUF } from '@/data/seo';
+
+const ICONS = { Search, Settings, Package, Palette, TestTube, Rocket } as const;
+---
+<section
+  id="delivery-lifecycle"
+  class="lazy-paint py-20 px-4 bg-surface-base"
+>
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+        Ciclo de Entrega
+      </h2>
+      <p class="bluf mx-auto">{BLUF.deliveryLifecycle}</p>
+      <p class="text-xl text-text-secondary max-w-3xl mx-auto mt-6">
+        Do conceito à produção em 6-10 semanas, com processo comprovado de entrega
+      </p>
+    </div>
+
+    <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 list-none p-0">
+      {lifecycle.map((stage, index) => {
+        const Icon = ICONS[stage.iconName];
+        return (
+          <li>
+            <article
+              class="bg-surface-raised border border-border-default rounded-xl p-6 hover:border-primary/50 transition-colors duration-300 neon-border"
+            >
+              <div class="mb-4">
+                <Icon className="w-8 h-8 text-primary" strokeWidth={1.5} />
+              </div>
+              <div class="flex items-center mb-3">
+                <span
+                  class="bg-primary text-surface-base text-sm font-mono px-2 py-1 rounded mr-3"
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span class="text-accent-green text-sm font-mono">{stage.duration}</span>
+              </div>
+              <h3 class="text-xl font-mono font-bold text-text-primary mb-3">
+                {stage.title}
+              </h3>
+              <p class="text-text-muted font-mono text-sm">{stage.description}</p>
+            </article>
+          </li>
+        );
+      })}
+    </ol>
+
+    <div class="mt-16 relative flex flex-col items-center">
+      <div class="relative w-full max-w-4xl">
+        <div
+          class="absolute -top-6 left-0 w-full flex justify-between text-xs font-mono text-primary"
+        >
+          {['[', '▓', '▓', '▓', '▓', '▓', '▓', '▓', '▓', '▓', ']'].map((char) => (
+            <span class="neon-text">{char}</span>
+          ))}
+        </div>
+        <div
+          class="h-1 bg-gradient-to-r from-primary to-accent-green rounded-full"
+          style="box-shadow: 0 0 5px #ff0040"
+        ></div>
+      </div>
+
+      <div class="mt-6 text-center">
+        <span
+          class="text-lg md:text-xl font-mono font-bold text-primary neon-text tracking-normal"
+        >
+          ENTREGA RÁPIDA
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
