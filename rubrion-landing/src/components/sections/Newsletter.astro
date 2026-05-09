@@ -69,6 +69,11 @@ import { Mail } from 'lucide-react';
     var msgConfirm = 'Check your inbox to confirm.';
     var msgAlready = "You're already subscribed.";
     var msgNetwork = 'Network error. Try again.';
+    function resetTurnstile() {
+      if (window.turnstile) {
+        try { window.turnstile.reset(); } catch (_) {}
+      }
+    }
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var fd = new FormData(f);
@@ -93,13 +98,11 @@ import { Mail } from 'lucide-react';
           }
           st.textContent = o.j.alreadyActive ? msgAlready : msgConfirm;
           if (!o.j.alreadyActive) f.reset();
-          if (window.turnstile) {
-            try { window.turnstile.reset(); } catch (_) {}
-          }
         })
         .catch(function () {
           st.textContent = msgNetwork;
-        });
+        })
+        .finally(resetTurnstile);
     });
   })();
 </script>
