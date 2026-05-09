@@ -5,9 +5,9 @@ export { SITE_URL, SUPPORT_EMAIL };
 export const SITE_NAME = 'Rubrion';
 export const SITE_TAGLINE = 'Code-free, cloud-fee.';
 export const DEFAULT_TITLE =
-  'Rubrion — Infraestrutura gerenciada e SaaS white-label';
+  'Rubrion — Consultoria de TI · Whitelabel e software sob medida para PMEs';
 export const DEFAULT_DESCRIPTION =
-  'A Rubrion entrega módulos SaaS white-label gerenciados — CMS, e-commerce, LMS, base de conhecimento, comunicação, analytics — em Kubernetes e Terraform. Implantação em 6-10 semanas com custo de infraestrutura transparente, taxa fixa de serviço gerenciado, sem vendor lock-in e acesso ao código sob solicitação.';
+  'Consultoria de TI para PMEs. Produtos whitelabel (EdgePress, Rubrion Store) e software sob medida em Kubernetes e Terraform.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo_rubrion_ver4.png`;
 
 export const SOCIALS = [
@@ -19,49 +19,42 @@ export const SOCIALS = [
 // Atomic Answers de 40-60 palavras, uma por seção. As mesmas strings alimentam
 // <meta name="description">, descrições JSON-LD e os parágrafos BLUF visíveis.
 export const BLUF = {
-  hero: DEFAULT_DESCRIPTION,
-  whoWeServe:
-    'A Rubrion atende três segmentos: PMEs e startups que precisam de implantação rápida com custos previsíveis; escolas e organizações sem fins lucrativos que precisam de soluções acessíveis e voltadas à comunidade; e empresas que precisam de integrações personalizadas com segurança de nível corporativo e suporte dedicado.',
-  whatWeDeliver:
-    'A Rubrion entrega seis módulos prontos — Gestão de Conteúdo, E-Commerce, Gestão de Aprendizagem, Base de Conhecimento, Hub de Comunicação e Analytics — como deploys white-label, multi-tenant e isolados. Cada módulo roda na mesma plataforma Kubernetes, com infraestrutura provisionada via Terraform, suporte multilíngue e arquitetura API-first.',
-  serviceLines:
-    'Oferecemos SaaS Gerenciado (white-label) para deploys com sua marca, Gestão de Infraestrutura para times que querem nossa stack Kubernetes sem os módulos, e Desenvolvimento Sob Medida para integrações específicas sobre a plataforma.',
-  deliveryLifecycle:
-    'Todo projeto Rubrion segue o mesmo ciclo de seis etapas: Descoberta, Setup de Infraestrutura, Deploy de Módulos, Customização, Testes e Go-Live. Prazo típico ponta-a-ponta: 6-10 semanas. Deploys em produção incluem testes de carga, revisão de segurança e monitoramento contínuo após o handoff.',
-  contact:
-    'Para iniciar um projeto, envie um briefing com seu caso de uso, público-alvo e prazo. Resposta em até um dia útil pelo endereço ola@rubrion.com.br.',
+  hero: 'Whitelabel e software sob medida para PMEs. Barato, rápido, transparente.',
+  whoWeServe: 'PMEs, startups, escolas, ONGs, empresas.',
+  projects: 'O que entregamos — sites ao vivo e código aberto.',
+  contact: 'Mande um briefing. Resposta em até 24 horas.',
 } as const;
 
 export const FAQ: { question: string; answer: string }[] = [
   {
     question: 'O que a Rubrion faz?',
     answer:
-      'A Rubrion entrega módulos SaaS white-label gerenciados — CMS, e-commerce, LMS, base de conhecimento, comunicação, analytics — em Kubernetes e Terraform. Cada projeto vai ao ar em 6-10 semanas com custo de infraestrutura transparente e taxa fixa de serviço gerenciado. O acesso ao código-fonte é concedido sob solicitação e não há vendor lock-in.',
+      'Consultoria de TI que constrói, entrega e opera software para PMEs. Projetos combinam produtos whitelabel (newsletter EdgePress, marketplace Rubrion Store) com integrações sob medida, entregues em Kubernetes e Terraform. Deploy SaaS disponível quando o cliente desejar.',
   },
   {
-    question: 'Quão rápido a Rubrion implanta um novo tenant?',
+    question: 'Quão rápido a Rubrion entrega?',
     answer:
-      'Implantações padrão levam de 6 a 10 semanas, ponta a ponta. Descoberta e arquitetura ocupam 1-2 semanas, o provisionamento de infraestrutura é automatizado e leva 1 semana, o deploy dos módulos leva 1-2 semanas, customização e integrações somam 2-4 semanas, e a fase final de QA + go-live adiciona 1 semana antes da entrega em produção.',
-  },
-  {
-    question: 'Os clientes mantêm controle dos dados e da infraestrutura?',
-    answer:
-      'Sim. Cada tenant roda em infraestrutura isolada provisionada via Terraform na conta cloud do cliente ou em uma conta dedicada gerenciada pela Rubrion. Dados, configuração e código-fonte são de propriedade do cliente. A Rubrion oferece operação contínua, mas nunca detém controle exclusivo de um tenant.',
+      'Projetos padrão vão ao ar em 6 a 10 semanas, ponta a ponta. Descoberta e arquitetura ocupam 1-2 semanas, o provisionamento de infraestrutura é automatizado e leva 1 semana, setup do produto e integrações levam 2-4 semanas, customização adiciona mais 2-4 semanas, e a fase final de QA + go-live soma 1 semana antes da entrega em produção.',
   },
   {
     question: 'Qual é o modelo de preço?',
     answer:
-      'A Rubrion cobra o custo de infraestrutura como repasse direto mais uma taxa fixa de serviço gerenciado. Não há cobrança por usuário, não há licenciamento proprietário e não há multa por offboarding. O preço escala com o uso de infraestrutura — quando o uso cresce, só a conta de cloud subjacente cresce junto.',
+      'A Rubrion cobra uma taxa fixa de consultoria mais o custo de infraestrutura como repasse direto. Não há cobrança por usuário, não há licenciamento proprietário e não há multa por offboarding. O preço escala com o uso de infraestrutura — quando o uso cresce, só a conta de cloud subjacente cresce junto.',
+  },
+  {
+    question: 'Os clientes têm acesso ao código-fonte?',
+    answer:
+      'Sim. A maioria dos projetos Rubrion é entregue como repositórios abertos em github.com/rubrion (EdgePress, Rubrion Store etc.). Trabalhos sob medida são entregues com a propriedade total do código ao cliente. O cliente pode fazer fork, auto-hospedar ou internalizar a operação a qualquer momento.',
+  },
+  {
+    question: 'Que tipos de projetos a Rubrion aceita?',
+    answer:
+      'Newsletters whitelabel, marketplaces whitelabel, plataformas web sob medida, integrações com terceiros e operação gerenciada de Kubernetes. IoT e redes de sensores sem fio são entregues pela organização irmã Mondesa (mondesa.org).',
   },
   {
     question: 'Quais tecnologias a Rubrion usa?',
     answer:
-      'A plataforma roda em Kubernetes com Terraform para infraestrutura como código. Os módulos são construídos sobre fundações open-source e expostos via interfaces API-first. Os deploys rodam em qualquer cloud provider relevante (AWS, GCP, Azure) e integram com ferramentas padrão de observabilidade, identidade e CI/CD.',
-  },
-  {
-    question: 'Existe vendor lock-in?',
-    answer:
-      'Não. Toda implantação Rubrion é construída em módulos open-source rodando na conta cloud do cliente. O código-fonte é fornecido sob solicitação, a infraestrutura é descrita em Terraform, e camadas de banco de dados, identidade e armazenamento usam padrões portáveis. O cliente pode internalizar a operação a qualquer momento.',
+      'A plataforma roda em Kubernetes com Terraform para infraestrutura como código. Os produtos são construídos sobre fundações maduras dirigidas pela comunidade e expostos via interfaces API-first. Os deploys rodam em qualquer cloud provider relevante (AWS, GCP, Azure) e integram com ferramentas padrão de observabilidade, identidade e CI/CD.',
   },
 ];
 
@@ -99,49 +92,57 @@ export const buildOrganizationSchema = () => ({
     addressRegion: 'Brazil',
   },
   knowsAbout: [
-    'Gestão de Infraestrutura',
-    'Software White-Label',
+    'Consultoria de TI',
+    'Software Whitelabel',
+    'Plataformas de Newsletter',
+    'Software de Marketplace',
+    'Integrações Sob Medida',
     'Operação de Kubernetes',
     'Automação com Terraform',
-    'Arquitetura SaaS Multi-Tenant',
-    'CMS Headless',
-    'Plataformas de E-Commerce',
-    'Sistemas de Gestão de Aprendizagem',
-    'Software de Base de Conhecimento',
-    'Comunicação em Tempo Real',
-    'Business Intelligence',
+    'Entrega de Software para PMEs',
+    'Arquitetura Multi-Tenant',
+    'Arquitetura IoT',
   ],
   offers: [
     {
       '@type': 'Offer',
-      name: 'Infraestrutura Gerenciada (Kubernetes + Terraform)',
-      category: 'Gestão de Infraestrutura',
+      name: 'Implantação de Produto Whitelabel',
+      category: 'Software Whitelabel',
       description:
-        'Clusters Kubernetes em nível de produção e infraestrutura gerenciada via Terraform, implantados e operados pela Rubrion. Inclui monitoramento, hardening de segurança e resposta on-call.',
+        'Deploys com sua marca dos produtos Rubrion — EdgePress (newsletter), Rubrion Store (marketplace). Auto-hospedado por padrão; deploy SaaS disponível sob solicitação.',
       availability: 'https://schema.org/InStock',
     },
     {
       '@type': 'Offer',
-      name: 'Módulos SaaS White-Label',
-      category: 'Software White-Label',
-      description:
-        'Módulos prontos de CMS, E-Commerce, Gestão de Aprendizagem, Base de Conhecimento, Comunicação e Analytics, implantados como instâncias multi-tenant isoladas sob a marca do cliente.',
-      availability: 'https://schema.org/InStock',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Desenvolvimento e Integração Sob Medida',
+      name: 'Desenvolvimento Sob Medida',
       category: 'Engenharia de Software',
       description:
-        'Desenvolvimento de módulos sob medida, integrações com terceiros, customização de API e otimização de performance sobre a plataforma Rubrion.',
+        'Plataformas web sob medida, integrações com terceiros e customização de APIs. Projetos de consultoria com taxa fixa e propriedade total do código entregue ao cliente.',
+      availability: 'https://schema.org/InStock',
+    },
+    {
+      '@type': 'Offer',
+      name: 'Infraestrutura Gerenciada e Operações',
+      category: 'Gestão de Infraestrutura',
+      description:
+        'Clusters Kubernetes em nível de produção e infraestrutura gerenciada via Terraform, operados pela Rubrion. Inclui monitoramento, hardening de segurança e resposta on-call.',
       availability: 'https://schema.org/InStock',
     },
   ],
   serviceType: [
-    'Software como Serviço',
-    'Soluções White-Label',
+    'Consultoria de TI',
+    'Soluções Whitelabel',
+    'Desenvolvimento de Software Sob Medida',
     'Infraestrutura em Nuvem',
-    'Desenvolvimento Sob Medida',
+  ],
+  subOrganization: [
+    {
+      '@type': 'Organization',
+      name: 'Mondesa',
+      url: 'https://mondesa.org',
+      description:
+        'Organização irmã focada em soluções IoT para sistemas críticos de energia e arquitetura de redes de sensores sem fio.',
+    },
   ],
 });
 

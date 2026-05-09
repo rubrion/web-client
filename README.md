@@ -1,6 +1,10 @@
 # rubrion-web-client
 
-Marketing-site monorepo for Rubrion.
+Marketing-site monorepo for Rubrion — IT consulting for SMBs. Whitelabel
+products ([EdgePress](https://github.com/rubrion/edgepress) newsletter,
+[Rubrion Store](https://github.com/rubrion/store) marketplace) and bespoke
+software. Sister org [Mondesa](https://mondesa.org) handles IoT for energy
+systems.
 
 ## Layout
 

@@ -3,21 +3,19 @@ import Layout from '@/layouts/Layout.astro';
 import Footer from '@/components/Footer.astro';
 import Hero from '@/components/sections/Hero.astro';
 import WhoWeServe from '@/components/sections/WhoWeServe.astro';
-import WhatWeDeliver from '@/components/sections/WhatWeDeliver.astro';
-import DeliveryLifecycle from '@/components/sections/DeliveryLifecycle.astro';
+import Projects from '@/components/sections/Projects.astro';
 import Contact from '@/components/sections/Contact.astro';
 import { DEFAULT_DESCRIPTION, SITE_URL } from '@/data/seo';
 ---
 <Layout
-  title="Rubrion — Code-free, cloud-fee | Infraestrutura gerenciada e SaaS white-label"
+  title="Rubrion — Code-free, cloud-fee | Consultoria de TI · Whitelabel e software sob medida"
   description={DEFAULT_DESCRIPTION}
   canonical={`${SITE_URL}/`}
 >
   <main class="w-full">
     <Hero />
     <WhoWeServe />
-    <WhatWeDeliver />
-    <DeliveryLifecycle />
+    <Projects />
     <Contact />
   </main>
   <Footer />

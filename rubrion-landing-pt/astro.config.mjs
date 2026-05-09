@@ -16,5 +16,8 @@ export default defineConfig({
   integrations: [react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    // Astro defaults Vite's envPrefix to `PUBLIC_`. Keep `VITE_` working too so
+    // `VITE_SUPPORT_WORKER_URL` and `VITE_TURNSTILE_SITE_KEY` reach the client.
+    envPrefix: ['PUBLIC_', 'VITE_'],
   },
 });

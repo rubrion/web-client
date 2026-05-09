@@ -14,6 +14,13 @@
 	"observability": {
 		"enabled": true
 	},
+	// Custom domains attached at deploy time. Both apex and www variants point
+	// to this worker. Zones (rubrion.ai) must already be registered in the same
+	// Cloudflare account; `custom_domain: true` provisions DNS automatically.
+	"routes": [
+		{ "pattern": "rubrion.ai", "custom_domain": true },
+		{ "pattern": "www.rubrion.ai", "custom_domain": true }
+	],
 	// Public build-time env vars. Vite inlines anything prefixed with VITE_ at
 	// build time, so these are baked into the bundle and visible to anyone — only
 	// put non-secret values here. (Turnstile *secret* key is set on the

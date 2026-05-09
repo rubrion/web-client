@@ -1,7 +1,6 @@
 ---
 import { Building2, GraduationCap, Rocket } from 'lucide-react';
 
-import { BLUF } from '@/data/seo';
 import { segments } from '@/data/segments';
 
 const ICONS = { Rocket, GraduationCap, Building2 } as const;
@@ -24,10 +23,6 @@ const ICONS = { Rocket, GraduationCap, Building2 } as const;
   <div class="max-w-6xl mx-auto relative z-10">
     <div class="text-center mb-16">
       <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">Quem Atendemos</h2>
-      <p class="bluf mx-auto">{BLUF.whoWeServe}</p>
-      <p class="text-xl text-text-secondary max-w-2xl mx-auto mt-6">
-        De startups a empresas, oferecemos soluções sob medida para qualquer escala
-      </p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-8">

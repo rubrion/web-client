@@ -1,6 +1,6 @@
 ---
 import HeroCarousel from '@/components/islands/HeroCarousel.tsx';
-import { BLUF, SITE_TAGLINE } from '@/data/seo';
+import { SITE_TAGLINE } from '@/data/seo';
 ---
 <section
   id="hero"
@@ -47,13 +47,9 @@ import { BLUF, SITE_TAGLINE } from '@/data/seo';
       {SITE_TAGLINE}
     </h1>
 
-    <p class="bluf mx-auto mb-8 text-text-primary">
-      {BLUF.hero}
-    </p>
-
     <p class="text-xl md:text-2xl font-mono text-text-primary mb-8 max-w-2xl mx-auto">
-      &gt; White-label SaaS modules with transparent infrastructure costs<br />
-      &gt; No vendor lock-in, no hidden fees, just value in the service
+      &gt; IT consulting + whitelabel for SMBs<br />
+      &gt; Complex software, cheap to deliver, transparent to operate
     </p>
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -65,10 +61,10 @@ import { BLUF, SITE_TAGLINE } from '@/data/seo';
         &gt;talk_to_us
       </a>
       <a
-        href="#what-we-deliver"
+        href="#projects"
         class="bg-surface-base border-2 border-primary text-primary px-8 py-4 rounded-lg text-lg font-mono font-bold neon-border hover:bg-primary hover:text-surface-base transition-all duration-200 whitespace-nowrap"
       >
-        &gt;see_modules
+        &gt;see_projects
       </a>
     </div>
 

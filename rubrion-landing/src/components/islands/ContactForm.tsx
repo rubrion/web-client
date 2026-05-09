@@ -42,6 +42,7 @@ export default function ContactForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [captchaCycle, setCaptchaCycle] = useState(0);
 
   const captchaRequired = Boolean(TURNSTILE_SITE_KEY);
 
@@ -75,12 +76,16 @@ export default function ContactForm() {
     }, 250);
 
     return () => window.clearInterval(interval);
-  }, [captchaRequired, renderTurnstile]);
+  }, [captchaRequired, renderTurnstile, captchaCycle]);
 
   useEffect(() => {
     return () => {
       if (turnstileWidgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(turnstileWidgetIdRef.current);
+        try {
+          window.turnstile.remove(turnstileWidgetIdRef.current);
+        } catch {
+          /* widget already gone */
+        }
         turnstileWidgetIdRef.current = null;
       }
     };
@@ -91,12 +96,32 @@ export default function ContactForm() {
     if (error) setError(null);
   };
 
-  const resetCaptcha = () => {
+  const cycleCaptcha = useCallback(() => {
     if (turnstileWidgetIdRef.current && window.turnstile) {
-      window.turnstile.reset(turnstileWidgetIdRef.current);
+      try {
+        window.turnstile.remove(turnstileWidgetIdRef.current);
+      } catch {
+        /* widget DOM detached already */
+      }
     }
+    turnstileWidgetIdRef.current = null;
     setTurnstileToken(null);
-  };
+    setCaptchaCycle((n) => n + 1);
+  }, []);
+
+  const resetCaptcha = useCallback(() => {
+    if (!turnstileWidgetIdRef.current || !window.turnstile) {
+      setTurnstileToken(null);
+      return;
+    }
+    try {
+      window.turnstile.reset(turnstileWidgetIdRef.current);
+      setTurnstileToken(null);
+    } catch {
+      // Container was detached (e.g. success-screen swap). Force a remount.
+      cycleCaptcha();
+    }
+  }, [cycleCaptcha]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,7 +182,7 @@ export default function ContactForm() {
         setIsSubmitted(false);
         setFormData({ name: '', email: '', company: '', message: '' });
         setHoneypot('');
-        resetCaptcha();
+        cycleCaptcha();
       }, 4000);
     } catch (submitError) {
       console.error('Failed to send message:', submitError);

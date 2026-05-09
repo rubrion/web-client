@@ -2,15 +2,15 @@ export type HeroStep = { title: string; description: string };
 
 export const heroSteps: HeroStep[] = [
   {
-    title: 'Open-source foundation',
-    description: 'Built on proven, community-driven technologies',
+    title: 'Consulting-led delivery',
+    description: 'We scope, design, and ship — fixed fee, fixed timeline',
   },
   {
-    title: 'White-label isolated instances',
-    description: 'Your brand, your data, completely isolated',
+    title: 'Whitelabel + bespoke',
+    description: 'Pick a shipped product or commission a custom build',
   },
   {
-    title: 'Fully hosted operations',
-    description: 'We handle infrastructure, you focus on growth',
+    title: 'Hosted, observable, yours',
+    description: 'Managed Kubernetes ops, transparent infra cost, source on request',
   },
 ];

@@ -37,9 +37,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { id: 'who-we-serve', label: 'Who We Serve', href: '#who-we-serve' },
-  { id: 'what-we-deliver', label: 'What We Deliver', href: '#what-we-deliver' },
-  { id: 'service-lines', label: 'Service Lines', href: '#service-lines' },
-  { id: 'delivery-lifecycle', label: 'Delivery', href: '#delivery-lifecycle' },
+  { id: 'projects', label: 'Projects', href: '#projects' },
 ];
 
 export default function Navbar() {
