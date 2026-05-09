@@ -35,13 +35,20 @@ interface NavItem {
   href: string;
 }
 
+// Anchor items (`#section`) trigger smooth-scroll on the home page; page items
+// (`/path`) navigate. The Blog item lives on its own route so it can host the
+// EdgePress embed iframe full-bleed.
 const navItems: NavItem[] = [
   { id: 'who-we-serve', label: 'Who We Serve', href: '#who-we-serve' },
   { id: 'projects', label: 'Projects', href: '#projects' },
+  { id: 'blog', label: 'Blog', href: '/blog' },
 ];
+
+const isAnchor = (href: string) => href.startsWith('#');
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero');
+  const [currentPath, setCurrentPath] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -57,6 +64,7 @@ export default function Navbar() {
   useEffect(() => {
     initializeScrollSystem();
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    setCurrentPath(window.location.pathname);
     return () => {
       destroyScrollSystem();
     };
@@ -70,7 +78,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const updateActiveSection = () => {
-      const allSections = ['hero', ...navItems.map((item) => item.href.substring(1))];
+      const allSections = [
+        'hero',
+        ...navItems.filter((item) => isAnchor(item.href)).map((item) => item.href.substring(1)),
+      ];
       const windowHeight = window.innerHeight;
 
       let currentSection = 'hero';
@@ -94,12 +105,34 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (href: string) => {
-    const targetId = href.substring(1);
-    scrollToElement(`#${targetId}`, { offset: -80 });
     setIsMobileMenuOpen(false);
+    if (isAnchor(href)) {
+      // On the home page: smooth-scroll to section.
+      // On any other page: bounce back to home with the hash so the home page
+      // scrolls into view after navigation.
+      if (currentPath === '/' || currentPath === '') {
+        scrollToElement(href, { offset: -80 });
+      } else {
+        window.location.href = `/${href}`;
+      }
+      return;
+    }
+    window.location.href = href;
   };
 
-  const handleCTAClick = () => scrollToElement('#contact', { offset: -80 });
+  const handleCTAClick = () => {
+    setIsMobileMenuOpen(false);
+    if (currentPath === '/' || currentPath === '') {
+      scrollToElement('#contact', { offset: -80 });
+    } else {
+      window.location.href = '/#contact';
+    }
+  };
+
+  const isItemActive = (item: NavItem) => {
+    if (!isAnchor(item.href)) return currentPath === item.href;
+    return currentPath === '/' && activeSection === item.href.substring(1);
+  };
 
   return (
     <>
@@ -163,29 +196,30 @@ export default function Navbar() {
             </motion.button>
 
             <div className="hidden lg:flex items-center space-x-2 flex-1 justify-center">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.href)}
-                  className={`px-3 py-2 text-sm font-mono font-medium rounded-md transition-colors relative ${
-                    activeSection === item.href.substring(1)
-                      ? 'text-primary neon-text'
-                      : 'text-text-muted hover:text-primary'
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.label}
-                  {activeSection === item.href.substring(1) && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                      layoutId="activeIndicator"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                      style={{ boxShadow: '0 0 5px #ff0040' }}
-                    />
-                  )}
-                </motion.button>
-              ))}
+              {navItems.map((item) => {
+                const active = isItemActive(item);
+                return (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.href)}
+                    className={`px-3 py-2 text-sm font-mono font-medium rounded-md transition-colors relative ${
+                      active ? 'text-primary neon-text' : 'text-text-muted hover:text-primary'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item.label}
+                    {active && (
+                      <motion.div
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
+                        layoutId="activeIndicator"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                        style={{ boxShadow: '0 0 5px #ff0040' }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
             </div>
 
             <div className="hidden lg:block ml-12">
@@ -256,21 +290,24 @@ export default function Navbar() {
           transition={{ duration: 0.3 }}
         >
           <div className="px-4 pt-2 pb-4 space-y-2 bg-surface-base/95 backdrop-blur-md border-t border-primary/30">
-            {navItems.map((item) => (
-              <motion.button
-                key={item.id}
-                onClick={() => handleNavClick(item.href)}
-                className={`block w-full text-left px-3 py-2 text-base font-mono font-medium rounded-md transition-colors ${
-                  activeSection === item.href.substring(1)
-                    ? 'text-primary neon-text bg-surface-raised'
-                    : 'text-text-muted hover:text-primary hover:bg-surface-raised'
-                }`}
-                whileHover={{ x: 5 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {item.label}
-              </motion.button>
-            ))}
+            {navItems.map((item) => {
+              const active = isItemActive(item);
+              return (
+                <motion.button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.href)}
+                  className={`block w-full text-left px-3 py-2 text-base font-mono font-medium rounded-md transition-colors ${
+                    active
+                      ? 'text-primary neon-text bg-surface-raised'
+                      : 'text-text-muted hover:text-primary hover:bg-surface-raised'
+                  }`}
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {item.label}
+                </motion.button>
+              );
+            })}
 
             <motion.button
               onClick={() => {
