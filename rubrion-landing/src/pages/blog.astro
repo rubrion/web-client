@@ -1,0 +1,35 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Footer from '@/components/Footer.astro';
+import { SITE_URL } from '@/data/seo';
+---
+<Layout
+  title="Blog — Rubrion | Whitelabel and bespoke software for SMBs"
+  description="The Rubrion blog. Notes on whitelabel products, infrastructure, and the engagements we ship for SMBs. Powered by EdgePress."
+  canonical={`${SITE_URL}/blog`}
+>
+  <main class="w-full pt-24">
+    <section class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+      <header class="mb-10 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-text-primary mb-4 neon-text">Blog</h1>
+        <p class="text-text-secondary max-w-2xl mx-auto">
+          Notes on whitelabel products, infrastructure, and the engagements we ship.
+        </p>
+      </header>
+
+      <div class="rounded-xl border border-border-default bg-surface-raised p-2 sm:p-4 shadow-lg">
+        <iframe
+          src="https://edgepress.rubrion.ai/embed/blog?limit=20&date=1&excerpt=1&theme=dark&font=inherit"
+          style="width:100%;border:0;display:block;background:transparent"
+          width="100%"
+          height="0"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Rubrion blog"
+        ></iframe>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <script src="https://edgepress.rubrion.ai/embed/resizer.js" async></script>
+</Layout>
