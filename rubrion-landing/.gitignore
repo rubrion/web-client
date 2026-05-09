@@ -13,9 +13,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# environment variables (`.env.production` is committed — values are public + needed by CI)
 .env
-.env.production
+.env.local
+.env.production.local
 
 # macOS-specific files
 .DS_Store
