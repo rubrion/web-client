@@ -1,21 +1,29 @@
 ---
-import { Mail } from 'lucide-react';
+import Icon from '@/components/Icon.astro';
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as
+  | string
+  | undefined;
 ---
-<section id="newsletter" class="lazy-paint py-20 px-4 bg-surface-base">
+
+<section id="newsletter" class="py-24 px-4">
   <div class="max-w-3xl mx-auto">
     <header class="text-center mb-10">
-      <div class="w-12 h-12 mx-auto mb-5 bg-surface-raised border border-primary rounded-lg flex items-center justify-center neon-border">
-        <Mail className="w-5 h-5 text-primary" strokeWidth={1.5} />
+      <div
+        class="reveal w-12 h-12 mx-auto mb-5 bg-panel border-2 border-ink rounded-lg flex items-center justify-center text-accent"
+      >
+        <Icon name="Mail" class="w-5 h-5" />
       </div>
-      <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-4">Newsletter</h2>
-      <p class="text-xl text-text-secondary max-w-2xl mx-auto">
-        New posts, ship logs, and engagement notes. No spam. Unsubscribe in one click.
+      <h2 class="reveal text-4xl md:text-5xl text-heading mb-4">Newsletter</h2>
+      <p class="reveal text-lg text-muted max-w-2xl mx-auto">
+        New posts, ship logs, and engagement notes. No spam. Unsubscribe in one
+        click.
       </p>
     </header>
 
-    <div class="bg-surface-raised border border-border-default rounded-xl p-6 sm:p-8 max-w-xl mx-auto">
+    <div class="reveal panel panel--accent p-6 sm:p-8 max-w-xl mx-auto">
       <form id="ep-subscribe" class="flex flex-col gap-4">
-        <label for="ep-email" class="text-sm font-mono text-text-primary">Email</label>
+        <label for="ep-email" class="text-sm font-medium text-heading">Email</label>
         <input
           id="ep-email"
           name="email"
@@ -23,7 +31,7 @@ import { Mail } from 'lucide-react';
           required
           autocomplete="email"
           placeholder="you@example.com"
-          class="w-full px-4 py-3 bg-surface-base border border-border-default rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent neon-border"
+          class="input"
         />
 
         {/* Honeypot — bots fill it, humans never see it */}
@@ -36,12 +44,19 @@ import { Mail } from 'lucide-react';
           class="!absolute !-left-[9999px] !w-px !h-px !opacity-0"
         />
 
-        {/* Cloudflare Turnstile widget — script is loaded globally in Layout.astro */}
-        <div class="cf-turnstile flex justify-center" data-sitekey="0x4AAAAAADMKgjDCOeL0zVJj" data-theme="dark"></div>
+        {
+          TURNSTILE_SITE_KEY && (
+            <div
+              class="cf-turnstile flex justify-center"
+              data-sitekey={TURNSTILE_SITE_KEY}
+              data-theme="dark"
+            />
+          )
+        }
 
         <button
           type="submit"
-          class="w-full bg-primary text-surface-base py-3 rounded-lg font-mono font-semibold neon-border transition-all duration-200 disabled:opacity-50"
+          class="btn btn--accent w-full py-3 disabled:opacity-50"
         >
           &gt;subscribe
         </button>
@@ -49,13 +64,19 @@ import { Mail } from 'lucide-react';
           id="ep-status"
           role="status"
           aria-live="polite"
-          class="text-sm font-mono text-text-secondary min-h-[1.25rem]"
-        ></p>
+          class="text-sm font-mono text-muted min-h-[1.25rem]"
+        >
+        </p>
       </form>
     </div>
 
-    <p class="text-center text-xs font-mono text-text-muted mt-6">
-      Distributed by <a href="https://edgepress.rubrion.ai" class="text-primary hover:underline" rel="noopener" target="_blank">EdgePress</a>. Double opt-in: confirm via email after signup.
+    <p class="text-center text-xs font-mono text-muted mt-6">
+      Distributed by <a
+        href="https://edgepress.rubrion.ai"
+        class="text-accent hover:underline"
+        rel="noopener"
+        target="_blank">EdgePress</a
+      >. Double opt-in: confirm via email after signup.
     </p>
   </div>
 </section>
@@ -94,7 +115,9 @@ import { Mail } from 'lucide-react';
           st.textContent = o.j.alreadyActive ? msgAlready : msgConfirm;
           if (!o.j.alreadyActive) f.reset();
           if (window.turnstile) {
-            try { window.turnstile.reset(); } catch (_) {}
+            try {
+              window.turnstile.reset();
+            } catch (_) {}
           }
         })
         .catch(function () {

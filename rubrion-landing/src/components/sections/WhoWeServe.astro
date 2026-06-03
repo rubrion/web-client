@@ -1,57 +1,37 @@
 ---
-import { Building2, GraduationCap, Rocket } from 'lucide-react';
-
+import Icon from '@/components/Icon.astro';
 import { segments } from '@/data/segments';
-
-const ICONS = { Rocket, GraduationCap, Building2 } as const;
 ---
-<section
-  id="who-we-serve"
-  class="lazy-paint py-20 px-4 relative z-20 bg-surface-base overflow-hidden"
->
-  <aside
-    aria-hidden="true"
-    class="zigzag-strip absolute left-0 top-0 w-8 h-full hidden md:block"
-    style="background-image: url(/zigzag_black_transparent_left.png); background-repeat: repeat-y; background-size: contain; opacity: 0.6"
-  />
-  <aside
-    aria-hidden="true"
-    class="zigzag-strip zigzag-strip--reverse absolute right-0 top-0 w-8 h-full hidden md:block"
-    style="background-image: url(/zigzag_black_transparent_right.png); background-repeat: repeat-y; background-size: contain; opacity: 0.6"
-  />
 
-  <div class="max-w-6xl mx-auto relative z-10">
+<section id="who-we-serve" class="py-24 px-4">
+  <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">Who We Serve</h2>
+      <h2 class="reveal text-4xl md:text-5xl text-heading mb-4">Who We Serve</h2>
+      <p class="reveal text-lg text-muted max-w-2xl mx-auto">
+        SMBs, startups, schools, nonprofits, enterprises.
+      </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8">
-      {segments.map((segment) => {
-        const Icon = ICONS[segment.iconName];
-        return (
-          <article
-            class="bg-surface-raised border border-border-default rounded-xl p-8 hover:bg-surface-elevated transition-all duration-300 group"
-          >
-            <div class="mb-4">
-              <Icon className="w-8 h-8 text-primary" strokeWidth={1.5} />
+    <div class="grid md:grid-cols-3 gap-8 reveal-group">
+      {
+        segments.map((segment) => (
+          <article class="reveal panel p-8">
+            <div class="mb-4 text-accent">
+              <Icon name={segment.iconName} class="w-8 h-8" />
             </div>
-            <h3
-              class="text-2xl font-bold text-text-primary mb-4 group-hover:text-accent-indigo transition-colors"
-            >
-              {segment.title}
-            </h3>
-            <p class="text-text-secondary mb-6">{segment.description}</p>
+            <h3 class="text-2xl text-heading mb-3">{segment.title}</h3>
+            <p class="text-text mb-6">{segment.description}</p>
             <ul class="space-y-2">
               {segment.features.map((feature) => (
-                <li class="flex items-center text-text-secondary">
-                  <span class="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                <li class="flex items-center text-muted text-sm">
+                  <span class="w-1.5 h-1.5 bg-accent rounded-full mr-3" />
                   {feature}
                 </li>
               ))}
             </ul>
           </article>
-        );
-      })}
+        ))
+      }
     </div>
   </div>
 </section>
