@@ -1,35 +1,49 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
+import FloorStage from '@/components/FloorStage.astro';
 import { SITE_URL } from '@/data/seo';
+
+export const prerender = true;
 ---
+
 <Layout
   title="Blog — Rubrion | Software whitelabel e sob medida para PMEs"
   description="O blog da Rubrion. Notas sobre produtos whitelabel, infraestrutura e os projetos que entregamos para PMEs. Distribuído pelo EdgePress."
   canonical={`${SITE_URL}/blog`}
 >
-  <main class="w-full pt-24">
-    <section class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
-      <header class="mb-10 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-text-primary mb-4 neon-text">Blog</h1>
-        <p class="text-text-secondary max-w-2xl mx-auto">
-          Notas sobre produtos whitelabel, infraestrutura e os projetos que entregamos.
-        </p>
-      </header>
+  <Navbar />
 
-      <div class="rounded-xl border border-border-default bg-surface-raised p-2 sm:p-4 shadow-lg">
-        <iframe
-          src="https://edgepress.rubrion.ai/embed/blog?limit=20&date=1&excerpt=1&theme=dark&font=inherit"
-          style="width:100%;border:0;display:block;background:transparent"
-          width="100%"
-          height="0"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Blog da Rubrion"
-        ></iframe>
+  <main id="building">
+    <section class="floor" data-floor="blog">
+      <FloorStage layers={[{ name: 'blog', speed: 0.6, eager: true }]} />
+      <div class="floor__content">
+        <section class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 min-h-svh">
+          <header class="mb-10 text-center">
+            <h1 class="reveal text-4xl md:text-5xl text-heading mb-4">Blog</h1>
+            <p class="reveal text-lg text-muted max-w-2xl mx-auto">
+              Notas sobre produtos whitelabel, infraestrutura e os projetos que
+              entregamos.
+            </p>
+          </header>
+
+          <div class="reveal panel panel--accent p-2 sm:p-4">
+            <iframe
+              src="https://edgepress.rubrion.ai/embed/blog?limit=20&date=1&excerpt=1&theme=dark&font=inherit"
+              style="width:100%;border:0;display:block;background:transparent"
+              width="100%"
+              height="0"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Blog da Rubrion"></iframe>
+          </div>
+        </section>
       </div>
     </section>
   </main>
+
   <Footer />
-  <script src="https://edgepress.rubrion.ai/embed/resizer.js" async></script>
+  <script src="https://edgepress.rubrion.ai/embed/resizer.js" async is:inline
+  ></script>
 </Layout>

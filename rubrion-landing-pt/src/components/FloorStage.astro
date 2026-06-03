@@ -1,0 +1,58 @@
+---
+/**
+ * Parallax layer rig for one building floor.
+ *
+ * Layers are ordered back → front; each gets a `data-speed` that
+ * lib/parallax.ts turns into a scrubbed ScrollTrigger tween.
+ *
+ * Layer images come from `public/floors/<name>-<width>.webp`, generated
+ * by `scripts/optimize-floors.mjs` (prebuild) from `src/assets/floors/`.
+ * To add a foreground image later: drop the PNG in src/assets/floors/,
+ * run the script (or any build), and append one entry to `layers` —
+ * no JS changes needed. Arbitrary fg HTML can go in the default slot.
+ */
+export interface FloorLayer {
+  /** Base name in public/floors/, e.g. 'floor3' */
+  name: string;
+  speed: number;
+  alt?: string;
+  eager?: boolean;
+  class?: string;
+}
+
+interface Props {
+  layers: FloorLayer[];
+}
+
+const { layers } = Astro.props;
+
+const WIDTHS = [1280, 1920, 2560];
+/** Source artwork aspect ratio (2752×1536) */
+const RATIO = 1536 / 2752;
+
+const srcsetFor = (name: string) =>
+  WIDTHS.map((w) => `/floors/${name}-${w}.webp ${w}w`).join(', ');
+---
+
+<div class="floor__stage" aria-hidden="true">
+  {
+    layers.map((layer) => (
+      <div class:list={['floor__layer', layer.class]} data-speed={layer.speed}>
+        <img
+          src={`/floors/${layer.name}-1920.webp`}
+          srcset={srcsetFor(layer.name)}
+          sizes="100vw"
+          alt={layer.alt ?? ''}
+          width={1920}
+          height={Math.round(1920 * RATIO)}
+          loading={layer.eager ? 'eager' : 'lazy'}
+          fetchpriority={layer.eager ? 'high' : 'auto'}
+          decoding="async"
+        />
+      </div>
+    ))
+  }
+  <slot />
+  <div class="floor__scrim"></div>
+  <div class="floor__fade"></div>
+</div>
