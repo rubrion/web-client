@@ -1,33 +1,52 @@
 ---
-import '@/styles/global.css';
 import SEO from '@/components/SEO.astro';
-import LoadingScreen from '@/components/islands/LoadingScreen.tsx';
-import Navbar from '@/components/islands/Navbar.tsx';
-import { HTML_LANG } from '@/data/locale';
 import type { SEOProps } from '@/data/seo';
+import { HTML_LANG } from '@/data/locale';
 
-const props = Astro.props as SEOProps;
+import '@/styles/global.css';
+
+type Props = SEOProps;
+
+const seoProps = Astro.props;
 ---
+
 <!doctype html>
 <html lang={HTML_LANG}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/logo_rubrion_ver4.svg" />
-    <link rel="apple-touch-icon" href="/logo_rubrion_ver4.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="generator" content={Astro.generator} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+    />
 
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <SEO {...seoProps} />
 
-    <SEO {...props} />
+    <!-- Cloudflare Turnstile — used by newsletter + contact forms -->
+    <script
+      is:inline
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer></script>
   </head>
-  <body class="min-h-screen w-full overflow-x-hidden bg-surface-base text-text-primary">
-    <LoadingScreen client:load />
-    <Navbar client:load />
+  <body>
     <slot />
+
+    <script>
+      import { initializeScrollSystem } from '@/lib/scroll';
+      import { initParallax, initReveals } from '@/lib/parallax';
+
+      initializeScrollSystem().then(() => {
+        initParallax();
+        initReveals();
+      });
+    </script>
   </body>
 </html>

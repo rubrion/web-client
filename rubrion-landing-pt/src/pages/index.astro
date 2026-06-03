@@ -1,24 +1,58 @@
 ---
 import Layout from '@/layouts/Layout.astro';
+import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
+import FloorStage from '@/components/FloorStage.astro';
 import Hero from '@/components/sections/Hero.astro';
 import WhoWeServe from '@/components/sections/WhoWeServe.astro';
 import Projects from '@/components/sections/Projects.astro';
 import Newsletter from '@/components/sections/Newsletter.astro';
 import Contact from '@/components/sections/Contact.astro';
-import { DEFAULT_DESCRIPTION, SITE_URL } from '@/data/seo';
+import {
+  DEFAULT_TITLE,
+  DEFAULT_DESCRIPTION,
+  SITE_URL,
+} from '@/data/seo';
+
+export const prerender = true;
 ---
+
 <Layout
-  title="Rubrion — Code-free, cloud-fee | Consultoria de TI · Whitelabel e software sob medida"
+  title={DEFAULT_TITLE}
   description={DEFAULT_DESCRIPTION}
   canonical={`${SITE_URL}/`}
 >
-  <main class="w-full">
-    <Hero />
-    <WhoWeServe />
-    <Projects />
-    <Newsletter />
-    <Contact />
+  <Navbar />
+
+  <!--
+    The building: scrolling down descends through floors.
+    floor3 (top) → hero · floor2 → who we serve + projects ·
+    floor1 (ground) → newsletter + contact.
+  -->
+  <main id="building">
+    <section class="floor" data-floor="3">
+      <FloorStage layers={[{ name: 'floor3', speed: 0.6, eager: true }]} />
+      <div class="floor__content">
+        <Hero />
+      </div>
+    </section>
+
+    <section class="floor" data-floor="2">
+      <FloorStage layers={[{ name: 'floor2', speed: 0.6 }]} />
+      <div class="floor__content">
+        <WhoWeServe />
+        <Projects />
+      </div>
+    </section>
+
+    <section class="floor" data-floor="1">
+      <FloorStage layers={[{ name: 'floor1', speed: 0.6 }]} />
+      <div class="floor__content">
+        <Newsletter />
+        <Contact />
+      </div>
+    </section>
   </main>
+
   <Footer />
 </Layout>

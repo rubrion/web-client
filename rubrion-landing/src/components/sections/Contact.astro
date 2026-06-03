@@ -1,70 +1,171 @@
 ---
-import { Globe, Mail, Rocket } from 'lucide-react';
-
-import ContactForm from '@/components/islands/ContactForm.tsx';
+import Icon from '@/components/Icon.astro';
 import { BLUF, SUPPORT_EMAIL } from '@/data/seo';
 ---
-<section id="contact" class="lazy-paint py-20 px-4 bg-surface-raised">
+
+<section id="contact" class="py-24 px-4">
   <div class="max-w-4xl mx-auto">
     <header class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-text-primary mb-6">
+      <h2 class="reveal text-4xl md:text-5xl text-heading mb-6">
         Ready to Get Started?
       </h2>
-      <p class="bluf mx-auto">{BLUF.contact}</p>
-      <p class="text-xl text-text-secondary max-w-2xl mx-auto mt-6">
+      <p class="reveal text-lg text-muted max-w-2xl mx-auto">{BLUF.contact}</p>
+      <p class="reveal text-xl text-text max-w-2xl mx-auto mt-4">
         Let's discuss how Rubrion can accelerate your digital transformation
       </p>
     </header>
 
     <div class="grid md:grid-cols-2 gap-12">
-      <div class="bg-surface-base border border-border-default rounded-xl p-8">
-        <ContactForm client:visible />
+      <div
+        class="reveal panel panel--accent p-8 relative"
+      >
+        <form id="contact-form" class="space-y-6">
+          <div>
+            <label
+              for="contact-name"
+              class="block text-sm font-medium text-heading mb-2">Name *</label
+            >
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              required
+              class="input"
+            />
+          </div>
+          <div>
+            <label
+              for="contact-email"
+              class="block text-sm font-medium text-heading mb-2">Email *</label
+            >
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              required
+              class="input"
+            />
+          </div>
+          <div>
+            <label
+              for="contact-company"
+              class="block text-sm font-medium text-heading mb-2">Company</label
+            >
+            <input
+              type="text"
+              id="contact-company"
+              name="company"
+              class="input"
+            />
+          </div>
+          <div>
+            <label
+              for="contact-message"
+              class="block text-sm font-medium text-heading mb-2">Message *</label
+            >
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              rows="4"
+              class="input resize-none"></textarea>
+          </div>
+
+          {/* Honeypot */}
+          <div
+            aria-hidden="true"
+            style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;"
+          >
+            <label for="contact-website">Website</label>
+            <input
+              type="text"
+              id="contact-website"
+              name="honeypot"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div id="contact-turnstile" class="flex justify-center"></div>
+
+          <div
+            id="contact-error"
+            class="hidden bg-accent/10 border border-accent/50 rounded-lg p-3"
+          >
+            <p class="text-accent text-sm font-mono">
+              &gt; Error: <span id="contact-error-text"></span>
+            </p>
+          </div>
+
+          <button
+            id="contact-submit"
+            type="submit"
+            class="btn btn--accent w-full py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            &gt;send_message
+          </button>
+        </form>
+
+        <!-- Success state -->
+        <div
+          id="contact-success"
+          class="hidden absolute inset-0 bg-bg/95 rounded-xl flex-col items-center justify-center text-center p-8"
+        >
+          <div class="text-accent mb-4">
+            <Icon name="CheckCircle" class="w-12 h-12 mx-auto" />
+          </div>
+          <h3 class="text-xl font-mono text-heading mb-2">
+            &gt;message_sent!
+          </h3>
+          <p class="text-muted font-mono text-sm">
+            &gt; Response expected within 24 hours
+          </p>
+        </div>
       </div>
 
-      <aside class="space-y-8">
-        <div>
-          <h3 class="text-2xl font-bold text-text-primary mb-4">Let's Talk</h3>
-          <p class="text-text-secondary mb-6">
-            Brief us. Reply within 24 hours.
-          </p>
+      <aside class="space-y-8 reveal-group">
+        <div class="reveal">
+          <h3 class="text-2xl text-heading mb-4">Let's Talk</h3>
+          <p class="text-text mb-6">Brief us. Reply within 24 hours.</p>
         </div>
 
         <div class="space-y-4">
-          <div class="flex items-center">
+          <div class="reveal flex items-center">
             <div
-              class="w-10 h-10 bg-surface-raised border border-accent-cyan rounded-lg flex items-center justify-center mr-4"
+              class="w-10 h-10 bg-panel border-2 border-ink rounded-lg flex items-center justify-center mr-4 text-muted"
             >
-              <Mail className="w-5 h-5 text-accent-cyan" strokeWidth={1.5} />
+              <Icon name="Mail" class="w-5 h-5" />
             </div>
             <div>
-              <p class="text-text-primary font-medium">Email</p>
-              <a href={`mailto:${SUPPORT_EMAIL}`} class="text-accent-indigo hover:underline">
-                {SUPPORT_EMAIL}
-              </a>
+              <p class="text-heading font-medium">Email</p>
+              <a
+                href={`mailto:${SUPPORT_EMAIL}`}
+                class="text-accent hover:underline">{SUPPORT_EMAIL}</a
+              >
             </div>
           </div>
 
-          <div class="flex items-center">
+          <div class="reveal flex items-center">
             <div
-              class="w-10 h-10 bg-surface-raised border border-accent-green rounded-lg flex items-center justify-center mr-4"
+              class="w-10 h-10 bg-panel border-2 border-ink rounded-lg flex items-center justify-center mr-4 text-muted"
             >
-              <Globe className="w-5 h-5 text-accent-green" strokeWidth={1.5} />
+              <Icon name="Globe" class="w-5 h-5" />
             </div>
             <div>
-              <p class="text-text-primary font-medium">Response Time</p>
-              <p class="text-text-secondary">Within 24 hours</p>
+              <p class="text-heading font-medium">Response Time</p>
+              <p class="text-muted">Within 24 hours</p>
             </div>
           </div>
 
-          <div class="flex items-center">
+          <div class="reveal flex items-center">
             <div
-              class="w-10 h-10 bg-surface-raised border border-primary rounded-lg flex items-center justify-center mr-4 neon-border"
+              class="w-10 h-10 bg-panel border-2 border-ink rounded-lg flex items-center justify-center mr-4 text-muted"
             >
-              <Rocket className="w-5 h-5 text-primary" strokeWidth={1.5} />
+              <Icon name="Rocket" class="w-5 h-5" />
             </div>
             <div>
-              <p class="text-text-primary font-medium">Deployment</p>
-              <p class="text-text-secondary">6-10 weeks to production</p>
+              <p class="text-heading font-medium">Deployment</p>
+              <p class="text-muted">6-10 weeks to production</p>
             </div>
           </div>
         </div>
@@ -72,3 +173,180 @@ import { BLUF, SUPPORT_EMAIL } from '@/data/seo';
     </div>
   </div>
 </section>
+
+<script>
+  const WORKER_URL = import.meta.env.VITE_SUPPORT_WORKER_URL as
+    | string
+    | undefined;
+  const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as
+    | string
+    | undefined;
+
+  declare global {
+    interface Window {
+      turnstile?: {
+        render: (
+          container: HTMLElement | string,
+          options: {
+            sitekey: string;
+            callback?: (token: string) => void;
+            'expired-callback'?: () => void;
+            'error-callback'?: () => void;
+            theme?: 'light' | 'dark' | 'auto';
+          }
+        ) => string;
+        reset: (widgetId?: string) => void;
+        remove: (widgetId?: string) => void;
+      };
+    }
+  }
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById(
+    'contact-submit'
+  ) as HTMLButtonElement | null;
+  const errorBox = document.getElementById('contact-error');
+  const errorText = document.getElementById('contact-error-text');
+  const successBox = document.getElementById('contact-success');
+  const turnstileContainer = document.getElementById('contact-turnstile');
+
+  const captchaRequired = Boolean(TURNSTILE_SITE_KEY);
+  let turnstileToken: string | null = null;
+  let widgetId: string | null = null;
+
+  const updateSubmitState = (submitting = false) => {
+    if (!submitBtn) return;
+    submitBtn.disabled = submitting || (captchaRequired && !turnstileToken);
+    submitBtn.textContent = submitting
+      ? '>sending...'
+      : captchaRequired && !turnstileToken
+        ? '>verifying...'
+        : '>send_message';
+  };
+
+  const renderTurnstile = () => {
+    if (!captchaRequired || !turnstileContainer || !window.turnstile) return;
+    if (widgetId) return;
+    widgetId = window.turnstile.render(turnstileContainer, {
+      sitekey: TURNSTILE_SITE_KEY!,
+      theme: 'dark',
+      callback: (token: string) => {
+        turnstileToken = token;
+        updateSubmitState();
+      },
+      'expired-callback': () => {
+        turnstileToken = null;
+        updateSubmitState();
+      },
+      'error-callback': () => {
+        turnstileToken = null;
+        updateSubmitState();
+      },
+    });
+  };
+
+  const resetCaptcha = () => {
+    turnstileToken = null;
+    if (widgetId && window.turnstile) {
+      try {
+        window.turnstile.reset(widgetId);
+      } catch {
+        widgetId = null;
+        renderTurnstile();
+      }
+    }
+    updateSubmitState();
+  };
+
+  if (captchaRequired) {
+    updateSubmitState();
+    const interval = window.setInterval(() => {
+      renderTurnstile();
+      if (widgetId) window.clearInterval(interval);
+    }, 250);
+  }
+
+  const showError = (message: string) => {
+    if (errorBox && errorText) {
+      errorText.textContent = message;
+      errorBox.classList.remove('hidden');
+    }
+  };
+
+  const hideError = () => errorBox?.classList.add('hidden');
+
+  form?.addEventListener('input', hideError);
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+
+    const fd = new FormData(form);
+    const name = String(fd.get('name') ?? '').trim();
+    const email = String(fd.get('email') ?? '').trim();
+    const company = String(fd.get('company') ?? '').trim();
+    const message = String(fd.get('message') ?? '').trim();
+    const honeypot = String(fd.get('honeypot') ?? '');
+
+    if (!name || !email || !message) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+    if (!WORKER_URL) {
+      showError('Form endpoint is not configured. Please contact us directly.');
+      return;
+    }
+    if (captchaRequired && !turnstileToken) {
+      showError('Please complete the captcha challenge.');
+      return;
+    }
+
+    updateSubmitState(true);
+
+    const payload = {
+      name,
+      email,
+      subject: 'New contact form submission',
+      message: company ? `Company: ${company}\n\n${message}` : message,
+      turnstileToken: turnstileToken ?? '',
+      honeypot,
+    };
+
+    try {
+      const response = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        let msg =
+          'Failed to send message. Please try again or contact us directly.';
+        try {
+          const data = await response.json();
+          if (data?.error) msg = data.error;
+        } catch {
+          /* keep default */
+        }
+        showError(msg);
+        resetCaptcha();
+        return;
+      }
+
+      successBox?.classList.remove('hidden');
+      successBox?.classList.add('flex');
+      window.setTimeout(() => {
+        successBox?.classList.add('hidden');
+        successBox?.classList.remove('flex');
+        form.reset();
+        resetCaptcha();
+      }, 4000);
+    } catch (submitError) {
+      console.error('Failed to send message:', submitError);
+      showError('Network error. Please try again or contact us directly.');
+      resetCaptcha();
+    } finally {
+      updateSubmitState(false);
+    }
+  });
+</script>
