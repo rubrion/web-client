@@ -1,75 +1,62 @@
 ---
-import HeroCarousel from '@/components/islands/HeroCarousel.tsx';
 import { SITE_TAGLINE } from '@/data/seo';
+import { heroSteps } from '@/data/heroSteps';
 ---
+
 <section
   id="hero"
-  class="relative min-h-screen flex items-center justify-center overflow-hidden z-10 pt-20 w-full"
-  style="max-width: 100vw"
+  class="min-h-svh flex items-center justify-center px-4 pt-24 pb-16"
 >
-  <div class="hero-bg absolute inset-0 opacity-20 w-full h-full" aria-hidden="true">
-    <div class="absolute inset-0 bg-primary/8"></div>
-    <div class="hero-grid-wrap absolute inset-0 overflow-hidden">
-      <div
-        class="hero-grid absolute"
-        style={`inset: -100px;
-          background-image:
-            linear-gradient(90deg, transparent 95%, #ff0040 96%, transparent 100%),
-            linear-gradient(0deg, transparent 95%, #ff0040 96%, transparent 100%);
-          background-size: 100px 100px;
-          filter: drop-shadow(0 0 2px #ff0040);`}
+  <div class="w-full max-w-4xl mx-auto text-center reveal-group">
+    <div class="reveal flex justify-center mb-8">
+      <img
+        src="/logo_rubrion_ver4.svg"
+        alt="Rubrion logo"
+        width="112"
+        height="112"
+        loading="eager"
+        decoding="async"
+        class="w-24 h-24 md:w-28 md:h-28"
       />
     </div>
-  </div>
 
-  <div
-    class="relative z-10 w-full max-w-4xl mx-auto px-4 text-center"
-    style="max-width: min(1024px, 90vw)"
-  >
-    <div class="flex justify-center mb-8">
-      <div class="w-24 h-24 md:w-32 md:h-32">
-        <img
-          src="/logo_rubrion_ver4.svg"
-          alt="Rubrion logo"
-          width="128"
-          height="128"
-          loading="eager"
-          decoding="async"
-          class="w-full h-full"
-        />
-      </div>
-    </div>
-
-    <h1
-      class="text-5xl md:text-7xl font-mono font-bold mb-6 text-primary neon-text glitch"
-      data-text={SITE_TAGLINE}
-    >
+    <h1 class="reveal text-5xl md:text-7xl font-bold text-heading mb-6">
       {SITE_TAGLINE}
     </h1>
 
-    <p class="text-xl md:text-2xl font-mono text-text-primary mb-8 max-w-2xl mx-auto">
+    <p class="reveal text-lg md:text-2xl font-mono text-text mb-10 max-w-2xl mx-auto">
       &gt; IT consulting + whitelabel for SMBs<br />
       &gt; Complex software, cheap to deliver, transparent to operate
     </p>
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+    <div class="reveal flex flex-col sm:flex-row gap-4 justify-center mb-16">
       <a
         href="#contact"
-        class="bg-primary text-surface-base border-2 border-primary px-8 py-4 rounded-lg text-lg font-mono font-bold shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-200 whitespace-nowrap"
-        style="box-shadow: 0 0 20px rgba(255, 0, 64, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3)"
+        class="nav-anchor btn btn--accent px-8 py-4 text-lg whitespace-nowrap"
       >
         &gt;talk_to_us
       </a>
       <a
         href="#projects"
-        class="bg-surface-base border-2 border-primary text-primary px-8 py-4 rounded-lg text-lg font-mono font-bold neon-border hover:bg-primary hover:text-surface-base transition-all duration-200 whitespace-nowrap"
+        class="nav-anchor btn btn--ghost px-8 py-4 text-lg whitespace-nowrap"
       >
         &gt;see_projects
       </a>
     </div>
 
     <aside aria-label="Platform principles">
-      <HeroCarousel client:visible />
+      <ul class="grid sm:grid-cols-3 gap-4 text-left reveal-group">
+        {
+          heroSteps.map((step) => (
+            <li class="reveal panel panel--accent p-5">
+              <h2 class="text-base font-semibold text-heading mb-1">
+                {step.title}
+              </h2>
+              <p class="text-sm text-muted">{step.description}</p>
+            </li>
+          ))
+        }
+      </ul>
     </aside>
   </div>
 </section>

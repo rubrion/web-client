@@ -1,0 +1,231 @@
+---
+import Icon from '@/components/Icon.astro';
+import { SITE_NAME } from '@/data/seo';
+import { ALT_URL, ALT_LANG_LABEL, ALT_LANG_ARIA, LANG_LABEL } from '@/data/locale';
+
+const LINKS = [
+  { href: '/#who-we-serve', label: 'Who We Serve' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#newsletter', label: 'Newsletter' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<header
+  id="navbar"
+  class="fixed top-0 left-0 right-0 z-50 bg-header-bg/90 backdrop-blur border-b border-border"
+>
+  <!-- Scroll progress bar -->
+  <div
+    id="nav-progress"
+    class="absolute bottom-0 left-0 h-px bg-accent w-0"
+    aria-hidden="true"
+  >
+  </div>
+
+  <nav
+    class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4"
+    aria-label="Main"
+  >
+    <a href="/#hero" class="nav-anchor flex items-center gap-3" aria-label={SITE_NAME}>
+      <img
+        src="/logo_rubrion_ver4.svg"
+        width="32"
+        height="32"
+        alt=""
+        class="h-8 w-8"
+      />
+      <span class="font-bold text-heading">{SITE_NAME}</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+      {
+        LINKS.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="nav-anchor nav-link text-text hover:text-heading transition-colors"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={ALT_URL}
+        hreflang={ALT_LANG_LABEL === 'EN' ? 'en' : 'pt-BR'}
+        aria-label={ALT_LANG_ARIA}
+        class="hidden md:inline-flex items-center gap-1 border-2 border-ink rounded-md px-2.5 py-1.5 text-xs font-mono font-bold text-text hover:text-accent transition-colors"
+      >
+        <span aria-current="true" class="text-heading">{LANG_LABEL}</span>
+        <span class="text-muted">/</span>
+        <span>{ALT_LANG_LABEL}</span>
+      </a>
+
+      <a
+        href="/#contact"
+        class="nav-anchor hidden md:inline-block bg-accent text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-accent/90 transition-colors"
+      >
+        Talk to us
+      </a>
+
+      <button
+        id="nav-toggle"
+        type="button"
+        class="md:hidden text-heading p-2"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile"
+      >
+        <span id="nav-toggle-open"><Icon name="Menu" class="w-6 h-6" strokeWidth={2} /></span>
+        <span id="nav-toggle-close" class="hidden"><Icon name="X" class="w-6 h-6" strokeWidth={2} /></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="nav-mobile"
+    class="hidden md:hidden border-t border-border bg-header-bg px-4 py-4"
+  >
+    <ul class="flex flex-col gap-4 text-sm font-medium">
+      {
+        LINKS.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="nav-anchor block text-text hover:text-heading transition-colors"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href="/#contact"
+          class="nav-anchor inline-block bg-accent text-white px-4 py-2 rounded-md"
+        >
+          Talk to us
+        </a>
+      </li>
+      <li>
+        <a
+          href={ALT_URL}
+          hreflang={ALT_LANG_LABEL === 'EN' ? 'en' : 'pt-BR'}
+          aria-label={ALT_LANG_ARIA}
+          class="inline-flex items-center gap-1 border-2 border-ink rounded-md px-2.5 py-1.5 text-xs font-mono font-bold text-text"
+        >
+          <span class="text-heading">{LANG_LABEL}</span>
+          <span class="text-muted">/</span>
+          <span>{ALT_LANG_LABEL}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<style>
+  .nav-link[data-active='true'] {
+    color: var(--color-heading);
+    text-shadow: 0 0 1px currentColor;
+  }
+</style>
+
+<script>
+  import { scrollToElement } from '@/lib/scroll';
+
+  // Smooth anchor scrolling (Lenis-aware, native fallback inside helper).
+  // If the target section isn't on this page, fall through to normal
+  // navigation (e.g. /#projects from /blog).
+  document.querySelectorAll<HTMLAnchorElement>('.nav-anchor').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href') ?? '';
+      const hashIndex = href.indexOf('#');
+      if (hashIndex === -1) return;
+      const hash = href.slice(hashIndex);
+      if (!document.querySelector(hash)) return;
+      e.preventDefault();
+      closeMobileMenu();
+      scrollToElement(hash, { offset: -64 });
+      history.replaceState(null, '', hash);
+    });
+  });
+
+  // Scroll progress bar
+  const progress = document.getElementById('nav-progress');
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    if (progress) progress.style.width = `${pct}%`;
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  // Active section highlighting
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.nav-link')
+  );
+  const hashOf = (l: HTMLAnchorElement) => {
+    const href = l.getAttribute('href') ?? '';
+    const i = href.indexOf('#');
+    return i === -1 ? null : href.slice(i);
+  };
+  const sections = links
+    .map((l) => {
+      const hash = hashOf(l);
+      return hash ? document.querySelector(hash) : null;
+    })
+    .filter((s): s is Element => Boolean(s));
+
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((l) =>
+          l.setAttribute(
+            'data-active',
+            String(hashOf(l) === `#${entry.target.id}`)
+          )
+        );
+      });
+    },
+    { rootMargin: '-40% 0px -55% 0px' }
+  );
+  sections.forEach((s) => sectionObserver.observe(s));
+
+  // Highlight non-anchor page links (e.g. /blog) by pathname
+  links.forEach((l) => {
+    if (!hashOf(l) && l.getAttribute('href') === location.pathname) {
+      l.setAttribute('data-active', 'true');
+    }
+  });
+
+  // Mobile menu
+  const toggle = document.getElementById('nav-toggle');
+  const mobileMenu = document.getElementById('nav-mobile');
+  const iconOpen = document.getElementById('nav-toggle-open');
+  const iconClose = document.getElementById('nav-toggle-close');
+
+  const closeMobileMenu = () => {
+    mobileMenu?.classList.add('hidden');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+  };
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = !mobileMenu?.classList.contains('hidden');
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      mobileMenu?.classList.remove('hidden');
+      iconOpen?.classList.add('hidden');
+      iconClose?.classList.remove('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+  });
+</script>
