@@ -12,13 +12,13 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
-    slug: 'edgepress',
-    title: 'EdgePress',
+    slug: 'edgeletter',
+    title: 'EdgeLetter',
     category: 'Plataforma whitelabel de newsletter',
     description:
       'Plataforma de newsletter auto-hospedável — domínio de envio com sua marca, segmentação de público e envio agendado. Disponível como deploy gerenciado ou fork.',
-    liveUrl: 'https://edgepress.rubrion.ai',
-    repoUrl: 'https://github.com/rubrion/edgepress',
+    liveUrl: 'https://edgeletter.rubrion.ai',
+    repoUrl: 'https://github.com/rubrion/edgeletter',
     tags: ['Newsletter', 'Whitelabel', 'Auto-hospedável'],
     iconName: 'Newspaper',
   },

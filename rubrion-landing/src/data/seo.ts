@@ -7,7 +7,7 @@ export const SITE_TAGLINE = 'Code-free, cloud-fee.';
 export const DEFAULT_TITLE =
   'Rubrion — IT consulting · Whitelabel & bespoke software for SMBs';
 export const DEFAULT_DESCRIPTION =
-  'IT consulting for SMBs. Whitelabel products (EdgePress, Rubrion Store) and bespoke software on Kubernetes and Terraform.';
+  'IT consulting for SMBs. Whitelabel products (EdgeLetter, Rubrion Store) and bespoke software on Kubernetes and Terraform.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo_rubrion_ver4.png`;
 
 export const SOCIALS = [
@@ -30,7 +30,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: 'What does Rubrion do?',
     answer:
-      'IT consulting that builds, ships, and operates software for SMBs. Engagements blend whitelabel products (EdgePress newsletter, Rubrion Store marketplace) with bespoke integrations, delivered on Kubernetes and Terraform. SaaS deployment available when clients want it.',
+      'IT consulting that builds, ships, and operates software for SMBs. Engagements blend whitelabel products (EdgeLetter newsletter, Rubrion Store marketplace) with bespoke integrations, delivered on Kubernetes and Terraform. SaaS deployment available when clients want it.',
   },
   {
     question: 'How fast can Rubrion deliver?',
@@ -45,7 +45,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: 'Do clients get source access?',
     answer:
-      'Yes. Most Rubrion projects ship as open repositories under github.com/rubrion (EdgePress, Rubrion Store, etc.). Bespoke work is delivered with full source ownership to the client. Clients can fork, self-host, or migrate operations in-house at any time.',
+      'Yes. Most Rubrion projects ship as open repositories under github.com/rubrion (EdgeLetter, Rubrion Store, etc.). Bespoke work is delivered with full source ownership to the client. Clients can fork, self-host, or migrate operations in-house at any time.',
   },
   {
     question: 'What kinds of projects does Rubrion take on?',
@@ -108,7 +108,7 @@ export const buildOrganizationSchema = () => ({
       name: 'Whitelabel Product Deployment',
       category: 'Whitelabel Software',
       description:
-        'Branded deployments of Rubrion shipped products — EdgePress (newsletter), Rubrion Store (marketplace). Self-hosted by default; SaaS deployment available on request.',
+        'Branded deployments of Rubrion shipped products — EdgeLetter (newsletter), Rubrion Store (marketplace). Self-hosted by default; SaaS deployment available on request.',
       availability: 'https://schema.org/InStock',
     },
     {

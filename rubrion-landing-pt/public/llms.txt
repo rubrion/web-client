@@ -1,18 +1,18 @@
 # Rubrion
 
-> Consultoria de TI para PMEs. Produtos whitelabel (EdgePress, Rubrion Store) e software sob medida em Kubernetes e Terraform. Barato, rápido, transparente. Deploy SaaS disponível sob solicitação.
+> Consultoria de TI para PMEs. Produtos whitelabel (EdgeLetter, Rubrion Store) e software sob medida em Kubernetes e Terraform. Barato, rápido, transparente. Deploy SaaS disponível sob solicitação.
 
 Última atualização: 2026-06-03
 
 ## O que fazemos
 
-- **Implantação de Produto Whitelabel** — Deploys com sua marca dos produtos prontos da Rubrion (newsletter EdgePress, marketplace Rubrion Store). Auto-hospedado por padrão; deploy SaaS sob solicitação.
+- **Implantação de Produto Whitelabel** — Deploys com sua marca dos produtos prontos da Rubrion (newsletter EdgeLetter, marketplace Rubrion Store). Auto-hospedado por padrão; deploy SaaS sob solicitação.
 - **Desenvolvimento Sob Medida** — Plataformas web sob medida, integrações com terceiros e customização de APIs. Projetos de consultoria com taxa fixa e propriedade total do código entregue ao cliente.
 - **Infraestrutura Gerenciada e Operações** — Clusters Kubernetes em nível de produção e infraestrutura gerenciada via Terraform, operados pela Rubrion. Inclui monitoramento, hardening de segurança e resposta on-call.
 
 ## Projetos
 
-- **EdgePress** — plataforma whitelabel de newsletter. Site: https://edgepress.rubrion.ai · Código: https://github.com/rubrion/edgepress
+- **EdgeLetter** — plataforma whitelabel de newsletter. Site: https://edgeletter.rubrion.ai · Código: https://github.com/rubrion/edgeletter
 - **Rubrion Store** — plataforma whitelabel de marketplace. Site: https://rubrion.store · Código: https://github.com/rubrion/store
 - **Mondesa** (organização irmã) — soluções IoT para sistemas críticos de energia e arquitetura de redes de sensores sem fio. Site: https://mondesa.org · Código: https://github.com/mondesa
 
@@ -43,7 +43,7 @@ Kubernetes, Terraform, fundações maduras dirigidas pela comunidade, interfaces
 
 ## Acesso ao código
 
-A maioria dos projetos Rubrion é entregue como repositórios abertos em github.com/rubrion (EdgePress, Rubrion Store etc.). Trabalhos sob medida são entregues com a propriedade total do código ao cliente. O cliente pode fazer fork, auto-hospedar ou internalizar a operação a qualquer momento.
+A maioria dos projetos Rubrion é entregue como repositórios abertos em github.com/rubrion (EdgeLetter, Rubrion Store etc.). Trabalhos sob medida são entregues com a propriedade total do código ao cliente. O cliente pode fazer fork, auto-hospedar ou internalizar a operação a qualquer momento.
 
 ## Contato
 
