@@ -1,18 +1,18 @@
 # Rubrion
 
-> IT consulting for SMBs. Whitelabel products (EdgePress, Rubrion Store) and bespoke software on Kubernetes and Terraform. Cheap, fast, transparent. SaaS deployment available on request.
+> IT consulting for SMBs. Whitelabel products (EdgeLetter, Rubrion Store) and bespoke software on Kubernetes and Terraform. Cheap, fast, transparent. SaaS deployment available on request.
 
 Last updated: 2026-06-03
 
 ## What we do
 
-- **Whitelabel Product Deployment** — Branded deploys of Rubrion shipped products (EdgePress newsletter, Rubrion Store marketplace). Self-hosted by default; SaaS deployment on request.
+- **Whitelabel Product Deployment** — Branded deploys of Rubrion shipped products (EdgeLetter newsletter, Rubrion Store marketplace). Self-hosted by default; SaaS deployment on request.
 - **Bespoke Software Development** — Custom web platforms, third-party integrations, and API customization. Fixed-fee consulting engagements with full source ownership delivered to the client.
 - **Managed Infrastructure & Operations** — Production-grade Kubernetes clusters and Terraform-managed infrastructure operated by Rubrion. Includes monitoring, security hardening, and on-call response.
 
 ## Projects
 
-- **EdgePress** — whitelabel newsletter platform. Live: https://edgepress.rubrion.ai · Source: https://github.com/rubrion/edgepress
+- **EdgeLetter** — whitelabel newsletter platform. Live: https://edgeletter.rubrion.ai · Source: https://github.com/rubrion/edgeletter
 - **Rubrion Store** — whitelabel marketplace platform. Live: https://rubrion.store · Source: https://github.com/rubrion/store
 - **Mondesa** (sister organization) — IoT solutions for critical energy systems and wireless sensor network architecture. Live: https://mondesa.org · Source: https://github.com/mondesa
 
@@ -43,7 +43,7 @@ Kubernetes, Terraform, mature community-driven foundations, API-first interfaces
 
 ## Source access
 
-Most Rubrion projects ship as open repositories under github.com/rubrion (EdgePress, Rubrion Store, etc.). Bespoke work is delivered with full source ownership to the client. Clients can fork, self-host, or migrate operations in-house at any time.
+Most Rubrion projects ship as open repositories under github.com/rubrion (EdgeLetter, Rubrion Store, etc.). Bespoke work is delivered with full source ownership to the client. Clients can fork, self-host, or migrate operations in-house at any time.
 
 ## Contact
 

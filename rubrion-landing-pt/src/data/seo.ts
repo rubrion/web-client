@@ -7,7 +7,7 @@ export const SITE_TAGLINE = 'Code-free, cloud-fee.';
 export const DEFAULT_TITLE =
   'Rubrion — Consultoria de TI · Whitelabel e software sob medida para PMEs';
 export const DEFAULT_DESCRIPTION =
-  'Consultoria de TI para PMEs. Produtos whitelabel (EdgePress, Rubrion Store) e software sob medida em Kubernetes e Terraform.';
+  'Consultoria de TI para PMEs. Produtos whitelabel (EdgeLetter, Rubrion Store) e software sob medida em Kubernetes e Terraform.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo_rubrion_ver4.png`;
 
 export const SOCIALS = [
@@ -29,7 +29,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: 'O que a Rubrion faz?',
     answer:
-      'Consultoria de TI que constrói, entrega e opera software para PMEs. Projetos combinam produtos whitelabel (newsletter EdgePress, marketplace Rubrion Store) com integrações sob medida, entregues em Kubernetes e Terraform. Deploy SaaS disponível quando o cliente desejar.',
+      'Consultoria de TI que constrói, entrega e opera software para PMEs. Projetos combinam produtos whitelabel (newsletter EdgeLetter, marketplace Rubrion Store) com integrações sob medida, entregues em Kubernetes e Terraform. Deploy SaaS disponível quando o cliente desejar.',
   },
   {
     question: 'Quão rápido a Rubrion entrega?',
@@ -44,7 +44,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: 'Os clientes têm acesso ao código-fonte?',
     answer:
-      'Sim. A maioria dos projetos Rubrion é entregue como repositórios abertos em github.com/rubrion (EdgePress, Rubrion Store etc.). Trabalhos sob medida são entregues com a propriedade total do código ao cliente. O cliente pode fazer fork, auto-hospedar ou internalizar a operação a qualquer momento.',
+      'Sim. A maioria dos projetos Rubrion é entregue como repositórios abertos em github.com/rubrion (EdgeLetter, Rubrion Store etc.). Trabalhos sob medida são entregues com a propriedade total do código ao cliente. O cliente pode fazer fork, auto-hospedar ou internalizar a operação a qualquer momento.',
   },
   {
     question: 'Que tipos de projetos a Rubrion aceita?',
@@ -109,7 +109,7 @@ export const buildOrganizationSchema = () => ({
       name: 'Implantação de Produto Whitelabel',
       category: 'Software Whitelabel',
       description:
-        'Deploys com sua marca dos produtos Rubrion — EdgePress (newsletter), Rubrion Store (marketplace). Auto-hospedado por padrão; deploy SaaS disponível sob solicitação.',
+        'Deploys com sua marca dos produtos Rubrion — EdgeLetter (newsletter), Rubrion Store (marketplace). Auto-hospedado por padrão; deploy SaaS disponível sob solicitação.',
       availability: 'https://schema.org/InStock',
     },
     {
