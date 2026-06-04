@@ -72,10 +72,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as
 
     <p class="text-center text-xs font-mono text-muted mt-6">
       Distributed by <a
-        href="https://edgepress.rubrion.ai"
+        href="https://edgeletter.rubrion.ai"
         class="text-accent hover:underline"
         rel="noopener"
-        target="_blank">EdgePress</a
+        target="_blank">EdgeLetter</a
       >. Double opt-in: confirm via email after signup.
     </p>
   </div>
@@ -97,7 +97,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as
       var t = fd.get('cf-turnstile-response');
       if (t) body.turnstile = t;
       st.textContent = msgSubmitting;
-      fetch('https://edgepress.rubrion.ai/api/subscribe', {
+      fetch('https://edgeletter.rubrion.ai/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
