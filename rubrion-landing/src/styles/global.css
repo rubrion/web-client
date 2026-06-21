@@ -1,326 +1,387 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-/*
- * Rubrion brand tokens — dark theme only (branding.html spec).
- * Accent reserved for one CTA per visible region.
- */
+/* class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- fonts ---- */
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/inter-latin.woff2) format("woff2");
+  unicode-range: u+00??, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc,
+    u+2000-206f, u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
+}
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/inter-latin-ext.woff2) format("woff2");
+  unicode-range: u+0100-02ba, u+02bd-02c5, u+02c7-02cc, u+02ce-02d7, u+02dd-02ff,
+    u+1e00-1e9f, u+2020, u+20a0-20ab, u+2113, u+2c60-2c7f, u+a720-a7ff;
+}
+
+/* ---- design tokens ---- */
 @theme {
-  --color-accent: #ff0040;
-  --color-bg: #0f1119;
-  --color-header-bg: #1b1e2d;
-  /* Contrast bumped above branding spec so panels hold up over artwork */
-  --color-heading: #ffffff;
-  --color-text: #dde5f4;
-  --color-muted: #93a3c4;
-  --color-border: #262b3c;
-  /* Comic-style ink for component outlines, matching the artwork's
-     bold black linework */
-  --color-ink: #04060b;
-  --color-panel: #151a28;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Circular", "Circular Std", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --font-sans:
-    'Fira Sans', -apple-system, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
+  /* brand red palette */
+  --color-brand-400: oklch(0.71 0.19 22);
+  --color-brand-500: oklch(0.64 0.24 26);
+  --color-brand-600: oklch(0.58 0.245 27);
+  --color-brand-700: oklch(0.51 0.23 28);
 
-:root {
-  color-scheme: dark;
-}
+  /* border lines: near-neutral with a faint warm/red tint (light / dark) */
+  --color-line: oklch(0.91 0.012 25);
+  --color-line-dark: oklch(0.27 0.018 25);
 
-html.lenis,
-html.lenis body {
-  height: auto;
+  /* shadows + glows: dark, almost black, just a whisper of red */
+  --shadow-brand:
+    0 1px 1px rgba(0, 0, 0, 0.06), 0 4px 6px rgba(25, 5, 7, 0.10),
+    0 24px 68px rgba(25, 5, 7, 0.16), 0 2px 3px rgba(0, 0, 0, 0.08);
+  --shadow-brand-glow:
+    0 0 0 1px rgba(35, 7, 9, 0.55), 0 1px 1px rgba(0, 0, 0, 0.40),
+    0 8px 30px rgba(20, 4, 6, 0.40), 0 0 14px rgba(80, 14, 18, 0.15);
+  --shadow-brand-ring: 0 0 16px rgba(70, 12, 16, 0.15);
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
 }
 
-body {
-  @apply bg-bg text-text font-sans;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
+/* ============================================================
+   Components
+   ============================================================ */
 
-h1,
-h2,
-h3,
-h4 {
-  @apply text-heading font-bold;
-  line-height: 1.2;
-}
-
-code,
-pre {
-  font-family: var(--font-mono);
-  font-feature-settings: 'liga' on, 'calt' on;
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-::selection {
-  background: rgba(255, 0, 64, 0.35);
-  color: var(--color-heading);
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
-}
-
-/* ------------------------------------------------------------------ */
-/* Building / floor parallax rig                                       */
-/*                                                                     */
-/* Each .floor section owns a sticky full-viewport stage that pins its */
-/* background layers while the floor's content scrolls past. Layers    */
-/* carry data-speed and are scrub-translated by lib/parallax.ts.       */
-/* ------------------------------------------------------------------ */
-
-.floor {
+/* primary CTA button */
+.btn-primary {
   position: relative;
-}
-
-.floor__stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-  z-index: 0;
-  /* Stage is pinned, content scrolls over it. Pull following content
-     up so it overlaps the stage rather than stacking below it. */
-  margin-bottom: -100svh;
-  /* Feather the stage's top/bottom so the torn edge dissolves into black
-     instead of ending in a solid line. */
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 7%,
-    #000 16%,
-    #000 84%,
-    rgba(0, 0, 0, 0.4) 93%,
-    transparent 100%
-  );
-  /* Irregular top/bottom edges so the cut between two floor images reads
-     as a torn/broken slab instead of a straight horizontal line. */
-  clip-path: polygon(
-    0% 1.6%,
-    5% 0.3%,
-    11% 1.9%,
-    17% 0.7%,
-    24% 2.3%,
-    31% 0.4%,
-    38% 1.7%,
-    45% 0.9%,
-    52% 2.1%,
-    59% 0.5%,
-    66% 1.8%,
-    73% 0.6%,
-    80% 2.2%,
-    87% 0.8%,
-    94% 1.5%,
-    100% 0.4%,
-    100% 98.3%,
-    95% 99.6%,
-    89% 98.0%,
-    82% 99.4%,
-    75% 97.8%,
-    68% 99.5%,
-    61% 98.1%,
-    54% 99.3%,
-    47% 97.7%,
-    40% 99.4%,
-    33% 98.2%,
-    26% 99.6%,
-    19% 97.9%,
-    12% 99.2%,
-    6% 98.4%,
-    0% 99.5%
-  );
-}
-
-.floor__layer {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-}
-
-.floor__layer img {
-  position: absolute;
-  left: 0;
-  top: -15%;
-  width: 100%;
-  height: 130%;
-  object-fit: cover;
-}
-
-/* Darkening scrim so content stays readable over artwork.
-   Edges fade to black so floor-to-floor transitions read as passing
-   through the building's slab between levels. */
-.floor__scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.96) 0%,
-      rgba(0, 0, 0, 0.78) 8%,
-      rgba(10, 12, 18, 0.5) 20%,
-      rgba(10, 12, 18, 0.5) 80%,
-      rgba(0, 0, 0, 0.78) 92%,
-      rgba(0, 0, 0, 0.96) 100%
-    );
-  pointer-events: none;
-}
-
-/* Scroll-driven blackout: lib/parallax.ts scrubs opacity 0→1 as a floor
-   exits the viewport and 1→0 as the next one enters, so the cut line
-   between two floor images is always buried in black. */
-.floor__fade {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.floor__content {
-  position: relative;
-  z-index: 2;
-}
-
-/* Reduced motion / touch fallback: static backgrounds, no pin */
-body.reduced-motion .floor__stage {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  margin-bottom: 0;
-}
-
-body.reduced-motion .floor__layer img {
-  top: 0;
-  height: 100%;
-}
-
-/* ------------------------------------------------------------------ */
-/* Comic panels & controls                                             */
-/*                                                                     */
-/* The floor artwork is cartoon-styled with heavy black linework, so   */
-/* components follow: near-black solid fills, thick ink outlines,      */
-/* slightly wobbly (hand-drawn) corners, hard offset shadows.          */
-/* ------------------------------------------------------------------ */
-
-.panel {
-  background: var(--color-panel);
-  border: 2px solid var(--color-ink);
-  /* asymmetric radii read as hand-drawn linework */
-  border-radius: 255px 18px 225px 18px / 18px 225px 18px 255px;
-  box-shadow: 5px 6px 0 rgba(0, 0, 0, 0.7);
-}
-
-.panel--accent {
-  border-top: 4px solid var(--color-accent);
-}
-
-.btn {
-  display: inline-block;
-  font-family: var(--font-mono);
+  cursor: pointer;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
   font-weight: 700;
-  border: 2px solid var(--color-ink);
-  border-radius: 225px 14px 255px 14px / 14px 255px 14px 225px;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.85);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.85);
-}
-
-.btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.85);
-}
-
-.btn--accent {
-  background: var(--color-accent);
   color: #fff;
+  background: #000;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-brand-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: var(--shadow-brand-glow), var(--shadow-brand-ring);
 }
 
-.btn--ghost {
-  background: var(--color-panel);
-  color: var(--color-heading);
+/* ghost / text button (nav login) */
+.btn-ghost {
+  position: relative;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #000;
+  transition: transform 0.2s;
 }
+.btn-ghost:hover { transform: translateY(-0.125rem); }
+.dark .btn-ghost { color: #fff; }
 
-.btn--ghost:hover {
-  color: var(--color-accent);
-}
-
+/* form input / textarea — neutral surface, red focus ring */
 .input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: #070a10;
-  border: 2px solid var(--color-ink);
-  border-radius: 10px;
-  color: var(--color-heading);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-neutral-900);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-
-.input::placeholder {
-  color: var(--color-muted);
-}
-
+.input::placeholder { color: var(--color-neutral-400); }
 .input:focus {
   outline: none;
-  border-color: var(--color-accent);
+  border-color: var(--color-brand-500);
+  box-shadow: var(--shadow-brand-ring);
+}
+.dark .input {
+  border-color: var(--color-line-dark);
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-100);
+}
+.dark .input::placeholder { color: var(--color-neutral-500); }
+
+/* bento feature card */
+.feature-card {
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: var(--shadow-brand);
+}
+.dark .feature-card { background: var(--color-neutral-900); }
+
+/* globe canvas sizing */
+.globe-canvas {
+  width: 440px;
+  height: 440px;
+  max-width: 100%;
+  aspect-ratio: 1;
 }
 
-/* ------------------------------------------------------------------ */
-/* Scroll reveal                                                       */
-/* ------------------------------------------------------------------ */
+/* resizable navbar: width shrinks + blur bg on scroll */
+#nav-pill {
+  transition: max-width 0.3s ease, transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+}
+#nav-pill.scrolled {
+  max-width: 48rem;
+  transform: translateY(8px);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-brand), var(--shadow-brand-ring);
+}
+.dark #nav-pill.scrolled {
+  background: rgba(23, 23, 23, 0.8);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), var(--shadow-brand-ring);
+}
 
-.reveal {
+/* ---- hero background: rotated dashed grid lines ---- */
+.grid-line {
+  --grid-bg: #fff;
+  --grid-color: rgba(40, 8, 10, 0.18);
+  --grid-color-dark: rgba(230, 216, 217, 0.18);
+  --grid-w: 1px;
+  --grid-h: 5px;
+  --grid-fade: 90%;
+  --grid-offset: 150px;
+  position: absolute;
+  z-index: 30;
+  top: calc(var(--grid-offset) / 2 * -1);
+  height: calc(100% + var(--grid-offset));
+  width: var(--grid-w);
+  background: linear-gradient(
+    to bottom, var(--grid-color), var(--grid-color) 50%, transparent 0, transparent
+  );
+  background-size: var(--grid-w) var(--grid-h);
+  mask:
+    linear-gradient(to top, var(--grid-bg) var(--grid-fade), transparent),
+    linear-gradient(to bottom, var(--grid-bg) var(--grid-fade), transparent),
+    linear-gradient(black, black);
+  mask-composite: exclude;
+}
+.grid-line.is-left { left: 0; }
+.grid-line.is-right { left: auto; right: 0; }
+.dark .grid-line {
+  background: linear-gradient(
+    to bottom, var(--grid-color-dark), var(--grid-color-dark) 50%, transparent 0, transparent
+  );
+}
+
+/* ---- hero falling beams (initial resting state; engine drives transform) ---- */
+.beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3.5rem;
+  width: 1px;
+  border-radius: 9999px;
+  background: linear-gradient(to top, var(--color-brand-600), var(--color-brand-400), transparent);
   opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translate(0, -200px) rotate(-45deg);
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+/* ---- entrance animations ---- */
+/* heading words: blur-in, staggered by --i */
+.hero-word {
+  display: inline-block;
+  opacity: 0;
+  animation: blur-in 0.4s ease forwards;
+  animation-delay: calc(var(--i, 0) * 0.05s);
 }
+@keyframes blur-in {
+  from { filter: blur(10px); opacity: 0; transform: translateY(10px); }
+  to   { filter: blur(0);    opacity: 1; transform: translateY(0); }
+}
+/* fade + rise for subtitle / cta / framed image */
+.fade-rise { opacity: 0; animation: rise 0.2s ease forwards; }
+.fade-rise.is-sub { animation-delay: 0.5s; }
+.fade-rise.is-cta { animation-delay: 0.7s; }
+.fade-rise.is-img { --rise-from: 20px; animation: rise 0.4s ease-out 0.9s forwards; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(var(--rise-from, 10px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- beam collision: explosion on impact (sparks + glow line) ---- */
+.beam-explosion {
+  position: absolute;
+  z-index: 50;
+  height: 0.5rem;
+  width: 0.5rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.beam-explosion-glow {
+  position: absolute;
+  inset-inline: -2.5rem;
+  top: 0;
+  margin: auto;
+  height: 4px;
+  width: 2.5rem;
+  border-radius: 9999px;
+  filter: blur(4px);
+  background: linear-gradient(to right, transparent, var(--color-brand-500), transparent);
+  animation: beam-glow 1s ease-out forwards;
+}
+.beam-spark {
+  position: absolute;
+  height: 4px;
+  width: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(to bottom, var(--color-brand-500), var(--color-brand-400));
+  animation: beam-spark-fly var(--dur, 1s) ease-out forwards;
+}
+@keyframes beam-glow {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes beam-spark-fly {
+  from { transform: translate(0, 0); opacity: 1; }
+  to   { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* ---- deploy cards: rotateX nod, 2s active + ~6s rest, staggered by position ---- */
+.card-nod { animation: card-nod 8s ease-in-out infinite; }
+.deploy-grid > .card-nod:nth-child(2) { animation-delay: 2s; }
+.deploy-grid > .card-nod:nth-child(3) { animation-delay: 4s; }
+@keyframes card-nod {
+  0%    { transform: rotateX(0deg); }
+  12.5% { transform: rotateX(10deg); }
+  25%   { transform: rotateX(0deg); }
+  100%  { transform: rotateX(0deg); }
+}
+
+/* ---- features header: box draws from top-left + corner dots fade in ---- */
+.draw-box {
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  transform-origin: top left;
+  transition: width 1s ease-in-out, height 1s ease-in-out;
+}
+.draw-box.in-view { width: 100%; height: 100%; }
+.draw-box .corner-dot { opacity: 0; transition: opacity 0.4s ease 0.7s; }
+.draw-box.in-view .corner-dot { opacity: 1; }
+
+/* ---- hero carousel: aspect-locked so the beam-collision top edge never moves ---- */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* == old 1920x1080 img; keeps the box height stable */
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--color-neutral-100);
+}
+.dark .hero-carousel { background: #000; }
+.hero-carousel-track { position: absolute; inset: 0; }
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+.hero-slide.is-active { opacity: 1; pointer-events: auto; }
+.hero-slide.is-hidden { display: none; } /* reduced-motion: keep one slide only */
+.hero-dots {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.75rem;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.hero-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 9999px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--color-neutral-300);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.hero-dot.is-active { width: 18px; background: var(--color-brand-500); }
+.dark .hero-dot { background: var(--color-neutral-700); }
+.dark .hero-dot.is-active { background: var(--color-brand-500); }
+
+/* ---- products grid: uniform logo/monogram tile + feature chip ---- */
+.product-mark {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-neutral-100);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.dark .product-mark {
+  border-color: var(--color-line-dark);
+  background: var(--color-neutral-900);
+}
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--color-line);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--color-neutral-500);
+}
+.dark .tag-pill { border-color: var(--color-line-dark); }
+
+/* ---- Rubot pipeline node: tone the metallic PNG to the dark/red theme ---- */
+.rubot-img {
+  filter:
+    grayscale(0.45) contrast(1.08) brightness(0.92)
+    drop-shadow(0 0 8px rgba(150, 25, 30, 0.55));
+}
+
+/* ---- FAQ accordion: native <details>, custom marker + chevron ---- */
+.faq-item summary { list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-chevron { transition: transform 0.2s ease; }
+.faq-item[open] .faq-chevron { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
   }
-}
-
-/* Stagger helper — apply to a parent; children reveal with a delay step */
-.reveal-group .reveal:nth-child(2) {
-  transition-delay: 0.12s;
-}
-.reveal-group .reveal:nth-child(3) {
-  transition-delay: 0.24s;
-}
-.reveal-group .reveal:nth-child(4) {
-  transition-delay: 0.36s;
 }
