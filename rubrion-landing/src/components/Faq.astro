@@ -1,0 +1,52 @@
+---
+// FAQ — Why Rubrion, as a dropdown accordion (native <details>, no JS)
+const faqs = [
+	{
+		q: 'How fast can you ship?',
+		a: 'Standard projects go live in six to ten weeks, from first call to production.',
+	},
+	{
+		q: 'How does pricing work?',
+		a: 'Fixed-fee work, plus your own infrastructure cost. No per-seat fees, no lock-in, and no offboarding penalty.',
+	},
+	{
+		q: 'Do we own what you build?',
+		a: 'Yes. We deliver the source. Fork it, self-host it, or take it in-house anytime.',
+	},
+	{
+		q: 'Where do you host?',
+		a: 'We run managed hosting in Brazil, Europe-West, and US-East. Pick the region for your latency and data residency, or let us host across all three.',
+	},
+	{
+		q: 'Can we launch a product under our own brand?',
+		a: 'Yes. Our ready-made products run under your brand: newsletters, a marketplace, hiring, and AI agents. See the products page for the full lineup.',
+	},
+	{
+		q: 'Can you build something custom?',
+		a: 'Yes. Fullstack web and mobile, on a fixed fee and a fixed timeline, with the source delivered to you.',
+	},
+];
+---
+
+<section id="faq" class="w-full bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+	<div class="mx-auto max-w-3xl">
+		<h2 class="text-center text-xl font-bold tracking-tight text-neutral-800 md:text-4xl dark:text-neutral-100">
+			Why Rubrion
+		</h2>
+		<p class="mx-auto mt-4 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-400">
+			Common questions, answered.
+		</p>
+
+		<div class="mt-12 divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
+			{faqs.map((f) => (
+				<details class="faq-item group">
+					<summary class="flex cursor-pointer items-center justify-between gap-6 py-5">
+						<span class="text-base font-medium text-neutral-800 md:text-lg dark:text-neutral-100">{f.q}</span>
+						<svg class="faq-chevron h-5 w-5 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+					</summary>
+					<p class="pb-5 pr-10 text-sm/6 text-neutral-600 dark:text-neutral-400">{f.a}</p>
+				</details>
+			))}
+		</div>
+	</div>
+</section>

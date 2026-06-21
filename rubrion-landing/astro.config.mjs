@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -15,6 +16,7 @@ export default defineConfig({
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
+    // VITE_* are non-secret build-time vars baked into the client bundle.
     envPrefix: ['PUBLIC_', 'VITE_'],
   },
 });

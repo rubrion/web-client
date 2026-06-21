@@ -10,42 +10,35 @@ systems.
 
 | Folder | Stack | Domain |
 |--------|-------|--------|
-| `rubrion-landing/` | Astro 6 SSG + React islands + Tailwind v4 | **rubrion.ai** (English) |
-| `rubrion-landing-pt/` | identical clone, translated copy | **rubrion.com.br** (Portuguese — BR) |
+| `rubrion-landing/` | Astro 6 SSG + Tailwind v4 (monochrome + red "spark" brand) | **rubrion.ai** (English) |
 
-Both projects use the `@astrojs/cloudflare` adapter targeting `output: 'static'`,
-share the same Turnstile site key, and post to the same support-email-worker
-(lives in a sibling repo at `../support-email-worker/`).
+EN-only for now. The previous Portuguese clone (`rubrion-landing-pt/` →
+rubrion.com.br) has been retired; rubrion.com.br is parked / redirected in the
+Cloudflare dashboard until a PT version of the new template is built.
 
-A small navbar widget on each site links to its counterpart so visitors can
-toggle locales (EN ↔ PT). The selection is persistent only by URL — no
-geo-redirect, no cookies.
+The site uses the `@astrojs/cloudflare` adapter targeting `output: 'static'`,
+loads Cloudflare Turnstile on the contact + newsletter forms, posts contact
+submissions to the support-email-worker (sibling repo `../support-email-worker/`),
+and subscribes the newsletter via [EdgeLetter](https://edgeletter.rubrion.ai)
+(`/api/subscribe`). The blog page embeds the EdgeLetter blog as a self-resizing
+iframe.
 
 ## Local dev
 
 ```bash
-cd rubrion-landing       && npm install && npm run dev   # :4321
-cd rubrion-landing-pt    && npm install && npm run dev   # :4321 (run separately)
+cd rubrion-landing && npm install && npm run dev   # :4321
 ```
 
 ## Build & deploy
 
 ```bash
-cd rubrion-landing       && npm run deploy   # → rubrion-landing worker
-cd rubrion-landing-pt    && npm run deploy   # → rubrion-landing-pt worker
+cd rubrion-landing && npm run deploy   # → rubrion-landing worker
 ```
 
-Both worker bindings carry the same vars in `wrangler.jsonc` (Turnstile site
-key + `VITE_SUPPORT_WORKER_URL`). Cloudflare custom domains attach to the
-respective workers in the dashboard.
-
-## Translation strategy
-
-Hard fork. The two trees share no code at runtime — every translatable string
-lives in either `src/data/*.ts` or in the `.astro` / `.tsx` files of each
-project, and the translations are hand-tuned. When the EN copy changes, port
-the structural delta to PT manually. See `EMAIL_INTEGRATION.md` for the
-infrastructure side (DNS, MailChannels, Turnstile allow-list).
+The worker carries the non-secret build-time vars in `.env.production`
+(`VITE_SUPPORT_WORKER_URL` + Turnstile site key), baked into the client bundle
+by CF Workers Builds in CI. The rubrion.ai custom domain attaches to the
+`rubrion-landing` worker in the dashboard.
 
 ## Email + Turnstile
 
