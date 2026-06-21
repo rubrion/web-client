@@ -1,23 +1,23 @@
 ---
-// Newsletter — EdgeLetter double opt-in subscribe
+// Newsletter — compact row under the "What we build" grid. EdgeLetter double opt-in.
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 ---
 
-<section id="newsletter" class="w-full bg-white px-4 py-24 md:px-8 dark:bg-neutral-950">
-	<div class="mx-auto max-w-3xl">
-		<header class="text-center">
-			<div class="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-line bg-neutral-100 text-brand-500 dark:border-line-dark dark:bg-neutral-900">
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-			</div>
-			<h2 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-4xl dark:text-neutral-100">Newsletter</h2>
-			<p class="mx-auto mt-4 max-w-xl text-base/7 text-neutral-600 dark:text-neutral-400">
-				New posts, ship logs, and engagement notes. No spam. Unsubscribe in one click.
+<div id="newsletter" class="mx-auto mt-8 max-w-7xl rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
+	<div class="grid gap-6 md:grid-cols-2 md:items-center">
+		<div>
+			<h3 class="font-display text-xl font-semibold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-100">
+				Subscribe to the newsletter
+			</h3>
+			<p class="mt-2 max-w-md text-sm text-neutral-600 dark:text-neutral-400">
+				New posts, ship logs, and engagement notes. No spam, unsubscribe in one click.
+				Distributed by <a href="https://edgeletter.rubrion.ai" class="text-brand-500 hover:underline" rel="noopener" target="_blank">EdgeLetter</a>, double opt-in.
 			</p>
-		</header>
+		</div>
 
-		<div class="mx-auto mt-10 max-w-xl rounded-2xl border border-line bg-white p-6 shadow-brand sm:p-8 dark:border-line-dark dark:bg-neutral-900">
-			<form id="ep-subscribe" class="flex flex-col gap-4">
-				<label for="ep-email" class="text-sm font-medium text-neutral-900 dark:text-neutral-100">Email</label>
+		<form id="ep-subscribe" class="flex flex-col gap-3">
+			<div class="flex flex-col gap-3 sm:flex-row">
+				<label for="ep-email" class="sr-only">Email</label>
 				<input
 					id="ep-email"
 					name="email"
@@ -25,36 +25,31 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 					required
 					autocomplete="email"
 					placeholder="you@example.com"
-					class="input"
+					class="input sm:flex-1"
 				/>
-
-				{/* Honeypot — bots fill it, humans never see it */}
-				<input
-					type="text"
-					name="website"
-					tabindex="-1"
-					autocomplete="off"
-					aria-hidden="true"
-					class="!absolute !-left-[9999px] !h-px !w-px !opacity-0"
-				/>
-
-				{TURNSTILE_SITE_KEY && (
-					<div class="cf-turnstile flex justify-center" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" />
-				)}
-
-				<button type="submit" class="btn-primary w-full py-3 disabled:opacity-50">
+				<button type="submit" class="btn-primary shrink-0 px-6 py-3 disabled:opacity-50">
 					Subscribe
 				</button>
-				<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] font-mono text-sm text-neutral-600 dark:text-neutral-400"></p>
-			</form>
-		</div>
+			</div>
 
-		<p class="mt-6 text-center font-mono text-xs text-neutral-600 dark:text-neutral-400">
-			Distributed by <a href="https://edgeletter.rubrion.ai" class="text-brand-500 hover:underline" rel="noopener" target="_blank">EdgeLetter</a>.
-			Double opt-in: confirm via email after signup.
-		</p>
+			{/* Honeypot — bots fill it, humans never see it */}
+			<input
+				type="text"
+				name="website"
+				tabindex="-1"
+				autocomplete="off"
+				aria-hidden="true"
+				class="!absolute !-left-[9999px] !h-px !w-px !opacity-0"
+			/>
+
+			{TURNSTILE_SITE_KEY && (
+				<div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" />
+			)}
+
+			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] font-mono text-sm text-neutral-600 dark:text-neutral-400"></p>
+		</form>
 	</div>
-</section>
+</div>
 
 <script is:inline>
 	(function () {

@@ -1,5 +1,6 @@
 ---
 // Features — bento grid: what we build (AI agent pipeline, products, managed hosting, custom builds)
+import Newsletter from './Newsletter.astro';
 ---
 
 <div id="features" class="mx-auto w-full bg-white px-4 py-20 md:px-8 dark:bg-neutral-950">
@@ -82,18 +83,13 @@
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Launch under your brand</h3>
 				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">White-label products that already work: newsletters, a marketplace, and hiring. Live in weeks, not months.</p>
 			</div>
-			<div class="relative mx-6 mt-2 mb-6 min-h-0 flex-1 overflow-hidden rounded-lg border border-line bg-neutral-100 p-4 dark:border-line-dark dark:bg-neutral-800">
-				<div class="flex gap-1.5">
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-				</div>
-				<div class="mt-4 space-y-2.5">
-					<div class="h-2.5 w-1/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-					<div class="h-2.5 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-					<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-					<div class="h-2.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-				</div>
+			<div class="relative mx-6 mt-2 mb-6 min-h-0 flex-1 overflow-hidden rounded-lg border border-line dark:border-line-dark">
+				<img
+					src="/images/whitelabel-dashboard.jpg"
+					alt="A white-label business dashboard running under your own brand"
+					loading="lazy"
+					class="h-full w-full object-cover object-top"
+				/>
 			</div>
 		</div>
 
@@ -137,6 +133,9 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- newsletter row, directly under the grid -->
+	<Newsletter />
 </div>
 
 <script>
