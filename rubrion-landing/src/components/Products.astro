@@ -1,0 +1,79 @@
+---
+// Products — white-label products + Rubot (the platform that wraps the agents we build)
+import Specfit from '../assets/products/specfit.svg';
+import Brad from '../assets/products/brad.svg';
+
+const products = [
+	{ name: 'EdgeLetter', mono: 'E', desc: 'Run a newsletter and publishing platform under your own name.', chips: ['Branded sender', 'Segmentation', 'Self-host'], link: { label: 'edgeletter.rubrion.ai', href: 'https://edgeletter.rubrion.ai', external: true } },
+	{ name: 'Rubrion Store', mono: 'S', desc: 'Your own multi-vendor marketplace, under your brand.', chips: ['Vendor onboarding', 'Fast search', 'Multi-tenant'], link: { label: 'rubrion.store', href: 'https://rubrion.store', external: true } },
+	{ name: 'SpecFit', mark: 'specfit', desc: 'Smarter hiring, score any CV against the role.', chips: ['CV scoring', 'Ranked shortlist', 'Fair limits'], link: { label: 'Talk to us', href: 'mailto:hello@rubrion.ai', external: false } },
+];
+---
+
+<section id="products" class="mx-auto w-full bg-white px-4 py-20 md:px-8 dark:bg-neutral-950">
+	<h2 class="mx-auto w-fit text-center text-xl font-bold tracking-tight text-neutral-800 md:text-4xl dark:text-neutral-100">
+		Products you can run today
+	</h2>
+	<p class="mx-auto mt-4 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-400">
+		Live, working products you launch under your own brand, self-host them or let us run them.
+	</p>
+
+	<div class="mx-auto mt-14 grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		{products.map((p) => (
+			<div class="feature-card p-6">
+				<div>
+					<div class="flex items-center gap-3">
+						<span class="product-mark text-neutral-900 dark:text-neutral-100">
+							{p.mark === 'specfit'
+								? <Specfit class="h-7 w-7" />
+								: p.mono}
+						</span>
+						<h3 class="font-display text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100">{p.name}</h3>
+					</div>
+					<p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400">{p.desc}</p>
+					<div class="mt-4 flex flex-wrap gap-2">
+						{p.chips.map((c) => <span class="tag-pill">{c}</span>)}
+					</div>
+				</div>
+				<a href={p.link.href} class="mt-6 inline-flex items-center gap-1 font-mono text-xs text-brand-500 transition hover:text-brand-400" {...(p.link.external ? { target: '_blank', rel: 'noopener' } : {})}>
+					{p.link.label} {p.link.external ? '↗' : '→'}
+				</a>
+			</div>
+		))}
+	</div>
+
+	<!-- Rubot: the platform that wraps the agents we build -->
+	<div id="agents" class="mx-auto mt-12 max-w-7xl">
+		<h3 class="font-mono text-xs tracking-[0.3em] text-neutral-500 uppercase">AI agents</h3>
+		<div class="feature-card mt-4 p-6 md:p-8">
+			<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+				<div class="max-w-md">
+					<div class="flex items-center gap-3">
+						<span class="product-mark"><img src="/rubot-face.png" alt="Rubot" loading="lazy" class="rubot-img h-8 w-8 object-contain" /></span>
+						<div>
+							<h4 class="font-display text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Rubot</h4>
+							<p class="font-mono text-[11px] tracking-widest text-brand-500 uppercase">Agent platform</p>
+						</div>
+					</div>
+					<p class="mt-4 text-sm text-neutral-600 dark:text-neutral-400">
+						The platform our agents run on. Each one is shaped to your context and deployed under your brand, with per-tenant isolation and guardrails.
+					</p>
+					<a href="mailto:hello@rubrion.ai" class="mt-5 inline-flex items-center gap-1 font-mono text-xs text-brand-500 transition hover:text-brand-400">Add an agent →</a>
+				</div>
+
+				<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
+					<div class="rounded-xl border border-line p-4 dark:border-line-dark">
+						<div class="flex items-center gap-2">
+							<Brad class="h-6 w-6 text-neutral-900 dark:text-neutral-100" />
+							<span class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Brad</span>
+						</div>
+						<p class="mt-2 text-xs text-neutral-500 dark:text-neutral-400">Marketing: briefs, social copy, and on-brand banners, over WhatsApp.</p>
+					</div>
+					<div class="flex items-center justify-center rounded-xl border border-dashed border-line p-4 text-center text-xs text-neutral-400 dark:border-line-dark dark:text-neutral-500">
+						More agents on the way
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

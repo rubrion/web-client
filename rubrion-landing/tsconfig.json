@@ -7,14 +7,10 @@
   ],
   "exclude": [
     "dist"
-  ],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+],
+"compilerOptions": {
     "types": [
-      "./worker-configuration.d.ts"
+        "./worker-configuration.d.ts"
     ]
-  }
+}
 }

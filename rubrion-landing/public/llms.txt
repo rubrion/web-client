@@ -1,58 +1,39 @@
 # Rubrion
 
-> IT consulting for SMBs. Whitelabel products (EdgeLetter, Rubrion Store) and bespoke software on Kubernetes and Terraform. Cheap, fast, transparent. SaaS deployment available on request.
+> We build and ship software for small and mid-sized businesses — ready-made products you launch under your own brand, AI agents for your operations, and custom builds when you need something of your own. Fast, fixed-fee, and yours to keep.
 
-Last updated: 2026-06-03
+Tagline: Code-free, cloud-fee.
+Last updated: 2026-06-21
 
 ## What we do
 
-- **Whitelabel Product Deployment** — Branded deploys of Rubrion shipped products (EdgeLetter newsletter, Rubrion Store marketplace). Self-hosted by default; SaaS deployment on request.
-- **Bespoke Software Development** — Custom web platforms, third-party integrations, and API customization. Fixed-fee consulting engagements with full source ownership delivered to the client.
-- **Managed Infrastructure & Operations** — Production-grade Kubernetes clusters and Terraform-managed infrastructure operated by Rubrion. Includes monitoring, security hardening, and on-call response.
+- **Launch a product under your brand** — Pick a Rubrion product that already works and run it as your own: newsletters, a marketplace, hiring, or a multi-site presence. Live in weeks, not months.
+- **Add an AI agent to your business** — Put a brand-aware assistant to work on marketing copy, customer chat, and document/CV review, without building it from scratch.
+- **Commission a custom build** — Fullstack consulting and development: web platforms, mobile apps, and end-to-end project work, on a fixed fee and fixed timeline. We hand you the source. It's yours.
 
-## Projects
+## Products
 
-- **EdgeLetter** — whitelabel newsletter platform. Live: https://edgeletter.rubrion.ai · Source: https://github.com/rubrion/edgeletter
-- **Rubrion Store** — whitelabel marketplace platform. Live: https://rubrion.store · Source: https://github.com/rubrion/store
-- **Mondesa** (sister organization) — IoT solutions for critical energy systems and wireless sensor network architecture. Live: https://mondesa.org · Source: https://github.com/mondesa
+- **EdgeLetter** — publishing & newsletters under your own brand. Branded sender domain, audience segmentation, scheduled delivery, double opt-in, one-click unsubscribe. Self-host or let us run it. Live: https://edgeletter.rubrion.ai
+- **Rubrion Store** — your own multi-vendor marketplace. Vendor onboarding and storefronts, product catalog and fast search, multi-tenant for a community or your customers. Live: https://rubrion.store
+- **SpecFit** — smarter hiring. Scores a CV against any job description and ranks applicants so you read the best first, with per-user limits to keep it fair and cheap.
+- **Engage-Hub** — many branded sites, one place. Multilingual out of the box, per-brand theming, one place to manage many sites. Live: https://engage-hub.rubrion.com
+- **Brad** — your AI marketing agent. Drafts briefs, social posts, and ad copy; generates on-brand banners and images; talks to you on WhatsApp; stays on-brand with built-in guardrails.
+- **Rubot** — AI chat agents for your business. Customer- and team-facing chat agents tailored to your business, ready to deploy.
+
+Sister organization: **Mondesa** — IoT for critical energy systems and wireless sensor networks. Live: https://mondesa.org
 
 ## Who we serve
 
-- **SMBs & Startups** — fast delivery, predictable costs, scalable architecture.
-- **Schools & Nonprofits** — cost-effective, community-focused, education discounts.
-- **Enterprises** — custom integrations, enterprise-grade security, dedicated support.
+We've shipped in publishing, e-commerce & marketplaces, hiring, AI marketing & support, agriculture, healthcare & clinical labs, education, and events — for SMBs, startups, schools and nonprofits, and enterprises.
 
-## Pricing model
+## Why Rubrion
 
-Fixed-fee consulting engagement plus infrastructure passthrough to the client cloud account. No per-seat fees. No proprietary licensing. No offboarding penalty. When usage grows, only the underlying cloud bill grows with it.
-
-## Engagement timeline
-
-Standard projects ship in 6-10 weeks end to end:
-
-1. **Discovery & Planning** (1-2 weeks) — Requirements analysis and architecture design.
-2. **Infrastructure Setup** (1 week) — Kubernetes cluster and CI/CD pipeline deployment.
-3. **Product Setup & Integration** (2-4 weeks) — Whitelabel deployment and third-party wiring.
-4. **Customization** (2-4 weeks) — Branding, custom features, and bespoke modules.
-5. **Testing & QA** (1 week) — Comprehensive testing and performance optimization.
-6. **Go Live & Support** (Ongoing) — Production deployment and ongoing monitoring.
-
-## Technology
-
-Kubernetes, Terraform, mature community-driven foundations, API-first interfaces. Deploys on AWS, GCP, or Azure. Standard observability, identity, and CI/CD tooling.
-
-## Source access
-
-Most Rubrion projects ship as open repositories under github.com/rubrion (EdgeLetter, Rubrion Store, etc.). Bespoke work is delivered with full source ownership to the client. Clients can fork, self-host, or migrate operations in-house at any time.
+- **Fast** — standard projects go live in 6–10 weeks.
+- **Transparent pricing** — fixed-fee work plus your own infrastructure cost. No per-seat fees, no lock-in, no offboarding penalty.
+- **Yours** — source delivered; fork it, self-host it, or take it in-house anytime.
+- **Managed hosting, close to your users** — we run and maintain your servers in Brazil, Europe (West), and US (East). Pick the region for the lowest latency and the right data residency, or let us host across all three.
 
 ## Contact
 
-- Email: [hello@rubrion.ai](mailto:hello@rubrion.ai)
-- Form: [https://rubrion.ai/#contact](https://rubrion.ai/#contact)
-- Response time: within 24 hours.
-
-## Optional
-
-- [Portuguese (BR) version](https://rubrion.com.br/)
-- [Sitemap](https://rubrion.ai/sitemap-index.xml)
-- [Schema.org structured data](https://rubrion.ai/) — Organization (Corporation, with Mondesa as subOrganization), WebSite, FAQPage are embedded in the home page.
+- Email: hello@rubrion.ai
+- Site: https://rubrion.ai

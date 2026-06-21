@@ -1,0 +1,195 @@
+---
+// Features — bento grid: what we build (AI agent pipeline, products, managed hosting, custom builds)
+---
+
+<div id="features" class="mx-auto w-full bg-white px-4 py-20 md:px-8 dark:bg-neutral-950">
+	<!-- section header with corner brackets -->
+	<div class="relative mx-auto flex w-fit items-center justify-center p-4">
+		<div class="draw-box absolute inset-0 border border-line dark:border-line-dark">
+			<div class="corner-dot absolute -top-1 -left-1 h-2 w-2 bg-neutral-200 dark:bg-neutral-800"></div>
+			<div class="corner-dot absolute -top-1 -right-1 h-2 w-2 bg-neutral-200 dark:bg-neutral-800"></div>
+			<div class="corner-dot absolute -bottom-1 -left-1 h-2 w-2 bg-neutral-200 dark:bg-neutral-800"></div>
+			<div class="corner-dot absolute -right-1 -bottom-1 h-2 w-2 bg-neutral-200 dark:bg-neutral-800"></div>
+		</div>
+		<h2 class="mx-auto w-fit text-center text-xl font-bold tracking-tight text-neutral-800 md:text-4xl dark:text-neutral-100">
+			What we build
+		</h2>
+	</div>
+	<p class="mx-auto mt-4 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-400">
+		Three ways to ship: a ready-made product, an AI agent, or a custom build, plus hosting close to your users.
+	</p>
+
+	<div class="mx-auto mt-20 grid max-w-7xl grid-cols-1 gap-4 md:auto-rows-[25rem] md:grid-cols-5">
+		<!-- card 1: add an AI agent (message → agent → on-brand reply) -->
+		<div id="agents" class="feature-card group md:col-span-3">
+			<div class="relative h-full w-full overflow-hidden">
+				<div class="relative flex h-full w-full items-center justify-center">
+					<svg width="128" height="69" viewBox="0 0 128 69" fill="none" class="absolute -top-2 left-1/2 -translate-x-[90%] text-neutral-200 dark:text-neutral-800">
+						<path d="M1 0.5L1 29.586C1 36.214 6.373 41.586 13 41.586H115C121.627 41.586 127 46.959 127 53.586L127 75" stroke="currentColor" stroke-width="1"></path>
+						<path d="M1 0.5L1 29.586C1 36.214 6.373 41.586 13 41.586H115C121.627 41.586 127 46.959 127 53.586L127 75" stroke="url(#grad-r2)" stroke-width="1"></path>
+						<defs>
+							<linearGradient id="grad-r2" x1="0%" y1="0%" x2="0%" y2="0%">
+								<animate attributeName="x1" values="0%;100%" dur="4.5s" repeatCount="indefinite" />
+								<animate attributeName="y1" values="0%;90%" dur="4.5s" repeatCount="indefinite" />
+								<animate attributeName="x2" values="0%;120%" dur="4.5s" repeatCount="indefinite" />
+								<animate attributeName="y2" values="0%;120%" dur="4.5s" repeatCount="indefinite" />
+								<stop stop-color="#7a0a0a" stop-opacity="0"></stop>
+								<stop offset="1" stop-color="#ff5a5a"></stop>
+								<stop offset="1" stop-color="#ff5a5a" stop-opacity="0"></stop>
+							</linearGradient>
+						</defs>
+					</svg>
+					<svg width="62" height="105" viewBox="0 0 62 105" fill="none" class="absolute -bottom-2 left-1/2 text-neutral-200 dark:text-neutral-800">
+						<path d="M1 -69L1 57.5C1 64.127 6.373 69.5 13 69.5H49C55.627 69.5 61 74.873 61 81.5L61 105" stroke="currentColor" stroke-width="1"></path>
+						<path d="M1 -69L1 57.5C1 64.127 6.373 69.5 13 69.5H49C55.627 69.5 61 74.873 61 81.5L61 105" stroke="url(#grad-r1)" stroke-width="1"></path>
+						<defs>
+							<linearGradient id="grad-r1" x1="0%" y1="0%" x2="0%" y2="0%">
+								<animate attributeName="x1" values="0%;100%" dur="6.2s" repeatCount="indefinite" />
+								<animate attributeName="y1" values="0%;90%" dur="6.2s" repeatCount="indefinite" />
+								<animate attributeName="x2" values="0%;120%" dur="6.2s" repeatCount="indefinite" />
+								<animate attributeName="y2" values="0%;120%" dur="6.2s" repeatCount="indefinite" />
+								<stop stop-color="#7a0a0a" stop-opacity="0"></stop>
+								<stop offset="1" stop-color="#ff5a5a"></stop>
+								<stop offset="1" stop-color="#ff5a5a" stop-opacity="0"></stop>
+							</linearGradient>
+						</defs>
+					</svg>
+					<div class="deploy-grid relative z-30 mx-auto grid w-full max-w-lg grid-cols-1 gap-4 p-8 [perspective:1000px] [transform-style:preserve-3d] sm:p-0 md:grid-cols-3">
+						<div class="card-nod relative flex h-14 w-full flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-white to-white p-2 shadow-lg md:h-40 dark:from-neutral-800 dark:to-neutral-700">
+							<svg viewBox="0 0 24 24" class="h-8 w-8 text-neutral-700 dark:text-neutral-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="1.5"></rect><rect x="3" y="14" width="18" height="6" rx="1.5"></rect><path d="M7 7h.01M7 17h.01"></path></svg>
+							<p class="bg-transparent font-mono text-[8px] text-neutral-500 dark:text-neutral-400">your infrastructure</p>
+						</div>
+						<div class="card-nod relative flex h-14 w-full flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-white to-white p-2 shadow-lg md:h-40 dark:from-neutral-800 dark:to-neutral-700">
+							<img src="/rubot-face.png" alt="Rubot" loading="lazy" class="rubot-img h-8 w-8 object-contain md:h-20 md:w-20" />
+							<p class="bg-transparent font-mono text-[8px] text-neutral-500 dark:text-neutral-400">Rubot</p>
+						</div>
+						<div class="card-nod relative flex h-14 w-full flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-b from-white to-white p-2 shadow-lg md:h-40 dark:from-neutral-800 dark:to-neutral-700">
+							<svg viewBox="0 0 24 24" class="h-8 w-8 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></svg>
+							<p class="bg-transparent font-mono text-[8px] text-neutral-500 dark:text-neutral-400">automation</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="h-40 p-6">
+				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Add an AI agent</h3>
+				<p class="mt-2 max-w-sm text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">We wire Rubot into your infrastructure and shape it to your context, turning your operations into automation. Brad, our marketing agent, is just one example of what it becomes.</p>
+			</div>
+		</div>
+
+		<!-- card 2: launch under your brand -->
+		<div class="feature-card group md:col-span-2">
+			<div class="p-6">
+				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Launch under your brand</h3>
+				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">White-label products that already work: newsletters, a marketplace, and hiring. Live in weeks, not months.</p>
+			</div>
+			<div class="relative mx-6 mt-2 mb-6 min-h-0 flex-1 overflow-hidden rounded-lg border border-line bg-neutral-100 p-4 dark:border-line-dark dark:bg-neutral-800">
+				<div class="flex gap-1.5">
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+				</div>
+				<div class="mt-4 space-y-2.5">
+					<div class="h-2.5 w-1/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+					<div class="h-2.5 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+					<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+					<div class="h-2.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- card 3: managed hosting (red globe, Brazil / EUW / US-East) -->
+		<div class="feature-card group md:col-span-2">
+			<div class="h-40 p-6">
+				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Managed hosting, your region</h3>
+				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">We host and operate it for you, in Brazil, Europe-West, and US-East. Fixed fee, no lock-in.</p>
+			</div>
+			<div class="relative h-full w-full overflow-hidden">
+				<div class="relative h-64 w-full md:h-full">
+					<canvas id="edge-globe" class="globe-canvas absolute -right-12 -bottom-28 md:-right-20 md:-bottom-40"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<!-- card 4: commission a custom build -->
+		<div class="feature-card group md:col-span-3">
+			<div class="p-6">
+				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Commission a custom build</h3>
+				<p class="mt-2 max-w-md text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Fullstack web and mobile, fixed fee and fixed timeline. We've shipped a video-studio site, an event RSVP platform, a clinical-lab portal, and an offline farm app. Source delivered, it's yours.</p>
+			</div>
+			<div class="relative mx-6 mt-2 mb-6 min-h-0 flex-1 overflow-hidden rounded-lg border border-line bg-neutral-100 p-4 dark:border-line-dark dark:bg-neutral-800">
+				<div class="flex gap-1.5">
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+				</div>
+				<div class="mt-4 grid grid-cols-2 gap-3">
+					<div class="space-y-2.5">
+						<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						<div class="h-2.5 w-full rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						<div class="h-2.5 w-5/6 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+					</div>
+					<div class="space-y-2.5">
+						<div class="h-2.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						<div class="h-2.5 w-5/6 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	import createGlobe from 'cobe';
+
+	// rotating red globe
+	const canvas = document.getElementById('edge-globe') as HTMLCanvasElement | null;
+	if (canvas) {
+		// cobe v2 has no internal loop — drive rotation via globe.update() in our own rAF
+		const globe = createGlobe(canvas, {
+			devicePixelRatio: 2,
+			width: 1200,
+			height: 1200,
+			phi: 0,
+			theta: -0.2, // slight tilt so the southern hemisphere (Brazil) faces the viewer
+			dark: 1,
+			diffuse: 1.2,
+			mapSamples: 16000,
+			mapBrightness: 6,
+			baseColor: [0.55, 0.08, 0.08],
+			markerColor: [1, 0.3, 0.3],
+			glowColor: [1, 0.45, 0.45],
+			markerElevation: 0, // v2 defaults to .05 (floats markers off the surface); pin flush
+			markers: [
+				{ location: [-23.5505, -46.6333], size: 0.055 }, // São Paulo, Brazil
+				{ location: [50.1109, 8.6821], size: 0.04 }, // Europe-West (Frankfurt)
+				{ location: [38.9072, -77.0369], size: 0.04 }, // US-East (Ashburn)
+			],
+		});
+		let phi = 0;
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const tick = () => {
+			phi += 0.01;
+			globe.update({ phi });
+			if (!reduce) requestAnimationFrame(tick);
+		};
+		requestAnimationFrame(tick);
+	}
+
+	// features header: draw box + corner dots when scrolled into view
+	const box = document.querySelector('.draw-box');
+	if (box) {
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					if (e.isIntersecting) {
+						box.classList.add('in-view');
+						io.disconnect();
+					}
+				}
+			},
+			{ threshold: 0.4 },
+		);
+		io.observe(box);
+	}
+</script>
