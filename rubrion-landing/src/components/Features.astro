@@ -93,17 +93,20 @@ const whitelabels = [
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Launch under your brand</h3>
 				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Ready-made products you run as your own. Live in weeks, not months.</p>
 			</div>
-			<div class="mx-6 mt-2 mb-6 flex min-h-0 flex-1 flex-col justify-center">
-				<p class="font-mono text-[11px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">White-label apps</p>
-				<div class="mt-2.5 space-y-2">
-					{whitelabels.map((w) => (
+			<div class="mx-6 mt-2 mb-6 flex min-h-0 flex-1 flex-col">
+				<div class="min-h-0 flex-1 space-y-2 overflow-y-auto pr-0.5">
+					{whitelabels.map((w, i) => (
 						<a
 							data-app
 							data-url={w.url}
+							data-extra={i >= 3 ? '' : undefined}
 							href={w.url || undefined}
 							target={w.url ? '_blank' : undefined}
 							rel={w.url ? 'noopener' : undefined}
-							class="flex items-center gap-3 rounded-xl border border-line bg-white/60 p-2.5 transition hover:border-brand-500/40 dark:border-line-dark dark:bg-neutral-900/40"
+							class:list={[
+								'flex items-center gap-3 rounded-xl border border-line bg-white/60 p-2.5 transition hover:border-brand-500/40 dark:border-line-dark dark:bg-neutral-900/40',
+								i >= 3 && 'hidden',
+							]}
 						>
 							<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-xs font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">{w.mono}</span>
 							<span class="min-w-0 flex-1">
@@ -120,6 +123,15 @@ const whitelabels = [
 						</a>
 					))}
 				</div>
+				{whitelabels.length > 3 && (
+					<button
+						type="button"
+						data-applist-more
+						data-more="Show more"
+						data-less="Show less"
+						class="mt-2.5 self-start font-mono text-[11px] tracking-wide text-brand-500 uppercase transition hover:text-brand-400"
+					>Show more</button>
+				)}
 			</div>
 		</div>
 
@@ -227,10 +239,27 @@ const whitelabels = [
 			return;
 		}
 		const ctrl = new AbortController();
-		const timer = window.setTimeout(() => ctrl.abort(), 6000);
-		fetch(url, { mode: 'no-cors', signal: ctrl.signal })
+		const timer = window.setTimeout(() => ctrl.abort(), 8000);
+		fetch(url, {
+			mode: 'no-cors',
+			cache: 'no-store',
+			redirect: 'follow',
+			referrerPolicy: 'no-referrer',
+			signal: ctrl.signal,
+		})
 			.then(() => set(true))
 			.catch(() => set(false))
 			.finally(() => window.clearTimeout(timer));
 	});
+
+	// white-label list: show-more toggle for items beyond the first three
+	const moreBtn = document.querySelector('[data-applist-more]');
+	if (moreBtn) {
+		let open = false;
+		moreBtn.addEventListener('click', () => {
+			open = !open;
+			document.querySelectorAll('[data-app][data-extra]').forEach((el) => el.classList.toggle('hidden', !open));
+			moreBtn.textContent = open ? moreBtn.getAttribute('data-less') : moreBtn.getAttribute('data-more');
+		});
+	}
 </script>
