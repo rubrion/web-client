@@ -313,12 +313,19 @@ html {
 .hero-slide.is-hidden { display: none; } /* reduced-motion: keep one slide only */
 .hero-dots {
   position: absolute;
-  inset-inline: 0;
   bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  /* black pill so dots contrast against any carousel image behind them */
+  padding: 0.4rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
 }
 .hero-dot {
   height: 6px;
@@ -327,11 +334,12 @@ html {
   border: 0;
   padding: 0;
   cursor: pointer;
-  background: var(--color-neutral-300);
+  /* inactive dots sit on the black pill in both themes → translucent white */
+  background: rgba(255, 255, 255, 0.45);
   transition: width 0.3s ease, background 0.3s ease;
 }
 .hero-dot.is-active { width: 18px; background: var(--color-brand-500); }
-.dark .hero-dot { background: var(--color-neutral-700); }
+.dark .hero-dot { background: rgba(255, 255, 255, 0.45); }
 .dark .hero-dot.is-active { background: var(--color-brand-500); }
 
 /* ---- products grid: uniform logo/monogram tile + feature chip ---- */
