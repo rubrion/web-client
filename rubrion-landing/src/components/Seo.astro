@@ -1,0 +1,81 @@
+---
+// SEO / GEO head tags: canonical, hreflang, robots, Open Graph, Twitter, JSON-LD.
+// Locale-driven (locale.ts) so the EN and PT trees share this file unchanged.
+// Organization + WebSite schema render on every page; pass `jsonLd` for extras
+// (e.g. FAQPage on /faq).
+import {
+	SITE_NAME,
+	DEFAULT_DESCRIPTION,
+	OG_IMAGE_PATH,
+	buildOrganizationSchema,
+	buildWebSiteSchema,
+	type JsonLd,
+} from '../data/seo';
+import {
+	SITE_URL,
+	OG_LOCALE,
+	OG_LOCALE_ALT,
+	HTML_LANG,
+	ALT_HTML_LANG,
+	ALT_URL,
+	EN_URL,
+} from '../data/locale';
+
+interface Props {
+	title: string;
+	description?: string;
+	canonical?: string;
+	ogImage?: string;
+	jsonLd?: JsonLd[];
+}
+
+const path = Astro.url.pathname;
+const {
+	title,
+	description = DEFAULT_DESCRIPTION,
+	canonical = `${SITE_URL}${path}`,
+	ogImage = `${SITE_URL}${OG_IMAGE_PATH}`,
+	jsonLd = [],
+} = Astro.props;
+
+const selfHref = `${SITE_URL}${path}`;
+const altHref = `${ALT_URL}${path}`;
+const defaultHref = `${EN_URL}${path}`;
+
+const blocks: JsonLd[] = [buildOrganizationSchema(), buildWebSiteSchema(), ...jsonLd];
+---
+
+<link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang={HTML_LANG} href={selfHref} />
+<link rel="alternate" hreflang={ALT_HTML_LANG} href={altHref} />
+<link rel="alternate" hreflang="x-default" href={defaultHref} />
+
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="author" content={SITE_NAME} />
+<meta name="geo.region" content="BR" />
+<meta name="geo.placename" content="Brazil" />
+<meta name="format-detection" content="telephone=no" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${title} — ${SITE_NAME}`} />
+<meta property="og:locale" content={OG_LOCALE} />
+<meta property="og:locale:alternate" content={OG_LOCALE_ALT} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+{blocks.map((block) => (
+	<script type="application/ld+json" set:html={JSON.stringify(block)} />
+))}

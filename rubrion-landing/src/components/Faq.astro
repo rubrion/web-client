@@ -1,31 +1,8 @@
 ---
-// FAQ — Why Rubrion, as a dropdown accordion (native <details>, no JS)
-const faqs = [
-	{
-		q: 'How fast can you ship?',
-		a: 'Standard projects go live in six to ten weeks, from first call to production.',
-	},
-	{
-		q: 'How does pricing work?',
-		a: 'Fixed-fee work, plus your own infrastructure cost. No per-seat fees, no lock-in, and no offboarding penalty.',
-	},
-	{
-		q: 'Do we own what you build?',
-		a: 'Yes. We deliver the source. Fork it, self-host it, or take it in-house anytime.',
-	},
-	{
-		q: 'Where do you host?',
-		a: 'We run managed hosting in Brazil, Europe-West, and US-East. Pick the region for your latency and data residency, or let us host across all three.',
-	},
-	{
-		q: 'Can we launch a product under our own brand?',
-		a: 'Yes. Our ready-made products run under your brand: newsletters, a marketplace, hiring, and AI agents. See the products page for the full lineup.',
-	},
-	{
-		q: 'Can you build something custom?',
-		a: 'Yes. Fullstack web and mobile, on a fixed fee and a fixed timeline, with the source delivered to you.',
-	},
-];
+// FAQ — Why Rubrion, as a dropdown accordion (native <details>, no JS).
+// Questions live in src/data/seo.ts so the visible list and the FAQPage
+// JSON-LD on /faq stay in sync.
+import { FAQS as faqs } from '../data/seo';
 ---
 
 <section id="faq" class="w-full bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
