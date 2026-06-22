@@ -5,15 +5,24 @@ import '@fontsource/plus-jakarta-sans/500.css';
 import '@fontsource/plus-jakarta-sans/600.css';
 import '@fontsource/plus-jakarta-sans/700.css';
 import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import type { JsonLd } from '../data/seo';
+import { HTML_LANG } from '../data/locale';
 
 interface Props {
 	title?: string;
 	description?: string;
+	canonical?: string;
+	ogImage?: string;
+	jsonLd?: JsonLd[];
 }
 
 const {
 	title = 'Rubrion, Code-free, cloud-fee.',
 	description = 'Rubrion is a software studio. Launch a product under your brand, add an AI agent to your business, or commission a custom build. Fast, fixed-fee, and yours to keep.',
+	canonical,
+	ogImage,
+	jsonLd,
 } = Astro.props;
 
 // Cloudflare Turnstile loader — only when a site key is configured.
@@ -22,7 +31,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 ---
 
 <!doctype html>
-<html lang="en" class="dark" style="color-scheme:dark">
+<html lang={HTML_LANG} class="dark" style="color-scheme:dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +52,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<Seo title={title} description={description} canonical={canonical} ogImage={ogImage} jsonLd={jsonLd} />
 		<script is:inline>
 			// theme bootstrap before paint (no FOUC)
 			try {
