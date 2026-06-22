@@ -112,23 +112,46 @@ import Newsletter from './Newsletter.astro';
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Commission a custom build</h3>
 				<p class="mt-2 max-w-md text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Fullstack web and mobile, fixed fee and fixed timeline. We've shipped a video-studio site, an event RSVP platform, a clinical-lab portal, and an offline farm app. Source delivered, it's yours.</p>
 			</div>
-			<div class="relative mx-6 mt-2 mb-6 min-h-0 flex-1 overflow-hidden rounded-lg border border-line bg-neutral-100 p-4 dark:border-line-dark dark:bg-neutral-800">
-				<div class="flex gap-1.5">
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-					<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
-				</div>
-				<div class="mt-4 grid grid-cols-2 gap-3">
-					<div class="space-y-2.5">
-						<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-						<div class="h-2.5 w-full rounded bg-neutral-200 dark:bg-neutral-700"></div>
-						<div class="h-2.5 w-5/6 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-					</div>
-					<div class="space-y-2.5">
-						<div class="h-2.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-						<div class="h-2.5 w-5/6 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-						<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-					</div>
+			<!-- web + mobile device duo; tilts toward the cursor (see script) -->
+			<div
+				data-tilt-scene
+				class="relative mx-6 mt-2 mb-6 flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-lg border border-line bg-neutral-100 p-6 dark:border-line-dark dark:bg-neutral-800"
+				style="perspective: 1000px;"
+			>
+				<div data-tilt class="flex items-end transition-transform duration-200 ease-out will-change-transform [transform-style:preserve-3d]">
+					<!-- browser -->
+					<figure class="w-56 shrink-0 overflow-hidden rounded-lg border border-line bg-white shadow-brand sm:w-64 dark:border-line-dark dark:bg-neutral-900" style="transform: translateZ(24px);">
+						<div class="flex items-center gap-1.5 border-b border-line px-3 py-2 dark:border-line-dark">
+							<span class="h-2 w-2 rounded-full bg-brand-500"></span>
+							<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+							<span class="h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+							<span class="ml-2 h-3 flex-1 rounded bg-neutral-100 dark:bg-neutral-800"></span>
+						</div>
+						<div class="animate-pulse space-y-2 p-3">
+							<div class="h-2.5 w-1/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+							<div class="h-12 w-full rounded bg-neutral-100 dark:bg-neutral-800"></div>
+							<div class="grid grid-cols-3 gap-2">
+								<div class="h-8 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+								<div class="h-8 rounded bg-brand-500/30"></div>
+								<div class="h-8 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+							</div>
+							<div class="h-2.5 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						</div>
+					</figure>
+
+					<!-- phone, sits in front + lower -->
+					<figure class="-ml-8 w-16 shrink-0 self-end overflow-hidden rounded-xl border border-line bg-white shadow-brand sm:w-20 dark:border-line-dark dark:bg-neutral-900" style="transform: translateZ(48px);">
+						<div class="flex justify-center py-1.5">
+							<span class="h-1 w-6 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+						</div>
+						<div class="animate-pulse space-y-1.5 px-2 pb-3">
+							<div class="h-8 w-full rounded bg-neutral-100 dark:bg-neutral-800"></div>
+							<div class="h-2 w-2/3 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+							<div class="h-2 w-full rounded bg-neutral-200 dark:bg-neutral-700"></div>
+							<div class="h-6 w-full rounded bg-brand-500/30"></div>
+							<div class="h-2 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
+						</div>
+					</figure>
 				</div>
 			</div>
 		</div>
@@ -190,5 +213,24 @@ import Newsletter from './Newsletter.astro';
 			{ threshold: 0.4 },
 		);
 		io.observe(box);
+	}
+
+	// commission card: device duo tilts toward the cursor (pointer devices only)
+	const tiltScene = document.querySelector<HTMLElement>('[data-tilt-scene]');
+	const tiltEl = tiltScene?.querySelector<HTMLElement>('[data-tilt]');
+	const canTilt =
+		window.matchMedia('(hover: hover)').matches &&
+		!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (tiltScene && tiltEl && canTilt) {
+		const MAX = 8; // degrees
+		tiltScene.addEventListener('mousemove', (e) => {
+			const r = tiltScene.getBoundingClientRect();
+			const px = (e.clientX - r.left) / r.width - 0.5;
+			const py = (e.clientY - r.top) / r.height - 0.5;
+			tiltEl.style.transform = `rotateX(${(-py * MAX * 2).toFixed(2)}deg) rotateY(${(px * MAX * 2).toFixed(2)}deg)`;
+		});
+		tiltScene.addEventListener('mouseleave', () => {
+			tiltEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
+		});
 	}
 </script>
