@@ -30,7 +30,7 @@ import Logo from './Logo.astro';
 
 		<div class="flex items-center gap-4">
 			<button
-				id="theme-toggle"
+				data-theme-toggle
 				aria-label="Toggle theme"
 				class="relative flex cursor-pointer items-center justify-center rounded-xl p-2 text-neutral-500 hover:shadow-sm"
 			>
@@ -44,21 +44,57 @@ import Logo from './Logo.astro';
 	</div>
 
 	<!-- mobile -->
-	<div class="relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 lg:hidden">
-		<div class="flex w-full flex-row items-center justify-between">
+	<div class="relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col px-0 py-2 lg:hidden">
+		<div class="flex w-full flex-row items-center justify-between rounded-full px-2">
 			<Logo class="mr-4" />
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-black dark:text-white"><path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path></svg>
+			<button
+				id="mobile-menu-button"
+				type="button"
+				aria-label="Open menu"
+				aria-expanded="false"
+				aria-controls="mobile-menu"
+				class="cursor-pointer p-2 text-black dark:text-white"
+			>
+				<svg data-menu-open xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l16 0"></path><path d="M4 12l16 0"></path><path d="M4 18l16 0"></path></svg>
+				<svg data-menu-close class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+			</button>
+		</div>
+
+		<div
+			id="mobile-menu"
+			class="mt-2 hidden w-full rounded-2xl border border-line bg-white p-4 shadow-brand dark:border-line-dark dark:bg-neutral-900"
+		>
+			<nav class="flex flex-col gap-1">
+				<a href="/#features" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800">What we do</a>
+				<a href="/products" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800">Products</a>
+				<a href="/faq" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800">FAQ</a>
+				<a href="/blog" class="rounded-lg px-3 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800">Blog</a>
+			</nav>
+			<div class="mt-3 flex items-center justify-between border-t border-line pt-3 dark:border-line-dark">
+				<a href="/#contact" class="btn-primary">Start a project</a>
+				<button
+					data-theme-toggle
+					aria-label="Toggle theme"
+					class="relative flex cursor-pointer items-center justify-center rounded-xl p-2 text-neutral-500 hover:shadow-sm"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
 
 <script is:inline>
-	document.getElementById('theme-toggle')?.addEventListener('click', () => {
-		const el = document.documentElement;
-		const dark = !el.classList.contains('dark');
-		el.classList.toggle('dark', dark);
-		el.style.colorScheme = dark ? 'dark' : 'light';
-		try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+	// theme toggle — shared across desktop + mobile buttons
+	document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+		btn.addEventListener('click', () => {
+			const el = document.documentElement;
+			const dark = !el.classList.contains('dark');
+			el.classList.toggle('dark', dark);
+			el.style.colorScheme = dark ? 'dark' : 'light';
+			try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+		});
 	});
 
 	// resizable navbar: shrink + blur bg + shadow after scrolling 100px
@@ -67,5 +103,23 @@ import Logo from './Logo.astro';
 		const onScroll = () => pill.classList.toggle('scrolled', window.scrollY > 100);
 		onScroll();
 		window.addEventListener('scroll', onScroll, { passive: true });
+	}
+
+	// mobile menu open/close
+	const menuBtn = document.getElementById('mobile-menu-button');
+	const menu = document.getElementById('mobile-menu');
+	if (menuBtn && menu) {
+		const openIcon = menuBtn.querySelector('[data-menu-open]');
+		const closeIcon = menuBtn.querySelector('[data-menu-close]');
+		const setOpen = (open) => {
+			menu.classList.toggle('hidden', !open);
+			menuBtn.setAttribute('aria-expanded', String(open));
+			menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+			openIcon?.classList.toggle('hidden', open);
+			closeIcon?.classList.toggle('hidden', !open);
+		};
+		menuBtn.addEventListener('click', () => setOpen(menu.classList.contains('hidden')));
+		menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+		document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
 	}
 </script>
