@@ -2,6 +2,15 @@
 // Features — bento grid: what we build (AI agent pipeline, products, managed hosting, custom builds)
 import Newsletter from './Newsletter.astro';
 import CustomBuildDevice from './CustomBuildDevice.astro';
+
+// apps white-label; status no ar/offline definido no cliente pingando cada url (sem url → offline)
+const whitelabels = [
+	{ name: 'EdgeLetter', mono: 'E', tag: 'Newsletters e publicações', url: 'https://edgeletter.rubrion.ai' },
+	{ name: 'Rubrion Store', mono: 'S', tag: 'Marketplace multivendedor', url: 'https://rubrion.store' },
+	{ name: 'Estúdio de conteúdo com IA', mono: 'IA', tag: 'Conteúdo e redes, no automático', url: '' },
+	{ name: 'Agendamentos', mono: 'A', tag: 'Reservas, com a sua marca', url: '' },
+	{ name: 'CRM vertical', mono: 'C', tag: 'CRM específico do setor', url: '' },
+];
 ---
 
 <div id="features" class="mx-auto w-full bg-white px-4 py-20 md:px-8 dark:bg-neutral-950">
@@ -26,7 +35,7 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 		<div id="agents" class="feature-card group md:col-span-3">
 			<div class="relative h-full w-full overflow-hidden">
 				<div class="relative flex h-full w-full items-center justify-center">
-					<svg width="128" height="69" viewBox="0 0 128 69" fill="none" class="absolute -top-6 left-1/2 -translate-x-[90%] text-neutral-200 dark:text-neutral-800">
+					<svg width="128" height="69" viewBox="0 0 128 69" fill="none" class="absolute -top-6 left-1/2 hidden -translate-x-[90%] text-neutral-200 md:block dark:text-neutral-800">
 						<path d="M1 0.5L1 29.586C1 36.214 6.373 41.586 13 41.586H115C121.627 41.586 127 46.959 127 53.586L127 75" stroke="currentColor" stroke-width="1"></path>
 						<path d="M1 0.5L1 29.586C1 36.214 6.373 41.586 13 41.586H115C121.627 41.586 127 46.959 127 53.586L127 75" stroke="url(#grad-r2)" stroke-width="1"></path>
 						<defs>
@@ -41,7 +50,7 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 							</linearGradient>
 						</defs>
 					</svg>
-					<svg width="62" height="105" viewBox="0 0 62 105" fill="none" class="absolute -bottom-2 left-1/2 text-neutral-200 dark:text-neutral-800">
+					<svg width="62" height="105" viewBox="0 0 62 105" fill="none" class="absolute -bottom-2 left-1/2 hidden text-neutral-200 md:block dark:text-neutral-800">
 						<path d="M1 -69L1 57.5C1 64.127 6.373 69.5 13 69.5H49C55.627 69.5 61 74.873 61 81.5L61 105" stroke="currentColor" stroke-width="1"></path>
 						<path d="M1 -69L1 57.5C1 64.127 6.373 69.5 13 69.5H49C55.627 69.5 61 74.873 61 81.5L61 105" stroke="url(#grad-r1)" stroke-width="1"></path>
 						<defs>
@@ -72,7 +81,7 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 					</div>
 				</div>
 			</div>
-			<div class="h-40 p-6">
+			<div class="p-6 md:h-40">
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Adicione um agente de IA</h3>
 				<p class="mt-2 max-w-sm text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Integramos o Rubot à sua infraestrutura e o moldamos ao seu contexto, transformando suas operações em automação. O Brad, nosso agente de marketing, é só um exemplo do que ele pode virar.</p>
 			</div>
@@ -85,63 +94,44 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Produtos prontos que você roda como seus. No ar em semanas, não meses.</p>
 			</div>
 			<div class="mx-6 mt-2 mb-6 flex min-h-0 flex-1 flex-col justify-center">
-				<!-- live white-labels: fancy tiles with a pulsing "Live" indicator -->
-				<a href="https://edgeletter.rubrion.ai" target="_blank" rel="noopener" class="group/tile flex items-center gap-3 rounded-xl border border-line bg-white/60 p-3 transition hover:border-brand-500/40 hover:shadow-brand-ring dark:border-line-dark dark:bg-neutral-900/40">
-					<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-sm font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">E</span>
-					<span class="min-w-0 flex-1">
-						<span class="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">EdgeLetter</span>
-						<span class="block truncate font-mono text-[11px] text-neutral-500 dark:text-neutral-400">Newsletters e publicações</span>
-					</span>
-					<span class="flex shrink-0 items-center gap-1.5">
-						<span class="relative flex h-2 w-2">
-							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75"></span>
-							<span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
-						</span>
-						<span class="font-mono text-[10px] tracking-wide text-brand-500 uppercase">No ar</span>
-					</span>
-				</a>
-				<a href="https://rubrion.store" target="_blank" rel="noopener" class="group/tile mt-2.5 flex items-center gap-3 rounded-xl border border-line bg-white/60 p-3 transition hover:border-brand-500/40 hover:shadow-brand-ring dark:border-line-dark dark:bg-neutral-900/40">
-					<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-sm font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">S</span>
-					<span class="min-w-0 flex-1">
-						<span class="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">Rubrion Store</span>
-						<span class="block truncate font-mono text-[11px] text-neutral-500 dark:text-neutral-400">Marketplace multivendedor</span>
-					</span>
-					<span class="flex shrink-0 items-center gap-1.5">
-						<span class="relative flex h-2 w-2">
-							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75"></span>
-							<span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
-						</span>
-						<span class="font-mono text-[10px] tracking-wide text-brand-500 uppercase">No ar</span>
-					</span>
-				</a>
-
-				<p class="mt-5 font-mono text-[11px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Em breve</p>
-				<ul class="mt-2.5 space-y-2">
-					<li class="flex items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-						<span class="flex items-center gap-2.5"><span class="h-1.5 w-1.5 shrink-0 rounded-full border border-line dark:border-line-dark"></span>Estúdio de conteúdo com IA</span>
-						<span class="tag-pill">Em breve</span>
-					</li>
-					<li class="flex items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-						<span class="flex items-center gap-2.5"><span class="h-1.5 w-1.5 shrink-0 rounded-full border border-line dark:border-line-dark"></span>Agendamentos</span>
-						<span class="tag-pill">Em breve</span>
-					</li>
-					<li class="flex items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-						<span class="flex items-center gap-2.5"><span class="h-1.5 w-1.5 shrink-0 rounded-full border border-line dark:border-line-dark"></span>CRM vertical</span>
-						<span class="tag-pill">Em breve</span>
-					</li>
-				</ul>
+				<p class="font-mono text-[11px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Apps white-label</p>
+				<div class="mt-2.5 space-y-2">
+					{whitelabels.map((w) => (
+						<a
+							data-app
+							data-url={w.url}
+							href={w.url || undefined}
+							target={w.url ? '_blank' : undefined}
+							rel={w.url ? 'noopener' : undefined}
+							class="flex items-center gap-3 rounded-xl border border-line bg-white/60 p-2.5 transition hover:border-brand-500/40 dark:border-line-dark dark:bg-neutral-900/40"
+						>
+							<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-xs font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">{w.mono}</span>
+							<span class="min-w-0 flex-1">
+								<span class="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">{w.name}</span>
+								<span class="block truncate font-mono text-[11px] text-neutral-500 dark:text-neutral-400">{w.tag}</span>
+							</span>
+							<span class="flex shrink-0 items-center gap-1.5">
+								<span class="relative flex h-2 w-2">
+									<span data-ping class="absolute hidden h-full w-full rounded-full bg-brand-500 opacity-75"></span>
+									<span data-dot class="relative inline-flex h-2 w-2 rounded-full bg-neutral-300 dark:bg-neutral-600"></span>
+								</span>
+								<span data-status-label class="font-mono text-[10px] tracking-wide text-neutral-400 uppercase">···</span>
+							</span>
+						</a>
+					))}
+				</div>
 			</div>
 		</div>
 
 		<!-- card 3: managed hosting (red globe, Brazil / EUW / US-East) -->
 		<div class="feature-card group md:col-span-2">
-			<div class="h-40 p-6">
+			<div class="p-6 md:h-40">
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Hospedagem gerenciada, na sua região</h3>
 				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Nós hospedamos, operamos e protegemos para você, no Brasil, Europa-Oeste e EUA-Leste, com suporte de rede e infraestrutura em seus sistemas. Preço fixo, sem aprisionamento.</p>
 			</div>
 			<div class="relative h-full w-full overflow-hidden">
 				<div class="relative h-64 w-full md:h-full">
-					<canvas id="edge-globe" class="globe-canvas absolute -right-12 -bottom-28 md:-right-20 md:-bottom-40"></canvas>
+					<canvas id="edge-globe" class="globe-canvas absolute -right-12 -bottom-40 md:-right-20 md:-bottom-40"></canvas>
 				</div>
 			</div>
 		</div>
@@ -213,4 +203,34 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 		);
 		io.observe(box);
 	}
+
+	// apps white-label: status no ar/offline via ping de alcance (sem url → offline)
+	document.querySelectorAll('[data-app]').forEach((el) => {
+		const url = el.getAttribute('data-url');
+		const ping = el.querySelector('[data-ping]');
+		const dot = el.querySelector('[data-dot]');
+		const label = el.querySelector('[data-status-label]');
+		const set = (online: boolean) => {
+			ping?.classList.toggle('hidden', !online);
+			ping?.classList.toggle('animate-ping', online);
+			dot?.classList.toggle('bg-brand-500', online);
+			dot?.classList.toggle('bg-neutral-300', !online);
+			dot?.classList.toggle('dark:bg-neutral-600', !online);
+			if (label) {
+				label.textContent = online ? 'No ar' : 'Offline';
+				label.classList.toggle('text-brand-500', online);
+				label.classList.toggle('text-neutral-400', !online);
+			}
+		};
+		if (!url) {
+			set(false);
+			return;
+		}
+		const ctrl = new AbortController();
+		const timer = window.setTimeout(() => ctrl.abort(), 6000);
+		fetch(url, { mode: 'no-cors', signal: ctrl.signal })
+			.then(() => set(true))
+			.catch(() => set(false))
+			.finally(() => window.clearTimeout(timer));
+	});
 </script>
