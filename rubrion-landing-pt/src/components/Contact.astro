@@ -1,0 +1,277 @@
+---
+// Start a project — contact form + info aside
+---
+
+<section id="contact" class="relative w-full overflow-hidden bg-white px-4 py-24 md:px-8 dark:bg-neutral-950">
+	<div class="relative z-10 mx-auto max-w-5xl">
+		<header class="mx-auto max-w-2xl text-center">
+			<h2 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
+				Começar um projeto
+			</h2>
+			<p class="mx-auto mt-5 max-w-lg text-base/7 text-neutral-600 dark:text-neutral-400">
+				Conte o que você está construindo. Voltamos com escopo, preço fixo e um prazo.
+			</p>
+		</header>
+
+		<div class="mt-14 grid gap-12 md:grid-cols-2">
+			<!-- form card -->
+			<div class="relative rounded-2xl border border-line bg-white p-8 shadow-brand dark:border-line-dark dark:bg-neutral-900">
+				<form id="contact-form" class="space-y-6">
+					<div>
+						<label for="contact-name" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Nome *</label>
+						<input type="text" id="contact-name" name="name" required class="input" />
+					</div>
+					<div>
+						<label for="contact-email" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">E-mail *</label>
+						<input type="email" id="contact-email" name="email" required class="input" />
+					</div>
+					<div>
+						<label for="contact-company" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Empresa</label>
+						<input type="text" id="contact-company" name="company" class="input" />
+					</div>
+					<div>
+						<label for="contact-message" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Mensagem *</label>
+						<textarea id="contact-message" name="message" required rows="4" class="input resize-none"></textarea>
+					</div>
+
+					{/* Honeypot — bots fill it, humans never see it */}
+					<div aria-hidden="true" style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;">
+						<label for="contact-website">Website</label>
+						<input type="text" id="contact-website" name="honeypot" tabindex="-1" autocomplete="off" />
+					</div>
+
+					<div id="contact-turnstile" class="flex justify-center"></div>
+
+					<div id="contact-error" class="hidden rounded-lg border border-brand-500/40 bg-brand-500/10 p-3">
+						<p class="font-mono text-sm text-brand-600">
+							Erro: <span id="contact-error-text"></span>
+						</p>
+					</div>
+
+					<button id="contact-submit" type="submit" class="btn-primary w-full py-3 disabled:cursor-not-allowed disabled:opacity-50">
+						Enviar mensagem
+					</button>
+				</form>
+
+				<!-- success state -->
+				<div id="contact-success" class="absolute inset-0 hidden flex-col items-center justify-center rounded-2xl bg-white/95 p-8 text-center dark:bg-neutral-950/95">
+					<div class="mb-4 text-brand-500">
+						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></svg>
+					</div>
+					<h3 class="mb-2 font-display text-xl font-semibold text-neutral-900 dark:text-neutral-100">Mensagem enviada</h3>
+					<p class="font-mono text-sm text-neutral-600 dark:text-neutral-400">Resposta esperada em até 24 horas.</p>
+				</div>
+			</div>
+
+			<!-- info aside -->
+			<aside class="space-y-8">
+				<div>
+					<h3 class="font-display text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">Vamos conversar</h3>
+					<p class="mt-3 text-base/7 text-neutral-600 dark:text-neutral-400">Conte pra gente. Respondemos em até 24 horas.</p>
+				</div>
+
+				<div class="space-y-4">
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+						</div>
+						<div>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">E-mail</p>
+							<a href="mailto:ola@rubrion.com.br" class="text-brand-500 hover:underline">ola@rubrion.com.br</a>
+						</div>
+					</div>
+
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+						</div>
+						<div>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">Tempo de resposta</p>
+							<p class="text-neutral-600 dark:text-neutral-400">Em até 24 horas</p>
+						</div>
+					</div>
+
+					<div class="flex items-center gap-4">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
+						</div>
+						<div>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">Entrega</p>
+							<p class="text-neutral-600 dark:text-neutral-400">6–10 semanas até produção</p>
+						</div>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</div>
+</section>
+
+<script>
+	const WORKER_URL = import.meta.env.VITE_SUPPORT_WORKER_URL as string | undefined;
+	const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+
+	declare global {
+		interface Window {
+			turnstile?: {
+				render: (
+					container: HTMLElement | string,
+					options: {
+						sitekey: string;
+						callback?: (token: string) => void;
+						'expired-callback'?: () => void;
+						'error-callback'?: () => void;
+						theme?: 'light' | 'dark' | 'auto';
+					}
+				) => string;
+				reset: (widgetId?: string) => void;
+				remove: (widgetId?: string) => void;
+			};
+		}
+	}
+
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+	const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
+	const errorBox = document.getElementById('contact-error');
+	const errorText = document.getElementById('contact-error-text');
+	const successBox = document.getElementById('contact-success');
+	const turnstileContainer = document.getElementById('contact-turnstile');
+
+	const captchaRequired = Boolean(TURNSTILE_SITE_KEY);
+	let turnstileToken: string | null = null;
+	let widgetId: string | null = null;
+
+	const updateSubmitState = (submitting = false) => {
+		if (!submitBtn) return;
+		submitBtn.disabled = submitting || (captchaRequired && !turnstileToken);
+		submitBtn.textContent = submitting
+			? 'Enviando…'
+			: captchaRequired && !turnstileToken
+				? 'Verificando…'
+				: 'Enviar mensagem';
+	};
+
+	const renderTurnstile = () => {
+		if (!captchaRequired || !turnstileContainer || !window.turnstile) return;
+		if (widgetId) return;
+		widgetId = window.turnstile.render(turnstileContainer, {
+			sitekey: TURNSTILE_SITE_KEY!,
+			theme: 'auto',
+			callback: (token: string) => {
+				turnstileToken = token;
+				updateSubmitState();
+			},
+			'expired-callback': () => {
+				turnstileToken = null;
+				updateSubmitState();
+			},
+			'error-callback': () => {
+				turnstileToken = null;
+				updateSubmitState();
+			},
+		});
+	};
+
+	const resetCaptcha = () => {
+		turnstileToken = null;
+		if (widgetId && window.turnstile) {
+			try {
+				window.turnstile.reset(widgetId);
+			} catch {
+				widgetId = null;
+				renderTurnstile();
+			}
+		}
+		updateSubmitState();
+	};
+
+	if (captchaRequired) {
+		updateSubmitState();
+		const interval = window.setInterval(() => {
+			renderTurnstile();
+			if (widgetId) window.clearInterval(interval);
+		}, 250);
+	}
+
+	const showError = (message: string) => {
+		if (errorBox && errorText) {
+			errorText.textContent = message;
+			errorBox.classList.remove('hidden');
+		}
+	};
+
+	const hideError = () => errorBox?.classList.add('hidden');
+
+	form?.addEventListener('input', hideError);
+
+	form?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		hideError();
+
+		const fd = new FormData(form);
+		const name = String(fd.get('name') ?? '').trim();
+		const email = String(fd.get('email') ?? '').trim();
+		const company = String(fd.get('company') ?? '').trim();
+		const message = String(fd.get('message') ?? '').trim();
+		const honeypot = String(fd.get('honeypot') ?? '');
+
+		if (!name || !email || !message) {
+			showError('Preencha todos os campos obrigatórios.');
+			return;
+		}
+		if (!WORKER_URL) {
+			showError('O formulário não está configurado. Entre em contato diretamente.');
+			return;
+		}
+		if (captchaRequired && !turnstileToken) {
+			showError('Complete o desafio do captcha.');
+			return;
+		}
+
+		updateSubmitState(true);
+
+		const payload = {
+			name,
+			email,
+			subject: 'Nova mensagem do formulário de contato',
+			message: company ? `Empresa: ${company}\n\n${message}` : message,
+			turnstileToken: turnstileToken ?? '',
+			honeypot,
+		};
+
+		try {
+			const response = await fetch(WORKER_URL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload),
+			});
+
+			if (!response.ok) {
+				let msg = 'Não foi possível enviar a mensagem. Tente de novo ou entre em contato diretamente.';
+				try {
+					const data = await response.json();
+					if (data?.error) msg = data.error;
+				} catch {
+					/* keep default */
+				}
+				showError(msg);
+				resetCaptcha();
+				return;
+			}
+
+			successBox?.classList.remove('hidden');
+			successBox?.classList.add('flex');
+			window.setTimeout(() => {
+				successBox?.classList.add('hidden');
+				successBox?.classList.remove('flex');
+				form.reset();
+				resetCaptcha();
+			}, 4000);
+		} catch (submitError) {
+			console.error('Failed to send message:', submitError);
+			showError('Erro de rede. Tente de novo ou entre em contato diretamente.');
+			resetCaptcha();
+		} finally {
+			updateSubmitState(false);
+		}
+	});
+</script>

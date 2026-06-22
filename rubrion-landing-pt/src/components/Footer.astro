@@ -1,0 +1,19 @@
+---
+// Footer — logo, copyright, giant gradient watermark wordmark
+import Logo from './Logo.astro';
+---
+
+<div class="relative w-full overflow-hidden border-t border-line bg-white px-8 py-20 dark:border-line-dark dark:bg-neutral-950">
+	<div class="mx-auto flex max-w-7xl flex-col items-start justify-between text-sm text-neutral-500 sm:flex-row md:px-8">
+		<div>
+			<div class="mr-0 mb-4 md:mr-4 md:flex">
+				<Logo class="mr-4" />
+			</div>
+			<p class="mt-2 ml-2 font-mono text-xs text-brand-500">Code-free, cloud-fee.</p>
+			<div class="mt-2 ml-2">© Copyright Rubrion 2026. Todos os direitos reservados.</div>
+		</div>
+	</div>
+	<p class="mt-20 inset-x-0 bg-gradient-to-b from-neutral-50 to-neutral-200 bg-clip-text text-center font-display text-5xl font-bold text-transparent uppercase md:text-9xl lg:text-[12rem] xl:text-[13rem] dark:from-neutral-950 dark:to-neutral-800">
+		Rubrion
+	</p>
+</div>

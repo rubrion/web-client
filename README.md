@@ -11,34 +11,42 @@ systems.
 | Folder | Stack | Domain |
 |--------|-------|--------|
 | `rubrion-landing/` | Astro 6 SSG + Tailwind v4 (monochrome + red "spark" brand) | **rubrion.ai** (English) |
+| `rubrion-landing-pt/` | hard-fork clone, translated copy | **rubrion.com.br** (Portuguese — BR) |
 
-EN-only for now. The previous Portuguese clone (`rubrion-landing-pt/` →
-rubrion.com.br) has been retired; rubrion.com.br is parked / redirected in the
-Cloudflare dashboard until a PT version of the new template is built.
-
-The site uses the `@astrojs/cloudflare` adapter targeting `output: 'static'`,
-loads Cloudflare Turnstile on the contact + newsletter forms, posts contact
+Both trees use the `@astrojs/cloudflare` adapter targeting `output: 'static'`,
+load Cloudflare Turnstile on the contact + newsletter forms, post contact
 submissions to the support-email-worker (sibling repo `../support-email-worker/`),
-and subscribes the newsletter via [EdgeLetter](https://edgeletter.rubrion.ai)
+and subscribe the newsletter via [EdgeLetter](https://edgeletter.rubrion.ai)
 (`/api/subscribe`). The blog page embeds the EdgeLetter blog as a self-resizing
-iframe.
+iframe. A navbar `LanguageSwitcher` links each site to its counterpart (EN ↔ PT).
+
+### Locale reuse
+
+The SEO/GEO layer (`Seo.astro`, `seo.ts`, `robots.txt.ts`, `Layout.astro`) is
+locale-driven: it reads everything locale-specific from `src/data/locale.ts`.
+The PT tree differs from EN only in `locale.ts`, `astro.config` (`site`),
+`wrangler.jsonc` (`name` + KV id), `package.json` (`name`), and the translated
+strings in the `.astro` / `seo.ts` files. When EN copy changes, port the
+structural delta to PT by hand.
 
 ## Local dev
 
 ```bash
-cd rubrion-landing && npm install && npm run dev   # :4321
+cd rubrion-landing    && npm install && npm run dev   # :4321 (EN)
+cd rubrion-landing-pt && npm install && npm run dev   # :4321 (PT, run separately)
 ```
 
 ## Build & deploy
 
 ```bash
-cd rubrion-landing && npm run deploy   # → rubrion-landing worker
+cd rubrion-landing    && npm run deploy   # → rubrion-landing worker (rubrion.ai)
+cd rubrion-landing-pt && npm run deploy   # → rubrion-landing-pt worker (rubrion.com.br)
 ```
 
-The worker carries the non-secret build-time vars in `.env.production`
-(`VITE_SUPPORT_WORKER_URL` + Turnstile site key), baked into the client bundle
-by CF Workers Builds in CI. The rubrion.ai custom domain attaches to the
-`rubrion-landing` worker in the dashboard.
+Each worker carries the non-secret build-time vars in `.env.production`
+(`VITE_SUPPORT_WORKER_URL` + Turnstile site key — the key allows both domains),
+baked into the client bundle by CF Workers Builds in CI. The custom domains
+attach to their respective workers in the dashboard.
 
 ## Email + Turnstile
 

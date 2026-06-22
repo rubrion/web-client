@@ -1,0 +1,39 @@
+# Rubrion
+
+> We build and ship software for small and mid-sized businesses — ready-made products you launch under your own brand, AI agents for your operations, and custom builds when you need something of your own. Fast, fixed-fee, and yours to keep.
+
+Tagline: Code-free, cloud-fee.
+Last updated: 2026-06-21
+
+## What we do
+
+- **Launch a product under your brand** — Pick a Rubrion product that already works and run it as your own: newsletters, a marketplace, hiring, or a multi-site presence. Live in weeks, not months.
+- **Add an AI agent to your business** — Put a brand-aware assistant to work on marketing copy, customer chat, and document/CV review, without building it from scratch.
+- **Commission a custom build** — Fullstack consulting and development: web platforms, mobile apps, and end-to-end project work, on a fixed fee and fixed timeline. We hand you the source. It's yours.
+
+## Products
+
+- **EdgeLetter** — publishing & newsletters under your own brand. Branded sender domain, audience segmentation, scheduled delivery, double opt-in, one-click unsubscribe. Self-host or let us run it. Live: https://edgeletter.rubrion.ai
+- **Rubrion Store** — your own multi-vendor marketplace. Vendor onboarding and storefronts, product catalog and fast search, multi-tenant for a community or your customers. Live: https://rubrion.store
+- **SpecFit** — smarter hiring. Scores a CV against any job description and ranks applicants so you read the best first, with per-user limits to keep it fair and cheap.
+- **Engage-Hub** — many branded sites, one place. Multilingual out of the box, per-brand theming, one place to manage many sites. Live: https://engage-hub.rubrion.com
+- **Brad** — your AI marketing agent. Drafts briefs, social posts, and ad copy; generates on-brand banners and images; talks to you on WhatsApp; stays on-brand with built-in guardrails.
+- **Rubot** — AI chat agents for your business. Customer- and team-facing chat agents tailored to your business, ready to deploy.
+
+Sister organization: **Mondesa** — IoT for critical energy systems and wireless sensor networks. Live: https://mondesa.org
+
+## Who we serve
+
+We've shipped in publishing, e-commerce & marketplaces, hiring, AI marketing & support, agriculture, healthcare & clinical labs, education, and events — for SMBs, startups, schools and nonprofits, and enterprises.
+
+## Why Rubrion
+
+- **Fast** — standard projects go live in 6–10 weeks.
+- **Transparent pricing** — fixed-fee work plus your own infrastructure cost. No per-seat fees, no lock-in, no offboarding penalty.
+- **Yours** — source delivered; fork it, self-host it, or take it in-house anytime.
+- **Managed hosting, close to your users** — we run and maintain your servers in Brazil, Europe (West), and US (East). Pick the region for the lowest latency and the right data residency, or let us host across all three.
+
+## Contact
+
+- Email: hello@rubrion.ai
+- Site: https://rubrion.ai
