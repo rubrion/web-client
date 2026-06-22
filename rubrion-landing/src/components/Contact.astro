@@ -15,7 +15,7 @@
 
 		<div class="mt-14 grid gap-12 md:grid-cols-2">
 			<!-- form card -->
-			<div class="relative rounded-2xl border border-line bg-white p-8 shadow-brand dark:border-line-dark dark:bg-neutral-900">
+			<div class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 shadow-brand md:p-8 dark:border-line-dark dark:bg-neutral-900">
 				<form id="contact-form" class="space-y-6">
 					<div>
 						<label for="contact-name" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Name *</label>
@@ -156,6 +156,7 @@
 		widgetId = window.turnstile.render(turnstileContainer, {
 			sitekey: TURNSTILE_SITE_KEY!,
 			theme: 'auto',
+			size: 'flexible',
 			callback: (token: string) => {
 				turnstileToken = token;
 				updateSubmitState();
