@@ -1,0 +1,16 @@
+{
+  "name": "Rubrion — Code-free, cloud-fee.",
+  "short_name": "Rubrion",
+  "description": "Software studio for SMBs: launch a product under your brand, add an AI agent, or commission a custom build. Fast, fixed-fee, and yours to keep.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

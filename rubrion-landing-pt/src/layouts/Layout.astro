@@ -1,0 +1,74 @@
+---
+// Plus Jakarta Sans = self-hosted free display font (drop a licensed Circular woff2 to override)
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import type { JsonLd } from '../data/seo';
+import { HTML_LANG } from '../data/locale';
+
+interface Props {
+	title?: string;
+	description?: string;
+	canonical?: string;
+	ogImage?: string;
+	jsonLd?: JsonLd[];
+}
+
+const {
+	title = 'Rubrion, Code-free, cloud-fee.',
+	description = 'A Rubrion é um estúdio de software. Lance um produto com a sua marca, adicione um agente de IA ao seu negócio ou encomende um projeto sob medida. Rápido, preço fixo e o código é seu.',
+	canonical,
+	ogImage,
+	jsonLd,
+} = Astro.props;
+
+// Cloudflare Turnstile loader — only when a site key is configured.
+// Powers both the contact form (explicit render) and newsletter (cf-turnstile auto-render).
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+---
+
+<!doctype html>
+<html lang={HTML_LANG} class="dark" style="color-scheme:dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#000000" />
+		<link
+			rel="preload"
+			href="/fonts/inter-latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<Seo title={title} description={description} canonical={canonical} ogImage={ogImage} jsonLd={jsonLd} />
+		<script is:inline>
+			// theme bootstrap before paint (no FOUC)
+			try {
+				const stored = localStorage.getItem('theme');
+				const dark = stored ? stored === 'dark'
+					: window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const el = document.documentElement;
+				el.classList.toggle('dark', dark);
+				el.style.colorScheme = dark ? 'dark' : 'light';
+			} catch (e) {}
+		</script>
+		{TURNSTILE_SITE_KEY && (
+			<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer is:inline></script>
+		)}
+	</head>
+	<body class="antialiased bg-white dark:bg-black text-neutral-900 dark:text-neutral-100">
+		<slot />
+	</body>
+</html>

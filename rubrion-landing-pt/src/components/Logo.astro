@@ -1,0 +1,13 @@
+---
+import Mark from '../assets/rubrion-mark.svg';
+
+interface Props {
+	class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<a href="/" class:list={['relative z-20 flex items-center gap-2 px-2 py-1 text-sm', cls]}>
+	<Mark class="h-7 w-7 text-black dark:text-white" />
+	<span class="font-display text-lg font-bold tracking-tight text-black dark:text-white">Rubrion</span>
+</a>

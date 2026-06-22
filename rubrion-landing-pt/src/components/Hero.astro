@@ -1,0 +1,235 @@
+---
+// Hero — rotated dashed grid bg, falling collision beams, blur-in heading, framed product carousel
+
+const words = ['Code-free,', 'cloud-fee.'];
+
+// hero carousel slides — real product screenshots; Rubrion Store keeps a stylized placeholder
+const slides = [
+	{ name: 'EdgeLetter', eyebrow: 'Produto white-label', outcome: 'Newsletters e publicações, com a sua marca', url: 'edgeletter.rubrion.ai', img: '/images/product-edgeletter.png' },
+	{ name: 'Rubrion Store', eyebrow: 'Produto white-label', outcome: 'Um marketplace multivendedor que é seu', url: 'rubrion.store' },
+	{ name: 'SpecFit', eyebrow: 'Produto white-label', outcome: 'Triagem de currículos com IA', url: '', img: '/images/product-specfit.png' },
+	{ name: 'Brad', eyebrow: 'Agente de IA', outcome: 'Um agente de marketing, com a sua marca', url: '', img: '/images/product-brad.png' },
+];
+
+// Falling beams: each beam drops 45deg (Δx === Δy) then explodes on the box top edge.
+// `frac` (0..1) spreads start columns across the full width; px resolved at runtime.
+const N = 8;
+const durs = [7, 4.5, 6, 8, 5, 6.5, 7.5, 5.5];
+const beams = Array.from({ length: N }, (_, i) => ({
+	frac: i / (N - 1),
+	dur: durs[i % durs.length],
+	repeatDelay: 5.5,
+	delay: +((i * 0.9) % 5).toFixed(2),
+}));
+---
+
+<div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-neutral-50 px-4 py-20 md:px-8 md:py-40 dark:bg-neutral-900">
+	<!-- rotated dashed grid -->
+	<div class="pointer-events-none absolute top-1/2 left-1/2 z-0 grid h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 -rotate-45 transform grid-cols-2 gap-10 select-none md:grid-cols-4">
+		{[0, 1, 2, 3].map((i) => (
+			<div class:list={["relative h-full w-full", i === 2 && "bg-gradient-to-b from-transparent via-neutral-100 to-transparent dark:via-neutral-800"]}>
+				<div class="grid-line is-left"></div>
+				<div class="grid-line is-right"></div>
+			</div>
+		))}
+	</div>
+
+	<!-- falling beams layer (engine drives transforms + spawns explosions) -->
+	<div data-beams class="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+		{beams.map((b) => (
+			<div data-beam data-frac={b.frac} data-dur={b.dur} data-repeat={b.repeatDelay} data-delay={b.delay} class="beam"></div>
+		))}
+	</div>
+
+	<!-- heading: per-word blur-in -->
+	<h2 class="relative z-20 mx-auto mt-4 mb-4 max-w-4xl text-center text-3xl font-semibold tracking-tight text-balance text-gray-700 md:text-7xl dark:text-neutral-300">
+		{words.map((w, i) => (
+			<span class="hero-word" style={`--i:${i}`}>{w}&nbsp;</span>
+		))}
+	</h2>
+
+	<p class="fade-rise is-sub relative z-20 mx-auto mt-4 max-w-lg px-4 text-center text-base/6 text-gray-600 dark:text-gray-200">
+		Lance mais rápido com produtos que já funcionam, ou encomende um projeto sob medida. O resultado é seu.
+	</p>
+
+	<div class="fade-rise is-cta mt-8 mb-10 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
+		<a href="mailto:ola@rubrion.com.br" class="btn-primary w-40">Começar um projeto</a>
+		<a href="/products" class="btn-ghost">Ver nossos produtos</a>
+	</div>
+
+	<!-- explosion overlay (above the hero box so the impact reads clearly) -->
+	<div data-explosions class="pointer-events-none absolute inset-0 z-40 overflow-hidden"></div>
+
+	<!-- framed dashboard; its top edge is the beam collision boundary -->
+	<div data-beam-target class="fade-rise is-img relative z-20 mx-auto w-full max-w-7xl rounded-[32px] border border-line/60 bg-neutral-100 p-2 backdrop-blur-lg md:p-4 dark:border-line-dark dark:bg-neutral-800/50">
+		<div class="rounded-[24px] border border-line bg-white p-2 dark:border-line-dark dark:bg-black">
+			<div class="hero-carousel" data-carousel>
+				<div class="hero-carousel-track" data-carousel-track>
+					{slides.map((s, i) => (
+						<figure class:list={['hero-slide', i === 0 && 'is-active']} data-slide>
+							{s.img ? (
+								<img
+									src={s.img}
+									alt={`${s.name} — ${s.outcome}`}
+									loading={i === 0 ? 'eager' : 'lazy'}
+									class="absolute inset-0 h-full w-full object-cover object-top"
+								/>
+							) : (
+								<Fragment>
+									<span class="font-mono text-[11px] tracking-[0.3em] text-brand-500 uppercase">{s.eyebrow}</span>
+							<h3 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">{s.name}</h3>
+							<p class="max-w-md text-sm text-neutral-600 md:text-base dark:text-neutral-400">{s.outcome}</p>
+							{s.url && <span class="font-mono text-xs text-neutral-500">{s.url} ↗</span>}
+								</Fragment>
+							)}
+						</figure>
+					))}
+				</div>
+				<div class="hero-dots" data-dots>
+					{slides.map((s, i) => (
+						<button type="button" class:list={['hero-dot', i === 0 && 'is-active']} aria-label={`Mostrar ${s.name}`}></button>
+					))}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script is:inline>
+	(() => {
+		const init = () => {
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+			const layer = document.querySelector('[data-beams]');
+			// collide on the framed box's outer top edge (the outer margin)
+			const target = document.querySelector('[data-beam-target]');
+			const explosions = document.querySelector('[data-explosions]');
+			if (!layer || !target || !explosions) return;
+
+			const beams = Array.from(layer.querySelectorAll('[data-beam]')).map((el) => ({
+				el,
+				frac: parseFloat(el.dataset.frac),
+				duration: parseFloat(el.dataset.dur) * 1000,
+				repeatDelay: parseFloat(el.dataset.repeat) * 1000,
+				delay: parseFloat(el.dataset.delay) * 1000,
+				start: null, // ms when the current fall began
+				exploded: false,
+				waitUntil: 0,
+			}));
+
+			const spawnExplosion = (x, y) => {
+				const ex = document.createElement('div');
+				ex.className = 'beam-explosion';
+				ex.style.left = x + 'px';
+				ex.style.top = y + 'px';
+				const glow = document.createElement('span');
+				glow.className = 'beam-explosion-glow';
+				ex.appendChild(glow);
+				for (let i = 0; i < 20; i++) {
+					const s = document.createElement('span');
+					s.className = 'beam-spark';
+					s.style.setProperty('--dx', Math.floor(Math.random() * 80 - 40) + 'px');
+					s.style.setProperty('--dy', Math.floor(Math.random() * 64 - 32) + 'px'); // radial: straddle the edge
+					s.style.setProperty('--dur', (Math.random() * 1.5 + 0.5).toFixed(2) + 's');
+					ex.appendChild(s);
+				}
+				explosions.appendChild(ex);
+				setTimeout(() => ex.remove(), 2100);
+			};
+
+			const frame = (now) => {
+				const layerRect = layer.getBoundingClientRect();
+				const boxRect = target.getBoundingClientRect();
+				const boundaryY = boxRect.top; // land on the box top edge (border), not inside
+				const fall = boundaryY - layerRect.top; // start ref -> box top
+				// travel just past the box top so beams always reach it on any viewport
+				// height. Δx === Δy keeps the fall a true 45deg.
+				const D = Math.max(900, fall + 260);
+				// rain only over the carousel: pick a landing x across the box width, then
+				// back off up-left by the fall distance so the 45deg drift lands it there.
+				const boxLeft = boxRect.left - layerRect.left;
+				const boxW = boxRect.width;
+
+				for (const b of beams) {
+					if (b.start === null) b.start = now + b.delay;
+					if (now < b.start) continue;
+
+					if (b.exploded) {
+						if (now >= b.waitUntil) {
+							b.exploded = false;
+							b.start = now;
+						} else {
+							continue; // stay hidden during repeatDelay
+						}
+					}
+
+					const p = Math.min((now - b.start) / b.duration, 1);
+					// spread landings across the box width, inset from the edges so even the
+					// leftmost drop lands inside the box (not in empty space to its left)
+					const landX = boxLeft + boxW * (0.06 + 0.88 * b.frac);
+					// 45deg back-off; +172 cancels the rotated beam's tip offset so the
+					// bright tip (and its explosion) lands exactly at landX on the box edge
+					const startX = landX - (fall + 172);
+					const x = startX + D * p;
+					const y = -200 + D * p;
+					b.el.style.opacity = '1';
+					b.el.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(-45deg)';
+
+					const r = b.el.getBoundingClientRect();
+					if (r.bottom >= boundaryY) {
+						b.exploded = true;
+						b.waitUntil = now + b.repeatDelay;
+						b.el.style.opacity = '0';
+						// beam falls down-right: leading tip is the bbox right edge, not left
+						spawnExplosion(r.right - layerRect.left, boundaryY - layerRect.top);
+					} else if (p >= 1) {
+						b.start = now; // safety reset if it never reaches the boundary
+					}
+				}
+				requestAnimationFrame(frame);
+			};
+			requestAnimationFrame(frame);
+		};
+
+		if (document.readyState !== 'loading') init();
+		else document.addEventListener('DOMContentLoaded', init);
+	})();
+</script>
+
+<script is:inline>
+	(() => {
+		const init = () => {
+			const carousel = document.querySelector('[data-carousel]');
+			if (!carousel) return;
+			const slides = Array.from(carousel.querySelectorAll('[data-slide]'));
+			const dots = Array.from(carousel.querySelectorAll('[data-dots] button'));
+			if (slides.length < 2) return;
+
+			let index = 0;
+			const show = (next) => {
+				index = (next + slides.length) % slides.length;
+				slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+				dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+			};
+
+			let timer = 0;
+			const advance = () => show(index + 1);
+			const start = () => { timer = window.setInterval(advance, 5000); };
+			const reset = () => { clearInterval(timer); start(); };
+
+			dots.forEach((d, i) => d.addEventListener('click', () => { show(i); reset(); }));
+
+			// reduced-motion: no auto-advance; collapse to a single visible slide
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				slides.forEach((s, i) => s.classList.toggle('is-hidden', i !== index));
+				dots.forEach((d, i) => d.addEventListener('click', () => {
+					slides.forEach((s, j) => s.classList.toggle('is-hidden', j !== i));
+				}));
+				return;
+			}
+			start();
+		};
+
+		if (document.readyState !== 'loading') init();
+		else document.addEventListener('DOMContentLoaded', init);
+	})();
+</script>

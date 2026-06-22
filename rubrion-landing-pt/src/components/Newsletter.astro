@@ -1,0 +1,98 @@
+---
+// Newsletter — compact row under the "What we build" grid. EdgeLetter double opt-in.
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+---
+
+<div id="newsletter" class="mx-auto mt-4 max-w-7xl rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
+	<div class="grid gap-6 md:grid-cols-2 md:items-center">
+		<div>
+			<h3 class="font-display text-xl font-semibold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-100">
+				Assine a newsletter
+			</h3>
+			<p class="mt-2 max-w-md text-sm text-neutral-600 dark:text-neutral-400">
+				Novos posts, registros de entregas e notas dos projetos. Sem spam, cancele com um clique.
+				Distribuído pela <a href="https://edgeletter.rubrion.ai" class="text-brand-500 hover:underline" rel="noopener" target="_blank">EdgeLetter</a>, com confirmação dupla.
+			</p>
+		</div>
+
+		<form id="ep-subscribe" class="flex flex-col gap-3">
+			<div class="flex flex-col gap-3 sm:flex-row">
+				<label for="ep-email" class="sr-only">E-mail</label>
+				<input
+					id="ep-email"
+					name="email"
+					type="email"
+					required
+					autocomplete="email"
+					placeholder="you@example.com"
+					class="input sm:flex-1"
+				/>
+				<button type="submit" class="btn-primary shrink-0 px-6 py-3 disabled:opacity-50">
+					Assinar
+				</button>
+			</div>
+
+			{/* Honeypot — bots fill it, humans never see it */}
+			<input
+				type="text"
+				name="website"
+				tabindex="-1"
+				autocomplete="off"
+				aria-hidden="true"
+				class="!absolute !-left-[9999px] !h-px !w-px !opacity-0"
+			/>
+
+			{TURNSTILE_SITE_KEY && (
+				<div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" />
+			)}
+
+			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] font-mono text-sm text-neutral-600 dark:text-neutral-400"></p>
+		</form>
+	</div>
+</div>
+
+<script is:inline>
+	(function () {
+		var f = document.getElementById('ep-subscribe');
+		if (!f) return;
+		var st = document.getElementById('ep-status');
+		var msgSubmitting = 'Enviando…';
+		var msgConfirm = 'Confira seu e-mail para confirmar.';
+		var msgAlready = 'Você já está inscrito.';
+		var msgNetwork = 'Erro de rede. Tente de novo.';
+		f.addEventListener('submit', function (e) {
+			e.preventDefault();
+			var fd = new FormData(f);
+			var body = { email: fd.get('email'), website: fd.get('website') || '' };
+			var t = fd.get('cf-turnstile-response');
+			if (t) body.turnstile = t;
+			st.textContent = msgSubmitting;
+			fetch('https://edgeletter.rubrion.ai/api/subscribe', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(body),
+			})
+				.then(function (r) {
+					return r.json().then(function (j) {
+						return { ok: r.ok, j: j };
+					});
+				})
+				.then(function (o) {
+					if (!o.ok) {
+						st.textContent = (o.j && o.j.error) || 'Erro.';
+						return;
+					}
+					st.textContent = o.j.alreadyActive ? msgAlready : msgConfirm;
+					if (!o.j.alreadyActive) f.reset();
+					if (window.turnstile) {
+						try {
+							window.turnstile.reset();
+						} catch (_) {}
+					}
+				})
+				.catch(function () {
+					st.textContent = msgNetwork;
+				});
+		});
+	})();
+</script>
