@@ -3,7 +3,7 @@
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 ---
 
-<div id="newsletter" class="mx-auto mt-4 max-w-7xl rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
+<div id="newsletter" class="mx-auto mt-4 max-w-7xl overflow-hidden rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
 	<div class="grid gap-6 md:grid-cols-2 md:items-center">
 		<div>
 			<h3 class="font-display text-xl font-semibold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-100">
@@ -43,7 +43,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 			/>
 
 			{TURNSTILE_SITE_KEY && (
-				<div class="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" />
+				<div class="cf-turnstile max-w-full overflow-hidden" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-size="flexible" />
 			)}
 
 			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] font-mono text-sm text-neutral-600 dark:text-neutral-400"></p>

@@ -46,8 +46,8 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 	</div>
 
 	<!-- mobile -->
-	<div class="relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col px-0 py-2 lg:hidden">
-		<div class="flex w-full flex-row items-center justify-between rounded-full px-2">
+	<div id="mobile-nav" class="relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col px-0 py-2 transition-transform duration-300 lg:hidden">
+		<div class="flex w-full flex-row items-center justify-between rounded-full border border-line bg-white/85 px-3 py-1.5 shadow-brand backdrop-blur-md dark:border-line-dark dark:bg-neutral-950/85">
 			<Logo class="mr-4" />
 			<button
 				id="mobile-menu-button"
@@ -108,6 +108,20 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 		const onScroll = () => pill.classList.toggle('scrolled', window.scrollY > 100);
 		onScroll();
 		window.addEventListener('scroll', onScroll, { passive: true });
+	}
+
+	// mobile navbar: hide on scroll down, reveal on scroll up
+	const mobileNav = document.getElementById('mobile-nav');
+	if (mobileNav) {
+		let lastY = window.scrollY;
+		window.addEventListener('scroll', () => {
+			const y = window.scrollY;
+			const openMenu = document.getElementById('mobile-menu');
+			const menuOpen = openMenu && !openMenu.classList.contains('hidden');
+			if (!menuOpen && y > lastY && y > 80) mobileNav.classList.add('-translate-y-[150%]');
+			else mobileNav.classList.remove('-translate-y-[150%]');
+			lastY = y;
+		}, { passive: true });
 	}
 
 	// mobile menu open/close
