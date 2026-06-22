@@ -1,0 +1,22 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+
+import cloudflare from '@astrojs/cloudflare';
+import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
+
+// https://astro.build/config
+export default defineConfig({
+  site: 'https://rubrion.com.br',
+  output: 'static',
+  adapter: cloudflare({
+    imageService: 'compile',
+    platformProxy: { enabled: true },
+  }),
+  integrations: [sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+    // VITE_* are non-secret build-time vars baked into the client bundle.
+    envPrefix: ['PUBLIC_', 'VITE_'],
+  },
+});

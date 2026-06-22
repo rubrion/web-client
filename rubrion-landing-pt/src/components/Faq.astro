@@ -1,0 +1,29 @@
+---
+// FAQ — Why Rubrion, as a dropdown accordion (native <details>, no JS).
+// Questions live in src/data/seo.ts so the visible list and the FAQPage
+// JSON-LD on /faq stay in sync.
+import { FAQS as faqs } from '../data/seo';
+---
+
+<section id="faq" class="w-full bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+	<div class="mx-auto max-w-3xl">
+		<h2 class="text-center text-xl font-bold tracking-tight text-neutral-800 md:text-4xl dark:text-neutral-100">
+			Why Rubrion
+		</h2>
+		<p class="mx-auto mt-4 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-400">
+			Common questions, answered.
+		</p>
+
+		<div class="mt-12 divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
+			{faqs.map((f) => (
+				<details class="faq-item group">
+					<summary class="flex cursor-pointer items-center justify-between gap-6 py-5">
+						<span class="text-base font-medium text-neutral-800 md:text-lg dark:text-neutral-100">{f.q}</span>
+						<svg class="faq-chevron h-5 w-5 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+					</summary>
+					<p class="pb-5 pr-10 text-sm/6 text-neutral-600 dark:text-neutral-400">{f.a}</p>
+				</details>
+			))}
+		</div>
+	</div>
+</section>

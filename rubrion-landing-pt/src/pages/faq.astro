@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Faq from '../components/Faq.astro';
+import Footer from '../components/Footer.astro';
+import { FAQS, buildFaqSchema } from '../data/seo';
+---
+
+<Layout
+	title="Rubrion, FAQ"
+	description="Por que a Rubrion: em quanto tempo entregamos, como funciona o preço, de quem é o código e onde hospedamos."
+	jsonLd={[buildFaqSchema(FAQS)]}
+>
+	<Navbar />
+	<main class="pt-24">
+		<Faq />
+	</main>
+	<Footer />
+</Layout>

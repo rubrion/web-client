@@ -1,0 +1,19 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-06-21",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+	"name": "rubrion-landing-pt",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	// Astro sessions KV binding injected by @astrojs/cloudflare. Bound to the
+	// existing PT namespace by id so wrangler does not auto-provision on deploy.
+	"kv_namespaces": [
+		{ "binding": "SESSION", "id": "725dc3d131c14e0f898f22bae7ae73b6" }
+	],
+	"observability": {
+		"enabled": true
+	}
+}

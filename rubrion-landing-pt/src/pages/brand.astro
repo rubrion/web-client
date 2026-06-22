@@ -1,0 +1,209 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+import Mark from '../assets/rubrion-mark.svg';
+
+// palette data
+const reds = [
+	{ name: 'brand-400', oklch: 'oklch(.71 .19 22)', cls: 'bg-brand-400' },
+	{ name: 'brand-500', oklch: 'oklch(.64 .24 26)', cls: 'bg-brand-500' },
+	{ name: 'brand-600', oklch: 'oklch(.58 .245 27)', cls: 'bg-brand-600' },
+	{ name: 'brand-700', oklch: 'oklch(.51 .23 28)', cls: 'bg-brand-700' },
+];
+const neutrals = [
+	{ name: 'black', cls: 'bg-black' },
+	{ name: 'neutral-900', cls: 'bg-neutral-900' },
+	{ name: 'neutral-700', cls: 'bg-neutral-700' },
+	{ name: 'neutral-500', cls: 'bg-neutral-500' },
+	{ name: 'neutral-300', cls: 'bg-neutral-300' },
+	{ name: 'neutral-100', cls: 'bg-neutral-100' },
+	{ name: 'white', cls: 'bg-white' },
+];
+const type = [
+	{ label: 'Display / 7xl', cls: 'font-display text-5xl md:text-7xl', sample: 'Rubrion' },
+	{ label: 'Heading / 4xl', cls: 'font-sans text-3xl md:text-4xl font-bold tracking-tight', sample: 'Built on the edge' },
+	{ label: 'Title / xl', cls: 'font-sans text-xl font-semibold tracking-tight', sample: 'Section title' },
+	{ label: 'Body / base', cls: 'font-sans text-base text-neutral-600 dark:text-neutral-300', sample: 'The quick brown fox jumps over the lazy dog.' },
+	{ label: 'Mono / sm', cls: 'font-mono text-sm text-neutral-700 dark:text-neutral-300', sample: 'git commit -m "ship it"' },
+];
+const motion = [
+	['Blur-in heading', 'Words fade + de-blur, staggered 0.05s'],
+	['Falling beams', '45° red beams drop and explode on impact'],
+	['Card nod', 'Deploy cards tilt on a loop, staggered'],
+	['Globe', 'Auto-rotating red wireframe, flush markers'],
+	['Header draw-in', 'Bracket box expands on scroll into view'],
+	['Resizable navbar', 'Pill shrinks + red glow on scroll'],
+];
+---
+
+<Layout title="Rubrion — Brand Guide" description="Rubrion brand: palette, type, components.">
+	<!-- top bar -->
+	<header class="sticky top-0 z-50 border-b border-line bg-white/80 backdrop-blur-md dark:border-line-dark dark:bg-black/70">
+		<div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
+			<Logo />
+			<div class="flex items-center gap-4">
+				<span class="font-mono text-xs tracking-widest text-brand-500 uppercase">Brand Guide</span>
+				<button id="theme-toggle" aria-label="Toggle theme" class="rounded-xl p-2 text-neutral-500 hover:text-brand-500">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+				</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="mx-auto max-w-5xl px-6 py-16 md:py-24">
+		<!-- intro -->
+		<p class="font-mono text-xs tracking-[0.3em] text-brand-500 uppercase">Rubrion</p>
+		<h1 class="mt-4 font-display text-5xl tracking-tight md:text-7xl">Brand Guide</h1>
+		<p class="mt-6 max-w-xl text-base/7 text-neutral-600 dark:text-neutral-400">
+			A monochrome foundation — black and white — lit by a single red spark. Red lives in the
+			glows, shadows, and edges; never the whole surface.
+		</p>
+
+		<!-- palette -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">01</span>
+				<h2 class="font-display text-2xl md:text-3xl">Palette</h2>
+			</div>
+
+			<h3 class="mb-4 text-sm font-semibold text-neutral-500">Brand red</h3>
+			<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+				{reds.map((c) => (
+					<div>
+						<div class={`h-24 rounded-xl ${c.cls} shadow-brand-ring`}></div>
+						<p class="mt-2 font-mono text-xs font-medium">{c.name}</p>
+						<p class="font-mono text-[11px] text-neutral-500">{c.oklch}</p>
+					</div>
+				))}
+			</div>
+
+			<h3 class="mt-10 mb-4 text-sm font-semibold text-neutral-500">Monochrome base</h3>
+			<div class="grid grid-cols-4 gap-3 sm:grid-cols-7">
+				{neutrals.map((c) => (
+					<div>
+						<div class={`h-16 rounded-lg border border-line dark:border-line-dark ${c.cls}`}></div>
+						<p class="mt-2 font-mono text-[11px] text-neutral-500">{c.name}</p>
+					</div>
+				))}
+			</div>
+
+			<h3 class="mt-10 mb-4 text-sm font-semibold text-neutral-500">Border line (red-tinted)</h3>
+			<div class="flex flex-wrap gap-4">
+				<div class="flex h-20 w-40 items-center justify-center rounded-xl border border-line text-xs text-neutral-500 dark:border-line-dark">border-line</div>
+				<div class="flex h-20 w-40 items-center justify-center rounded-xl border-2 border-line text-xs text-neutral-500 dark:border-line-dark">border-line · 2px</div>
+			</div>
+		</section>
+
+		<!-- typography -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">02</span>
+				<h2 class="font-display text-2xl md:text-3xl">Typography</h2>
+			</div>
+			<div class="flex flex-wrap gap-6 text-sm text-neutral-500">
+				<span><span class="font-display text-base text-neutral-800 dark:text-neutral-100">Circular</span> — display / wordmark</span>
+				<span><span class="text-base text-neutral-800 dark:text-neutral-100">Inter</span> — UI / body</span>
+				<span><span class="font-mono text-base text-neutral-800 dark:text-neutral-100">Mono</span> — code / labels</span>
+			</div>
+			<div class="mt-8 space-y-6">
+				{type.map((t) => (
+					<div class="flex flex-col gap-1 border-b border-line py-4 dark:border-line-dark md:flex-row md:items-baseline md:gap-8">
+						<span class="w-32 shrink-0 font-mono text-xs text-neutral-500">{t.label}</span>
+						<span class={t.cls}>{t.sample}</span>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<!-- logo -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">03</span>
+				<h2 class="font-display text-2xl md:text-3xl">Logo</h2>
+			</div>
+			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+				<!-- on light -->
+				<div class="flex items-center justify-center rounded-xl bg-white p-10 shadow-brand">
+					<span class="flex items-center gap-2">
+						<Mark class="h-8 w-8 text-black" />
+						<span class="font-display text-lg font-bold tracking-tight text-black">Rubrion</span>
+					</span>
+				</div>
+				<!-- on dark -->
+				<div class="flex items-center justify-center rounded-xl bg-black p-10 shadow-brand">
+					<span class="flex items-center gap-2">
+						<Mark class="h-8 w-8 text-white" />
+						<span class="font-display text-lg font-bold tracking-tight text-white">Rubrion</span>
+					</span>
+				</div>
+			</div>
+			<p class="mt-3 text-xs text-neutral-500">Mark: the Rubrion symbol, currentColor — inverts with the surface. Wordmark set in Circular.</p>
+		</section>
+
+		<!-- buttons -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">04</span>
+				<h2 class="font-display text-2xl md:text-3xl">Buttons</h2>
+			</div>
+			<div class="flex flex-wrap items-center gap-6">
+				<a href="#" class="btn-primary w-40">Start a project</a>
+				<a href="#" class="btn-ghost">Login</a>
+			</div>
+			<p class="mt-4 text-xs text-neutral-500"><code class="text-brand-500">.btn-primary</code> carries the red glow ring; <code class="text-brand-500">.btn-ghost</code> is text-only with a lift on hover.</p>
+		</section>
+
+		<!-- cards & elevation -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">05</span>
+				<h2 class="font-display text-2xl md:text-3xl">Cards &amp; elevation</h2>
+			</div>
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+				<div class="feature-card p-6">
+					<h3 class="font-sans text-base font-medium tracking-tight">Feature card</h3>
+					<p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400"><code class="text-brand-500">.feature-card</code> — red-tinted ambient shadow.</p>
+				</div>
+				<div class="flex items-center justify-center rounded-2xl bg-white p-6 shadow-brand dark:bg-neutral-900">
+					<span class="font-mono text-xs text-neutral-500">shadow-brand</span>
+				</div>
+				<div class="flex items-center justify-center rounded-2xl bg-white p-6 shadow-brand-ring dark:bg-neutral-900">
+					<span class="font-mono text-xs text-neutral-500">shadow-brand-ring</span>
+				</div>
+			</div>
+		</section>
+
+		<!-- motion -->
+		<section class="mt-20">
+			<div class="mb-8 flex items-baseline gap-3 border-b border-line pb-3 dark:border-line-dark">
+				<span class="font-mono text-xs text-brand-500">06</span>
+				<h2 class="font-display text-2xl md:text-3xl">Motion</h2>
+			</div>
+			<div class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+				{motion.map(([name, desc]) => (
+					<div class="flex items-start gap-3 border-b border-line py-3 dark:border-line-dark">
+						<span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500"></span>
+						<div>
+							<p class="text-sm font-medium">{name}</p>
+							<p class="text-xs text-neutral-500">{desc}</p>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<footer class="mt-24 border-t border-line pt-8 text-xs text-neutral-500 dark:border-line-dark">
+			© Rubrion 2026 · Brand Guide · <a href="/" class="text-brand-500 hover:underline">← landing page</a>
+		</footer>
+	</main>
+</Layout>
+
+<script is:inline>
+	document.getElementById('theme-toggle')?.addEventListener('click', () => {
+		const el = document.documentElement;
+		const dark = !el.classList.contains('dark');
+		el.classList.toggle('dark', dark);
+		el.style.colorScheme = dark ? 'dark' : 'light';
+		try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+	});
+</script>

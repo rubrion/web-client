@@ -1,0 +1,32 @@
+{
+	"name": "rubrion-landing-pt",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro build && astro preview",
+		"astro": "astro",
+		"generate-types": "wrangler types",
+		"deploy": "astro build && wrangler deploy",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^13.7.0",
+		"@astrojs/sitemap": "^3.7.3",
+		"@fontsource/plus-jakarta-sans": "^5.2.8",
+		"@tailwindcss/vite": "^4.3.1",
+		"astro": "^6.4.7",
+		"cobe": "^2.0.1",
+		"tailwindcss": "^4.3.1"
+	},
+	"devDependencies": {
+		"wrangler": "^4.103.0"
+	},
+	"overrides": {
+		"vite": "^7"
+	}
+}

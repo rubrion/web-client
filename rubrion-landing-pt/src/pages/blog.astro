@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Rubrion, Blog" description="Notas sobre produtos white-label, infraestrutura e os projetos que entregamos. Distribuído pela EdgeLetter.">
+	<Navbar />
+	<main class="mx-auto max-w-4xl px-4 pt-32 pb-20 sm:px-6 lg:px-8">
+		<header class="mb-10 text-center">
+			<p class="font-mono text-xs tracking-[0.3em] text-brand-500 uppercase">Blog</p>
+			<h1 class="mt-4 font-display text-4xl font-bold tracking-tight text-neutral-900 md:text-6xl dark:text-neutral-100">
+				O que construímos, como entregamos
+			</h1>
+			<p class="mx-auto mt-6 max-w-md text-base text-neutral-600 dark:text-neutral-400">
+				Notas sobre produtos white-label, infraestrutura e os projetos que entregamos.
+			</p>
+		</header>
+
+		<div class="rounded-2xl border border-line bg-white p-2 shadow-brand sm:p-4 dark:border-line-dark dark:bg-neutral-900">
+			<iframe
+				src="https://edgeletter.rubrion.ai/embed/blog?limit=20&date=1&excerpt=1&theme=dark&font=inherit"
+				style="width:100%;border:0;display:block;background:transparent"
+				width="100%"
+				height="0"
+				loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"
+				title="Rubrion blog"></iframe>
+		</div>
+	</main>
+	<Footer />
+	<script src="https://edgeletter.rubrion.ai/embed/resizer.js" async is:inline></script>
+</Layout>
