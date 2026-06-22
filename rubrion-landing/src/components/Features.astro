@@ -85,18 +85,35 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 				<p class="mt-2 max-w-xs text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Ready-made products you run as your own. Live in weeks, not months.</p>
 			</div>
 			<div class="mx-6 mt-2 mb-6 flex min-h-0 flex-1 flex-col justify-center">
-				<p class="font-mono text-[11px] tracking-[0.2em] text-neutral-500 uppercase">Available now</p>
-				<ul class="mt-2.5 space-y-2">
-					<li class="flex items-center gap-2.5 text-sm text-neutral-700 dark:text-neutral-200">
-						<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>Newsletters &amp; publishing
-					</li>
-					<li class="flex items-center gap-2.5 text-sm text-neutral-700 dark:text-neutral-200">
-						<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>Multi-vendor marketplace
-					</li>
-					<li class="flex items-center gap-2.5 text-sm text-neutral-700 dark:text-neutral-200">
-						<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>Branded multi-site presence
-					</li>
-				</ul>
+				<!-- live white-labels: fancy tiles with a pulsing "Live" indicator -->
+				<a href="https://edgeletter.rubrion.ai" target="_blank" rel="noopener" class="group/tile flex items-center gap-3 rounded-xl border border-line bg-white/60 p-3 transition hover:border-brand-500/40 hover:shadow-brand-ring dark:border-line-dark dark:bg-neutral-900/40">
+					<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-sm font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">E</span>
+					<span class="min-w-0 flex-1">
+						<span class="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">EdgeLetter</span>
+						<span class="block truncate font-mono text-[11px] text-neutral-500 dark:text-neutral-400">Newsletters &amp; publishing</span>
+					</span>
+					<span class="flex shrink-0 items-center gap-1.5">
+						<span class="relative flex h-2 w-2">
+							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75"></span>
+							<span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+						</span>
+						<span class="font-mono text-[10px] tracking-wide text-brand-500 uppercase">Live</span>
+					</span>
+				</a>
+				<a href="https://rubrion.store" target="_blank" rel="noopener" class="group/tile mt-2.5 flex items-center gap-3 rounded-xl border border-line bg-white/60 p-3 transition hover:border-brand-500/40 hover:shadow-brand-ring dark:border-line-dark dark:bg-neutral-900/40">
+					<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 font-display text-sm font-bold text-neutral-900 dark:border-line-dark dark:bg-neutral-800 dark:text-neutral-100">S</span>
+					<span class="min-w-0 flex-1">
+						<span class="block text-sm font-semibold text-neutral-900 dark:text-neutral-100">Rubrion Store</span>
+						<span class="block truncate font-mono text-[11px] text-neutral-500 dark:text-neutral-400">Multi-vendor marketplace</span>
+					</span>
+					<span class="flex shrink-0 items-center gap-1.5">
+						<span class="relative flex h-2 w-2">
+							<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75"></span>
+							<span class="relative inline-flex h-2 w-2 rounded-full bg-brand-500"></span>
+						</span>
+						<span class="font-mono text-[10px] tracking-wide text-brand-500 uppercase">Live</span>
+					</span>
+				</a>
 
 				<p class="mt-5 font-mono text-[11px] tracking-[0.2em] text-neutral-400 uppercase dark:text-neutral-500">Coming soon</p>
 				<ul class="mt-2.5 space-y-2">
@@ -105,7 +122,7 @@ import CustomBuildDevice from './CustomBuildDevice.astro';
 						<span class="tag-pill">Soon</span>
 					</li>
 					<li class="flex items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-						<span class="flex items-center gap-2.5"><span class="h-1.5 w-1.5 shrink-0 rounded-full border border-line dark:border-line-dark"></span>Social media automation</span>
+						<span class="flex items-center gap-2.5"><span class="h-1.5 w-1.5 shrink-0 rounded-full border border-line dark:border-line-dark"></span>Bookings &amp; scheduling</span>
 						<span class="tag-pill">Soon</span>
 					</li>
 					<li class="flex items-center justify-between gap-2 text-sm text-neutral-500 dark:text-neutral-400">
