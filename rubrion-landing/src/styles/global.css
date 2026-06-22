@@ -377,7 +377,9 @@ html {
 .device-morph {
   width: 100%;
   max-width: 100%;
-  margin-inline: auto;
+  /* right-anchored: full width on desktop, collapses toward the right corner on mobile */
+  margin-left: auto;
+  margin-right: 0;
   overflow: hidden;
   border-radius: 0.75rem;
   border: 1px solid var(--color-line);
