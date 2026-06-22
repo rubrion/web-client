@@ -1,16 +1,14 @@
 ---
 // Hero — rotated dashed grid bg, falling collision beams, blur-in heading, framed product carousel
-import Specfit from '../assets/products/specfit.svg';
-import Brad from '../assets/products/brad.svg';
 
 const words = ['Code-free,', 'cloud-fee.'];
 
-// hero carousel slides — stylized product cards (swap in real screenshots later)
+// hero carousel slides — real product screenshots; Rubrion Store keeps a stylized placeholder
 const slides = [
-	{ name: 'EdgeLetter', eyebrow: 'White-label product', outcome: 'Newsletters & publishing, under your brand', url: 'edgeletter.rubrion.ai' },
+	{ name: 'EdgeLetter', eyebrow: 'White-label product', outcome: 'Newsletters & publishing, under your brand', url: 'edgeletter.rubrion.ai', img: '/images/product-edgeletter.png' },
 	{ name: 'Rubrion Store', eyebrow: 'White-label product', outcome: 'A multi-vendor marketplace you own', url: 'rubrion.store' },
-	{ name: 'SpecFit', eyebrow: 'White-label product', outcome: 'CV scoring & hiring, powered by AI', url: '', mark: 'specfit' },
-	{ name: 'Brad', eyebrow: 'AI agent', outcome: 'A marketing agent, on your brand', url: '', mark: 'brad' },
+	{ name: 'SpecFit', eyebrow: 'White-label product', outcome: 'CV scoring & hiring, powered by AI', url: '', img: '/images/product-specfit.png' },
+	{ name: 'Brad', eyebrow: 'AI agent', outcome: 'A marketing agent, on your brand', url: '', img: '/images/product-brad.png' },
 ];
 
 // Falling beams: each beam drops 45deg (Δx === Δy) then explodes on the box top edge.
@@ -69,14 +67,21 @@ const beams = Array.from({ length: N }, (_, i) => ({
 				<div class="hero-carousel-track" data-carousel-track>
 					{slides.map((s, i) => (
 						<figure class:list={['hero-slide', i === 0 && 'is-active']} data-slide>
-							{s.mark === 'brad'
-								? <Brad class="h-10 w-10 text-brand-500" />
-								: s.mark === 'specfit'
-								? <Specfit class="h-10 w-10 text-brand-500" />
-								: <span class="font-mono text-[11px] tracking-[0.3em] text-brand-500 uppercase">{s.eyebrow}</span>}
+							{s.img ? (
+								<img
+									src={s.img}
+									alt={`${s.name} — ${s.outcome}`}
+									loading={i === 0 ? 'eager' : 'lazy'}
+									class="absolute inset-0 h-full w-full object-cover object-top"
+								/>
+							) : (
+								<Fragment>
+									<span class="font-mono text-[11px] tracking-[0.3em] text-brand-500 uppercase">{s.eyebrow}</span>
 							<h3 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">{s.name}</h3>
 							<p class="max-w-md text-sm text-neutral-600 md:text-base dark:text-neutral-400">{s.outcome}</p>
 							{s.url && <span class="font-mono text-xs text-neutral-500">{s.url} ↗</span>}
+								</Fragment>
+							)}
 						</figure>
 					))}
 				</div>
