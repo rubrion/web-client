@@ -1,0 +1,103 @@
+---
+// Custom-build visual: one branded build that reflows desktop <-> mobile on a loop.
+// Self-contained — drop it into the "Commission a custom build" card.
+import Mark from '../assets/rubrion-mark.svg';
+
+const chart = [40, 65, 50, 80, 60, 90, 70];
+---
+
+<div
+	data-tilt-scene
+	class="relative mx-6 mt-2 mb-8 flex min-h-0 flex-1 items-center justify-center"
+	style="perspective: 1000px;"
+>
+	<div data-tilt class="w-full transition-transform duration-200 ease-out will-change-transform">
+		<figure data-morph class="device-morph" aria-label="One build, reflowing from desktop to mobile">
+			<div class="dm-chrome">
+				<span class="dm-dot is-accent"></span>
+				<span class="dm-dot"></span>
+				<span class="dm-dot"></span>
+				<span class="dm-url">yourbrand.app</span>
+				<span class="dm-notch"></span>
+			</div>
+
+			<div class="dm-body">
+				<!-- nav rail: collapses in the mobile state -->
+				<nav class="dm-rail text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+					<span class="whitespace-nowrap">Overview</span>
+					<span class="whitespace-nowrap">Projects</span>
+					<span class="whitespace-nowrap">Reports</span>
+					<span class="whitespace-nowrap">Settings</span>
+				</nav>
+
+				<div class="dm-main">
+					<!-- app header: client logo (Rubrion mark) + brand + CTA -->
+					<div class="flex items-center justify-between">
+						<span class="flex items-center gap-1.5">
+							<Mark class="h-4 w-4 text-brand-500" />
+							<span class="font-display text-xs font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Acme</span>
+						</span>
+						<span class="rounded-md bg-brand-500 px-2 py-1 text-[10px] font-semibold text-white">Deploy</span>
+					</div>
+
+					<!-- stat cards: 3-up on desktop, stacked on mobile -->
+					<div class="dm-cards">
+						<div class="dm-card">
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Revenue</span>
+							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">$142k</span>
+						</div>
+						<div class="dm-card">
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Users</span>
+							<span class="text-xs font-bold text-brand-500">1.2k</span>
+						</div>
+						<div class="dm-card">
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Uptime</span>
+							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">99.9%</span>
+						</div>
+					</div>
+
+					<!-- mini chart -->
+					<div class="flex h-12 items-end gap-1 rounded-lg border border-line p-2 dark:border-line-dark">
+						{chart.map((h) => (
+							<span class="flex-1 rounded-sm bg-neutral-200 dark:bg-neutral-700" style={`height:${h}%`}></span>
+						))}
+						<span class="flex-1 rounded-sm bg-brand-500/60" style="height:100%"></span>
+					</div>
+
+					<p class="font-mono text-[9px] text-neutral-400 dark:text-neutral-500">Built with Rubrion · source delivered</p>
+				</div>
+			</div>
+		</figure>
+	</div>
+</div>
+
+<script>
+	// one build morphs desktop <-> mobile on a loop
+	const morph = document.querySelector<HTMLElement>('[data-morph]');
+	if (morph && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		let mobile = false;
+		setInterval(() => {
+			mobile = !mobile;
+			morph.classList.toggle('is-mobile', mobile);
+		}, 2800);
+	}
+
+	// device tilts toward the cursor (pointer devices only)
+	const scene = document.querySelector<HTMLElement>('[data-tilt-scene]');
+	const tiltEl = scene?.querySelector<HTMLElement>('[data-tilt]');
+	const canTilt =
+		window.matchMedia('(hover: hover)').matches &&
+		!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (scene && tiltEl && canTilt) {
+		const MAX = 8;
+		scene.addEventListener('mousemove', (e) => {
+			const r = scene.getBoundingClientRect();
+			const px = (e.clientX - r.left) / r.width - 0.5;
+			const py = (e.clientY - r.top) / r.height - 0.5;
+			tiltEl.style.transform = `rotateX(${(-py * MAX * 2).toFixed(2)}deg) rotateY(${(px * MAX * 2).toFixed(2)}deg)`;
+		});
+		scene.addEventListener('mouseleave', () => {
+			tiltEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
+		});
+	}
+</script>
