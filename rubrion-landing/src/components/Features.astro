@@ -1,6 +1,7 @@
 ---
 // Features — bento grid: what we build (AI agent pipeline, products, managed hosting, custom builds)
 import Newsletter from './Newsletter.astro';
+import CustomBuildDevice from './CustomBuildDevice.astro';
 ---
 
 <div id="features" class="mx-auto w-full bg-white px-4 py-20 md:px-8 dark:bg-neutral-950">
@@ -112,42 +113,7 @@ import Newsletter from './Newsletter.astro';
 				<h3 class="text-base font-medium tracking-tight text-neutral-700 dark:text-neutral-100">Commission a custom build</h3>
 				<p class="mt-2 max-w-md text-base font-normal tracking-tight text-neutral-500 dark:text-neutral-400">Fullstack web and mobile, fixed fee and fixed timeline. We've shipped a video-studio site, an event RSVP platform, a clinical-lab portal, and an offline farm app. Source delivered, it's yours.</p>
 			</div>
-			<!-- one build that morphs desktop <-> mobile (loop driven in script); tilts toward cursor -->
-			<div
-				data-tilt-scene
-				class="relative mx-6 mt-2 mb-8 flex min-h-0 flex-1 items-center justify-center"
-				style="perspective: 1000px;"
-			>
-				<div data-tilt class="w-full transition-transform duration-200 ease-out will-change-transform">
-					<figure data-morph class="device-morph" aria-label="The same build, reflowing from desktop to mobile">
-						<div class="dm-chrome">
-							<span class="dm-dot is-accent"></span>
-							<span class="dm-dot"></span>
-							<span class="dm-dot"></span>
-							<span class="dm-url"></span>
-							<span class="dm-notch"></span>
-						</div>
-						<div class="dm-body">
-							<div class="dm-rail">
-								<span class="dm-line" style="width:100%"></span>
-								<span class="dm-line" style="width:75%"></span>
-								<span class="dm-line" style="width:100%"></span>
-								<span class="dm-line" style="width:60%"></span>
-							</div>
-							<div class="dm-main">
-								<div class="dm-cards">
-									<span class="dm-card"></span>
-									<span class="dm-card is-accent"></span>
-									<span class="dm-card"></span>
-								</div>
-								<span class="dm-block"></span>
-								<span class="dm-line" style="width:66%"></span>
-								<span class="dm-line" style="width:50%"></span>
-							</div>
-						</div>
-					</figure>
-				</div>
-			</div>
+			<CustomBuildDevice />
 		</div>
 	</div>
 
@@ -207,34 +173,5 @@ import Newsletter from './Newsletter.astro';
 			{ threshold: 0.4 },
 		);
 		io.observe(box);
-	}
-
-	// commission card: one build morphs desktop <-> mobile on a loop
-	const morph = document.querySelector<HTMLElement>('[data-morph]');
-	if (morph && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		let mobile = false;
-		setInterval(() => {
-			mobile = !mobile;
-			morph.classList.toggle('is-mobile', mobile);
-		}, 2800);
-	}
-
-	// commission card: device tilts toward the cursor (pointer devices only)
-	const tiltScene = document.querySelector<HTMLElement>('[data-tilt-scene]');
-	const tiltEl = tiltScene?.querySelector<HTMLElement>('[data-tilt]');
-	const canTilt =
-		window.matchMedia('(hover: hover)').matches &&
-		!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	if (tiltScene && tiltEl && canTilt) {
-		const MAX = 8; // degrees
-		tiltScene.addEventListener('mousemove', (e) => {
-			const r = tiltScene.getBoundingClientRect();
-			const px = (e.clientX - r.left) / r.width - 0.5;
-			const py = (e.clientY - r.top) / r.height - 0.5;
-			tiltEl.style.transform = `rotateX(${(-py * MAX * 2).toFixed(2)}deg) rotateY(${(px * MAX * 2).toFixed(2)}deg)`;
-		});
-		tiltScene.addEventListener('mouseleave', () => {
-			tiltEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
-		});
 	}
 </script>
