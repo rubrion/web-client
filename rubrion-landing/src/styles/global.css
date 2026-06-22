@@ -386,7 +386,7 @@ html {
   transition: max-width 0.9s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.9s ease;
 }
 .dark .device-morph { border-color: var(--color-line-dark); background: var(--color-neutral-900); }
-.device-morph.is-mobile { max-width: 13rem; border-radius: 1.5rem; }
+.device-morph.is-mobile { max-width: 15rem; border-radius: 1.75rem; }
 
 .dm-chrome {
   display: flex;
@@ -402,13 +402,19 @@ html {
 .dm-dot.is-accent { background: var(--color-brand-500); }
 .dm-url {
   margin-left: 0.5rem;
-  height: 0.75rem;
   flex: 1;
   max-width: 16rem;
-  border-radius: 0.25rem;
+  border-radius: 9999px;
   background: var(--color-neutral-100);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  line-height: 1rem;
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.dark .dm-url { background: var(--color-neutral-800); }
+.dark .dm-url { background: var(--color-neutral-800); color: var(--color-neutral-400); }
 .device-morph.is-mobile .dm-dot,
 .device-morph.is-mobile .dm-url { display: none; }
 .dm-notch { display: none; height: 0.25rem; width: 2.5rem; border-radius: 9999px; background: var(--color-neutral-300); }
@@ -417,7 +423,7 @@ html {
 
 .dm-body { display: flex; gap: 0.75rem; padding: 0.75rem; }
 .dm-rail {
-  flex: 0 0 22%;
+  flex: 0 0 26%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -429,18 +435,16 @@ html {
 .dm-cards { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .dm-card {
   flex: 1 1 30%;
-  height: 2.5rem;
-  border-radius: 0.375rem;
-  background: var(--color-neutral-200);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
   transition: flex-basis 0.7s ease;
 }
-.dark .dm-card { background: var(--color-neutral-700); }
-.dm-card.is-accent { background: color-mix(in oklch, var(--color-brand-500) 30%, transparent); }
+.dark .dm-card { border-color: var(--color-line-dark); }
 .device-morph.is-mobile .dm-card { flex-basis: 100%; }
-.dm-line { display: block; height: 0.625rem; border-radius: 0.25rem; background: var(--color-neutral-200); }
-.dark .dm-line { background: var(--color-neutral-700); }
-.dm-block { display: block; height: 4rem; border-radius: 0.375rem; background: var(--color-neutral-100); }
-.dark .dm-block { background: var(--color-neutral-800); }
 
 /* ---- Rubot pipeline node: tone the metallic PNG to the dark/red theme ---- */
 .rubot-img {
