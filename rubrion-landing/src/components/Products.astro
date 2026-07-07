@@ -1,12 +1,14 @@
 ---
 // Products — white-label products + Rubot (the platform that wraps the agents we build)
-import Specfit from '../assets/products/specfit.svg';
-import Brad from '../assets/products/brad.svg';
+import edgeletterLogo from '../assets/products/edgeletter-logo.png';
+import storeLogo from '../assets/products/store-logo.png';
+import curricleanLogo from '../assets/products/curriclean-logo.png';
+import Brad from '../assets/products/brad-logo.svg';
 
 const products = [
-	{ name: 'EdgeLetter', mono: 'E', desc: 'Run a newsletter and publishing platform under your own name.', chips: ['Branded sender', 'Segmentation', 'Self-host'], link: { label: 'edgeletter.rubrion.ai', href: 'https://edgeletter.rubrion.ai', external: true } },
-	{ name: 'Rubrion Store', mono: 'S', desc: 'Your own multi-vendor marketplace, under your brand.', chips: ['Vendor onboarding', 'Fast search', 'Multi-tenant'], link: { label: 'rubrion.store', href: 'https://rubrion.store', external: true } },
-	{ name: 'SpecFit', mark: 'specfit', desc: 'Smarter hiring, score any CV against the role.', chips: ['CV scoring', 'Ranked shortlist', 'Fair limits'], link: { label: 'specfit.rubrion.ai', href: 'https://specfit.rubrion.ai', external: true } },
+	{ name: 'EdgeLetter', logo: edgeletterLogo, desc: 'Run a newsletter and publishing platform under your own name.', chips: ['Branded sender', 'Segmentation', 'Self-host'], link: { label: 'edgeletter.rubrion.ai', href: 'https://edgeletter.rubrion.ai', external: true } },
+	{ name: 'Rubrion Store', logo: storeLogo, desc: 'Your own multi-vendor marketplace, under your brand.', chips: ['Vendor onboarding', 'Fast search', 'Multi-tenant'], link: { label: 'rubrion.store', href: 'https://rubrion.store', external: true } },
+	{ name: 'CurriClean', logo: curricleanLogo, desc: 'Smarter hiring, score any CV against the role.', chips: ['CV scoring', 'Ranked shortlist', 'Fair limits'], link: { label: 'curriclean.rubrion.ai', href: 'https://curriclean.rubrion.ai', external: true } },
 ];
 ---
 
@@ -23,10 +25,8 @@ const products = [
 			<div class="feature-card p-6">
 				<div>
 					<div class="flex items-center gap-3">
-						<span class="product-mark text-neutral-900 dark:text-neutral-100">
-							{p.mark === 'specfit'
-								? <Specfit class="h-7 w-7" />
-								: p.mono}
+						<span class="product-mark">
+							<img src={p.logo.src} alt={p.name} loading="lazy" class="h-7 w-7 object-contain" />
 						</span>
 						<h3 class="font-display text-lg font-bold tracking-tight text-neutral-900 dark:text-neutral-100">{p.name}</h3>
 					</div>
@@ -64,7 +64,7 @@ const products = [
 				<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
 					<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-xl border border-line p-4 transition hover:border-brand-500/50 dark:border-line-dark">
 						<div class="flex items-center gap-2">
-							<Brad class="h-6 w-6 text-neutral-900 dark:text-neutral-100" />
+							<Brad class="h-6 w-6" />
 							<span class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Brad</span>
 						</div>
 						<p class="mt-2 text-xs text-neutral-500 dark:text-neutral-400">Marketing: briefs, social copy, and on-brand banners, over WhatsApp.</p>
