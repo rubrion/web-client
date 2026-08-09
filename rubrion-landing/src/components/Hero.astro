@@ -121,33 +121,78 @@ const beams = Array.from({ length: N }, (_, i) => ({
 				ex.className = 'beam-explosion';
 				ex.style.left = x + 'px';
 				ex.style.top = y + 'px';
+				const frag = document.createDocumentFragment();
 				const glow = document.createElement('span');
 				glow.className = 'beam-explosion-glow';
-				ex.appendChild(glow);
+				frag.appendChild(glow);
 				for (let i = 0; i < 20; i++) {
 					const s = document.createElement('span');
 					s.className = 'beam-spark';
 					s.style.setProperty('--dx', Math.floor(Math.random() * 80 - 40) + 'px');
 					s.style.setProperty('--dy', Math.floor(Math.random() * 64 - 32) + 'px'); // radial: straddle the edge
 					s.style.setProperty('--dur', (Math.random() * 1.5 + 0.5).toFixed(2) + 's');
-					ex.appendChild(s);
+					frag.appendChild(s);
 				}
+				ex.appendChild(frag);
 				explosions.appendChild(ex);
 				setTimeout(() => ex.remove(), 2100);
 			};
 
-			const frame = (now) => {
-				const layerRect = layer.getBoundingClientRect();
-				const boxRect = target.getBoundingClientRect();
-				const boundaryY = boxRect.top; // land on the box top edge (border), not inside
-				const fall = boundaryY - layerRect.top; // start ref -> box top
-				// travel just past the box top so beams always reach it on any viewport
-				// height. Δx === Δy keeps the fall a true 45deg.
-				const D = Math.max(900, fall + 260);
+			// Nothing here depends on scroll position, so measure on resize/entrance instead
+			// of every frame — the old loop read 2 + one-per-beam rects per frame, each
+			// forcing a style recalc.
+			let fall = 0; // start ref -> box top edge
+			let D = 0; // travel distance; Δx === Δy keeps the fall a true 45deg
+			let boxLeft = 0;
+			let boxW = 0;
+			let hitAt = 0; // D * p at which the beam's rotated bbox reaches the box edge
+			let tipOffset = 0; // translate x -> leading tip (bbox right edge)
+			let backOff = 0; // 45deg up-left back-off that makes the tip land on landX
+
+			const measure = () => {
+				// offset* (not getBoundingClientRect) so the box's 20px entrance rise — a
+				// transform — doesn't skew the geometry and jolt every in-flight drop when we
+				// re-measure. Both elements share the hero as offsetParent, so it cancels.
+				fall = target.offsetTop - layer.offsetTop;
+				// travel just past the box top so beams always reach it on any viewport height
+				D = Math.max(900, fall + 260);
 				// rain only over the carousel: pick a landing x across the box width, then
 				// back off up-left by the fall distance so the 45deg drift lands it there.
-				const boxLeft = boxRect.left - layerRect.left;
-				const boxW = boxRect.width;
+				boxLeft = target.offsetLeft - layer.offsetLeft;
+				boxW = target.offsetWidth;
+				// bbox half-extent of a w x h rect rotated 45deg — replaces the per-frame
+				// rect read that used to detect the collision
+				const w = beams[0].el.offsetWidth;
+				const h = beams[0].el.offsetHeight;
+				const half = ((w + h) / 2) * Math.SQRT1_2;
+				hitAt = fall + 200 - h / 2 - half;
+				tipOffset = w / 2 + half;
+				// solves x(hitAt) + tipOffset === landX (the old hard-coded +172)
+				backOff = hitAt + tipOffset - fall;
+			};
+
+			const MAX_STEP = 32; // ms of animation time a single frame may advance
+			let rafId = 0;
+			let running = false;
+			let onScreen = false;
+			let lastFrame = 0;
+			let stoppedAt = 0;
+
+			const frame = (now) => {
+				// Position is derived from the wall clock, so a dropped frame used to teleport
+				// every drop by however long the gap was. Cap how much animation time a single
+				// frame may consume: on a slow device the rain runs slightly slow instead of
+				// jumping.
+				if (lastFrame) {
+					const skew = now - lastFrame - MAX_STEP;
+					if (skew > 0) {
+						for (const b of beams) {
+							if (b.start !== null) b.start += skew;
+							if (b.waitUntil) b.waitUntil += skew;
+						}
+					}
+				}
+				lastFrame = now;
 
 				for (const b of beams) {
 					if (b.start === null) b.start = now + b.delay;
@@ -166,28 +211,80 @@ const beams = Array.from({ length: N }, (_, i) => ({
 					// spread landings across the box width, inset from the edges so even the
 					// leftmost drop lands inside the box (not in empty space to its left)
 					const landX = boxLeft + boxW * (0.06 + 0.88 * b.frac);
-					// 45deg back-off; +172 cancels the rotated beam's tip offset so the
-					// bright tip (and its explosion) lands exactly at landX on the box edge
-					const startX = landX - (fall + 172);
-					const x = startX + D * p;
-					const y = -200 + D * p;
+					// 45deg back-off so the bright tip (and its explosion) lands exactly at
+					// landX on the box edge
+					const travel = D * p;
+					const x = landX - fall - backOff + travel;
+					const y = -200 + travel;
 					b.el.style.opacity = '1';
 					b.el.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(-45deg)';
 
-					const r = b.el.getBoundingClientRect();
-					if (r.bottom >= boundaryY) {
+					if (travel >= hitAt) {
 						b.exploded = true;
 						b.waitUntil = now + b.repeatDelay;
 						b.el.style.opacity = '0';
 						// beam falls down-right: leading tip is the bbox right edge, not left
-						spawnExplosion(r.right - layerRect.left, boundaryY - layerRect.top);
+						spawnExplosion(x + tipOffset, fall);
 					} else if (p >= 1) {
 						b.start = now; // safety reset if it never reaches the boundary
 					}
 				}
-				requestAnimationFrame(frame);
+				rafId = requestAnimationFrame(frame);
 			};
-			requestAnimationFrame(frame);
+
+			const start = () => {
+				if (running || document.hidden || !onScreen) return;
+				running = true;
+				// carry the schedule across the pause so nothing teleports on resume
+				if (stoppedAt) {
+					const paused = performance.now() - stoppedAt;
+					for (const b of beams) {
+						if (b.start !== null) b.start += paused;
+						if (b.waitUntil) b.waitUntil += paused;
+					}
+					stoppedAt = 0;
+				}
+				lastFrame = 0;
+				measure();
+				rafId = requestAnimationFrame(frame);
+			};
+
+			const stop = () => {
+				if (!running) return;
+				running = false;
+				stoppedAt = performance.now();
+				cancelAnimationFrame(rafId);
+				rafId = 0;
+			};
+
+			// the hero is ~93% off-screen over a full scroll-through; don't animate (or spawn
+			// explosion nodes) while nobody can see it
+			new IntersectionObserver(
+				(entries) => {
+					onScreen = entries.some((e) => e.isIntersecting);
+					if (onScreen) start();
+					else stop();
+				},
+				{ rootMargin: '80px' },
+			).observe(layer);
+
+			document.addEventListener('visibilitychange', () => {
+				if (document.hidden) stop();
+				else start();
+			});
+
+			let resizeRaf = 0;
+			window.addEventListener(
+				'resize',
+				() => {
+					cancelAnimationFrame(resizeRaf);
+					resizeRaf = requestAnimationFrame(measure);
+				},
+				{ passive: true },
+			);
+
+			// re-measure once the entrance settles, in case fonts/images shifted the layout
+			target.addEventListener('animationend', measure, { once: true });
 		};
 
 		if (document.readyState !== 'loading') init();

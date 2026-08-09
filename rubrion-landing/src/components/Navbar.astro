@@ -102,25 +102,43 @@ import LanguageSwitcher from './LanguageSwitcher.astro';
 		});
 	});
 
-	// resizable navbar: shrink + blur bg + shadow after scrolling 100px
+	// scroll-driven navbar state — one listener coalesced into one rAF, so the desktop
+	// pill and the mobile bar can't each schedule their own work on the same scroll
 	const pill = document.getElementById('nav-pill');
-	if (pill) {
-		const onScroll = () => pill.classList.toggle('scrolled', window.scrollY > 100);
-		onScroll();
-		window.addEventListener('scroll', onScroll, { passive: true });
-	}
-
-	// mobile navbar: hide on scroll down, reveal on scroll up
 	const mobileNav = document.getElementById('mobile-nav');
-	if (mobileNav) {
+	if (pill || mobileNav) {
 		let lastY = window.scrollY;
-		window.addEventListener('scroll', () => {
+		let ticking = false;
+		let shrunk = false;
+
+		const apply = () => {
+			ticking = false;
 			const y = window.scrollY;
-			const openMenu = document.getElementById('mobile-menu');
-			const menuOpen = openMenu && !openMenu.classList.contains('hidden');
-			if (!menuOpen && y > lastY && y > 80) mobileNav.classList.add('-translate-y-[150%]');
-			else mobileNav.classList.remove('-translate-y-[150%]');
+			// hysteresis: a single 100px threshold re-ran the 0.3s max-width transition
+			// (a layout property) on every jitter across the line
+			if (pill) {
+				if (!shrunk && y > 100) {
+					shrunk = true;
+					pill.classList.add('scrolled');
+				} else if (shrunk && y < 80) {
+					shrunk = false;
+					pill.classList.remove('scrolled');
+				}
+			}
+			if (mobileNav) {
+				const openMenu = document.getElementById('mobile-menu');
+				const menuOpen = openMenu && !openMenu.classList.contains('hidden');
+				if (!menuOpen && y > lastY && y > 80) mobileNav.classList.add('-translate-y-[150%]');
+				else mobileNav.classList.remove('-translate-y-[150%]');
+			}
 			lastY = y;
+		};
+
+		apply();
+		window.addEventListener('scroll', () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(apply);
 		}, { passive: true });
 	}
 
