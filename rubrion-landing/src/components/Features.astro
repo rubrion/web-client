@@ -168,11 +168,16 @@ const whitelabels = [
 	// rotating red globe
 	const canvas = document.getElementById('edge-globe') as HTMLCanvasElement | null;
 	if (canvas) {
+		// cobe sizes the backing store as width * devicePixelRatio. A fixed 1200 @2x gave a
+		// 2400x2400 buffer for a canvas displayed at 440px — ~30x the pixels actually shown,
+		// re-rendered every frame. Size it from the real CSS box instead.
+		const cssSize = canvas.clientWidth || 440;
+		const dpr = Math.min(window.devicePixelRatio || 1, 2);
 		// cobe v2 has no internal loop — drive rotation via globe.update() in our own rAF
 		const globe = createGlobe(canvas, {
-			devicePixelRatio: 2,
-			width: 1200,
-			height: 1200,
+			devicePixelRatio: dpr,
+			width: cssSize,
+			height: cssSize,
 			phi: 0,
 			theta: -0.2, // slight tilt so the southern hemisphere (Brazil) faces the viewer
 			dark: 1,
@@ -191,12 +196,38 @@ const whitelabels = [
 		});
 		let phi = 0;
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		let rafId = 0;
+		let onScreen = false;
 		const tick = () => {
 			phi += 0.01;
 			globe.update({ phi });
-			if (!reduce) requestAnimationFrame(tick);
+			rafId = requestAnimationFrame(tick);
 		};
-		requestAnimationFrame(tick);
+		const start = () => {
+			if (rafId || reduce || document.hidden || !onScreen) return;
+			rafId = requestAnimationFrame(tick);
+		};
+		const stop = () => {
+			if (!rafId) return;
+			cancelAnimationFrame(rafId);
+			rafId = 0;
+		};
+
+		// the globe used to render at 60fps for the whole page, including the ~90% of a
+		// scroll-through where it is nowhere near the viewport
+		new IntersectionObserver(
+			(entries) => {
+				onScreen = entries.some((e) => e.isIntersecting);
+				if (onScreen) start();
+				else stop();
+			},
+			{ rootMargin: '100px' },
+		).observe(canvas);
+
+		document.addEventListener('visibilitychange', () => {
+			if (document.hidden) stop();
+			else start();
+		});
 	}
 
 	// features header: draw box + corner dots when scrolled into view

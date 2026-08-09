@@ -139,9 +139,11 @@ html {
 }
 
 /* resizable navbar: width shrinks + blur bg on scroll */
+/* backdrop-filter is deliberately not transitioned — animating it re-blurs the whole
+   pill on every frame of the 0.3s run, right as the scroll starts */
 #nav-pill {
   transition: max-width 0.3s ease, transform 0.3s ease, background-color 0.3s ease,
-    box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+    box-shadow 0.3s ease;
 }
 #nav-pill.scrolled {
   max-width: 48rem;
@@ -188,6 +190,8 @@ html {
 }
 
 /* ---- hero falling beams (initial resting state; engine drives transform) ---- */
+/* promoted to their own layer: without this every step repaints the shared backdrop
+   root, which includes the framed box's backdrop-filter */
 .beam {
   position: absolute;
   top: 0;
@@ -198,6 +202,7 @@ html {
   background: linear-gradient(to top, var(--color-brand-600), var(--color-brand-400), transparent);
   opacity: 0;
   transform: translate(0, -200px) rotate(-45deg);
+  will-change: transform, opacity;
 }
 
 /* ---- entrance animations ---- */
