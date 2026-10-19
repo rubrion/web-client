@@ -1,27 +1,31 @@
 ---
-// FAQ — Why Rubrion, as a dropdown accordion (native <details>, no JS).
-// Questions live in src/data/seo.ts so the visible list and the FAQPage
-// JSON-LD on /faq stay in sync.
+// FAQ — Why Rubrion, as an accordion on native <details> (no JS). Questions
+// live in site.ts and feed the FAQPage JSON-LD too (seo.ts), so they never drift.
+import SectionHead from './SectionHead.astro';
 import { FAQS as faqs } from '../data/seo';
+import { c } from '../data/site';
+
+interface Props {
+	/** Render the heading (off when a PageHero already titles the page). */
+	head?: boolean;
+}
+const { head = true } = Astro.props;
 ---
 
-<section id="faq" class="w-full bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+<section id="faq" class:list={['bg-diag w-full bg-white px-4 md:px-8 dark:bg-black', head ? 'py-20 md:py-28' : 'pt-4 pb-24 md:pb-32']}>
 	<div class="mx-auto max-w-3xl">
-		<h2 class="text-center text-xl font-bold tracking-tight text-neutral-800 md:text-4xl dark:text-neutral-100">
-			Why Rubrion
-		</h2>
-		<p class="mx-auto mt-4 max-w-lg text-center text-sm text-neutral-600 dark:text-neutral-400">
-			Common questions, answered.
-		</p>
-
-		<div class="mt-12 divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
-			{faqs.map((f) => (
-				<details class="faq-item group">
-					<summary class="flex cursor-pointer items-center justify-between gap-6 py-5">
-						<span class="text-base font-medium text-neutral-800 md:text-lg dark:text-neutral-100">{f.q}</span>
-						<svg class="faq-chevron h-5 w-5 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+		{head && <SectionHead kicker={c.faq.kicker} title={c.faq.title} lead={c.faq.lead} center />}
+		<div class:list={[head && 'mt-12', 'divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark']}>
+			{faqs.map((f, i) => (
+				<details class="faq-item group" open={i === 0} data-reveal>
+					<summary class="flex cursor-pointer items-center justify-between gap-6 py-6">
+						<span class="flex items-baseline gap-4">
+							<span class="font-mono text-xs text-brand-500">{String(i + 1).padStart(2, '0')}</span>
+							<span class="text-base font-medium text-neutral-800 md:text-lg dark:text-neutral-100">{f.q}</span>
+						</span>
+						<svg class="faq-chevron h-5 w-5 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
 					</summary>
-					<p class="pb-5 pr-10 text-sm/6 text-neutral-600 dark:text-neutral-400">{f.a}</p>
+					<p class="pb-6 pl-9 pr-10 text-sm/7 text-neutral-600 md:text-base/7 dark:text-neutral-400">{f.a}</p>
 				</details>
 			))}
 		</div>

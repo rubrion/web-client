@@ -1,0 +1,285 @@
+---
+// Drawn stand-in for client work we can't screenshot: a generic UI of the
+// right kind (dashboard, chat, site, phone, table, report) in brand colours.
+// No real names or data, ever. `seed` varies the bars so cards differ.
+import type { Mock } from '../data/work';
+
+interface Props {
+	kind: Mock;
+	seed?: number;
+	class?: string;
+}
+const { kind, seed = 1, class: cls } = Astro.props;
+const bar = (i: number) => 30 + ((seed * 37 + i * 53) % 65);
+const bars = Array.from({ length: 8 }, (_, i) => bar(i));
+---
+
+<div class:list={['mock', `mock--${kind}`, cls]} aria-hidden="true">
+	<div class="mock__window">
+		<div class="mock__chrome"><i></i><i></i><i></i><span></span></div>
+		{kind === 'dashboard' && (
+			<div class="mock__body mock__dash">
+				<div class="mock__rail"><b></b><b></b><b></b><b></b></div>
+				<div class="grid gap-2">
+					<div class="mock__stats"><s></s><s class="is-red"></s><s></s></div>
+					<div class="mock__bars">{bars.map((h, i) => <em style={`height:${h}%`} class:list={[i === 5 && 'is-red']}></em>)}</div>
+				</div>
+			</div>
+		)}
+		{kind === 'chat' && (
+			<div class="mock__body mock__chat">
+				<p class="is-them"></p><p class="is-me w-2/3"></p><p class="is-them w-3/4"></p><p class="is-me w-1/2"></p><p class="is-them w-2/5"></p>
+			</div>
+		)}
+		{kind === 'site' && (
+			<div class="mock__body mock__site">
+				<div class="mock__hero"><b class="w-3/5"></b><b class="w-2/5"></b><u></u></div>
+				<div class="mock__tiles"><s></s><s></s><s></s></div>
+			</div>
+		)}
+		{kind === 'mobile' && (
+			<div class="mock__body mock__mobile">
+				<div class="mock__phone"><b></b><s></s><s></s><s class="is-red"></s><s></s></div>
+				<div class="mock__phone is-back"><b></b><s></s><s></s><s></s></div>
+			</div>
+		)}
+		{kind === 'table' && (
+			<div class="mock__body mock__table">
+				{bars.slice(0, 6).map((h, i) => <div><b style={`width:${h}%`}></b><s class:list={[i === 2 && 'is-red']}></s></div>)}
+			</div>
+		)}
+		{kind === 'report' && (
+			<div class="mock__body mock__report">
+				<div class="mock__page"><b class="w-1/2"></b><s></s><s></s><s class="w-4/5"></s><div class="mock__grid">{bars.slice(0, 6).map((_, i) => <i class:list={[i % 4 === 1 && 'is-red']}></i>)}</div></div>
+			</div>
+		)}
+	</div>
+</div>
+
+<style>
+	/* Everything inside is sized in em off a font-size that tracks the box,
+	 * so the same drawing fills a card or a case-page banner. */
+	.mock {
+		container-type: inline-size;
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100%;
+		padding: 8% 9%;
+		background:
+			radial-gradient(circle at 80% 0%, rgba(225, 40, 46, 0.22), transparent 55%),
+			repeating-linear-gradient(-45deg, transparent 0 23px, rgba(255, 255, 255, 0.05) 23px 24px),
+			#0b0b0b;
+	}
+	.mock__window {
+		width: 100%;
+		max-width: 26em;
+		font-size: clamp(9px, 3.6cqi, 26px);
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		border-radius: 0.7em;
+		background: #151515;
+		box-shadow: 0 24px 50px -24px rgba(200, 30, 36, 0.45);
+	}
+	.mock__chrome {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
+		padding: 0.45em 0.6em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	}
+	.mock__chrome i {
+		width: 0.4em;
+		height: 0.4em;
+		border-radius: 50%;
+		background: #3a3a3a;
+	}
+	.mock__chrome i:first-child {
+		background: var(--color-brand-500);
+	}
+	.mock__chrome span {
+		margin-left: 0.4em;
+		width: 40%;
+		height: 0.45em;
+		border-radius: 99px;
+		background: #262626;
+	}
+	.mock__body {
+		padding: 0.7em;
+	}
+	.mock b,
+	.mock s,
+	.mock p,
+	.mock em,
+	.mock u {
+		display: block;
+		border-radius: 0.3em;
+		background: #2a2a2a;
+		text-decoration: none;
+	}
+	.mock .is-red {
+		background: var(--color-brand-500);
+	}
+	.mock__dash {
+		display: grid;
+		grid-template-columns: 22% 1fr;
+		gap: 0.6em;
+	}
+	.mock__rail {
+		display: grid;
+		gap: 0.35em;
+		align-content: start;
+	}
+	.mock__rail b {
+		height: 0.45em;
+	}
+	.mock__stats {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.35em;
+	}
+	.mock__stats s {
+		height: 1.6em;
+	}
+	.mock__bars {
+		display: flex;
+		align-items: flex-end;
+		gap: 0.3em;
+		height: 4.5em;
+		padding: 0.4em;
+		border: 1px solid rgba(255, 255, 255, 0.07);
+		border-radius: 0.4em;
+	}
+	.mock__bars em {
+		flex: 1;
+		background: #3a3a3a;
+	}
+	.mock__chat {
+		display: grid;
+		gap: 0.4em;
+	}
+	.mock__chat p {
+		height: 1.1em;
+		width: 60%;
+		border-radius: 0.7em 0.7em 0.7em 0.2em;
+	}
+	.mock__chat .is-me {
+		justify-self: end;
+		border-radius: 0.7em 0.7em 0.2em 0.7em;
+		background: color-mix(in oklch, var(--color-brand-500) 70%, #000);
+	}
+	.mock__site {
+		display: grid;
+		gap: 0.6em;
+	}
+	.mock__hero {
+		display: grid;
+		gap: 0.35em;
+		padding: 0.8em;
+		border-radius: 0.4em;
+		background: linear-gradient(120deg, #222, #181818);
+	}
+	.mock__hero b {
+		height: 0.7em;
+		background: #3a3a3a;
+	}
+	.mock__hero u {
+		width: 3.5em;
+		height: 0.9em;
+		margin-top: 0.3em;
+		background: var(--color-brand-500);
+	}
+	.mock__tiles {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.35em;
+	}
+	.mock__tiles s {
+		height: 2.2em;
+	}
+	.mock__mobile {
+		display: flex;
+		justify-content: center;
+		gap: 0.7em;
+	}
+	.mock__phone {
+		display: grid;
+		gap: 0.3em;
+		align-content: start;
+		width: 5.2em;
+		height: 8.5em;
+		padding: 0.5em 0.4em;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: 0.9em;
+		background: #111;
+	}
+	.mock__phone.is-back {
+		margin-top: 1em;
+		opacity: 0.6;
+	}
+	.mock__phone b {
+		width: 40%;
+		height: 0.25em;
+		margin: 0 auto 0.2em;
+	}
+	.mock__phone s {
+		height: 1em;
+	}
+	.mock__table {
+		display: grid;
+		gap: 0.35em;
+	}
+	.mock__table div {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.3em 0.4em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+	.mock__table b {
+		height: 0.45em;
+		background: #333;
+	}
+	.mock__table s {
+		width: 1.6em;
+		height: 0.7em;
+		margin-left: auto;
+		flex: none;
+	}
+	.mock__report {
+		display: grid;
+		place-items: center;
+		background: #101010;
+	}
+	.mock__page {
+		display: grid;
+		gap: 0.35em;
+		width: 72%;
+		padding: 0.7em;
+		border-radius: 0.3em;
+		background: #e9e9e9;
+	}
+	.mock__page b {
+		height: 0.55em;
+		background: #9a9a9a;
+	}
+	.mock__page s {
+		height: 0.32em;
+		background: #c4c4c4;
+	}
+	.mock__grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.25em;
+		margin-top: 0.3em;
+	}
+	.mock__grid i {
+		height: 0.9em;
+		border-radius: 0.15em;
+		background: #cfcfcf;
+	}
+	.mock__grid i.is-red {
+		background: var(--color-brand-500);
+	}
+</style>

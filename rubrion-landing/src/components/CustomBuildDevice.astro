@@ -2,6 +2,9 @@
 // Custom-build visual: one branded build that reflows desktop <-> mobile on a loop.
 // Self-contained — drop it into the "Commission a custom build" card.
 import Mark from '../assets/rubrion-mark.svg';
+import { c } from '../data/site';
+
+const d = c.build.device;
 
 const chart = [40, 65, 50, 80, 60, 90, 70];
 ---
@@ -12,7 +15,7 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 	style="perspective: 1000px;"
 >
 	<div data-tilt class="w-full transition-transform duration-200 ease-out will-change-transform">
-		<figure data-morph class="device-morph" aria-label="One build, reflowing from desktop to mobile">
+		<figure data-morph class="device-morph" aria-label={d.label}>
 			<div class="dm-chrome">
 				<span class="dm-dot is-accent"></span>
 				<span class="dm-dot"></span>
@@ -24,10 +27,10 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 			<div class="dm-body">
 				<!-- nav rail: collapses in the mobile state -->
 				<nav class="dm-rail text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
-					<span class="whitespace-nowrap">Overview</span>
-					<span class="whitespace-nowrap">Projects</span>
-					<span class="whitespace-nowrap">Reports</span>
-					<span class="whitespace-nowrap">Settings</span>
+					<span class="whitespace-nowrap">{d.nav[0]}</span>
+					<span class="whitespace-nowrap">{d.nav[1]}</span>
+					<span class="whitespace-nowrap">{d.nav[2]}</span>
+					<span class="whitespace-nowrap">{d.nav[3]}</span>
 				</nav>
 
 				<div class="dm-main">
@@ -43,21 +46,21 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 					<!-- stat cards: 3-up on desktop, stacked on mobile -->
 					<div class="dm-cards">
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Revenue</span>
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.revenue}</span>
 							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">$142k</span>
 						</div>
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Users</span>
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.users}</span>
 							<span class="text-xs font-bold text-brand-500">1.2k</span>
 						</div>
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">Uptime</span>
+							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.uptime}</span>
 							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">99.9%</span>
 						</div>
 					</div>
 
 					<!-- mini chart -->
-					<div class="flex h-12 items-end gap-1 rounded-lg border border-line p-2 dark:border-line-dark">
+					<div class="flex h-12 items-end gap-1 rounded-lg border border-line p-2 dark:border-line-dark" role="img" aria-label={d.chart}>
 						{chart.map((h) => (
 							<span class="flex-1 rounded-sm bg-neutral-200 dark:bg-neutral-700" style={`height:${h}%`}></span>
 						))}
@@ -76,10 +79,16 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 	const morph = document.querySelector<HTMLElement>('[data-morph]');
 	if (morph && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 		let mobile = false;
-		setInterval(() => {
-			mobile = !mobile;
-			morph.classList.toggle('is-mobile', mobile);
-		}, 5000);
+		let timer = 0;
+		// Only while on screen: no point reflowing a device nobody can see.
+		new IntersectionObserver(([e]) => {
+			clearInterval(timer);
+			if (e.isIntersecting)
+				timer = window.setInterval(() => {
+					mobile = !mobile;
+					morph.classList.toggle('is-mobile', mobile);
+				}, 5000);
+		}).observe(morph);
 	}
 
 	// device tilts toward the cursor (pointer devices only)

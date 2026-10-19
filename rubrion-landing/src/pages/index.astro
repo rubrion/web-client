@@ -1,18 +1,34 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
-import Features from '../components/Features.astro';
+import Services from '../components/Services.astro';
+import SectionHead from '../components/SectionHead.astro';
+import WorkGrid from '../components/WorkGrid.astro';
+import Build from '../components/Build.astro';
+import BlogTeaser from '../components/BlogTeaser.astro';
 import Contact from '../components/Contact.astro';
-import Footer from '../components/Footer.astro';
+import { c } from '../data/site';
+import { heroWork } from '../data/work';
+
+const first = heroWork[0].image;
 ---
 
-<Layout>
-	<Navbar />
-	<main>
-		<Hero />
-		<Features />
-		<Contact />
-	</main>
-	<Footer />
+<Layout overlay turnstile>
+	<Fragment slot="head">
+		<link rel="preload" as="image" href={`/work/${first}-1600.webp`} imagesrcset={`/work/${first}-900.webp 900w, /work/${first}-1600.webp 1600w`} imagesizes="100vw" fetchpriority="high" />
+	</Fragment>
+	<Hero />
+	<Services />
+	<section id="work" class="bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
+		<div class="mx-auto max-w-7xl">
+			<div class="flex flex-wrap items-end justify-between gap-6">
+				<SectionHead kicker={c.work.kicker} title={c.work.title} lead={c.work.lead} />
+				<a href="/work" data-reveal class="font-mono text-xs tracking-wide text-brand-500 uppercase hover:text-brand-400">{c.work.allWork} →</a>
+			</div>
+			<WorkGrid limit={6} filters={false} />
+		</div>
+	</section>
+	<Build />
+	<BlogTeaser />
+	<Contact />
 </Layout>

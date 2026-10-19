@@ -1,0 +1,33 @@
+---
+// The seven services, numbered like the brand guide's sections.
+import SectionHead from './SectionHead.astro';
+import ServiceIcon from './ServiceIcon.astro';
+import { c } from '../data/site';
+import type { Service } from '../data/work';
+
+const items = Object.entries(c.services.items) as [Service, [string, string]][];
+---
+
+<section id="services" class="bg-diag bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
+	<div class="mx-auto max-w-7xl">
+		<SectionHead kicker={c.services.kicker} title={c.services.title} lead={c.services.lead} />
+		<ul class="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4 dark:border-line-dark dark:bg-line-dark">
+			{items.map(([key, [name, text]], i) => (
+				<li class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 md:p-7 dark:bg-neutral-950 dark:hover:bg-neutral-900" data-reveal>
+					<div class="flex items-center justify-between">
+						<span class="flex h-11 w-11 items-center justify-center rounded-xl border border-line text-neutral-800 transition group-hover:border-brand-500/50 group-hover:text-brand-500 group-hover:shadow-brand-ring dark:border-line-dark dark:text-neutral-200">
+							<ServiceIcon name={key} />
+						</span>
+						<span class="font-mono text-xs text-brand-500">{String(i + 1).padStart(2, '0')}</span>
+					</div>
+					<h3 class="mt-6 font-display text-lg font-bold tracking-tight">{name}</h3>
+					<p class="mt-2 text-sm/6 text-neutral-600 dark:text-neutral-400">{text}</p>
+				</li>
+			))}
+			<li class="relative flex flex-col justify-between bg-neutral-900 p-6 text-white md:p-7 dark:bg-black" data-reveal>
+				<p class="font-display text-lg font-bold tracking-tight">{c.footer.tagline}</p>
+				<a href="#contact" class="mt-6 inline-flex items-center gap-2 font-mono text-xs tracking-wide text-brand-400 uppercase hover:text-brand-500">{c.nav.cta} →</a>
+			</li>
+		</ul>
+	</div>
+</section>

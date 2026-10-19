@@ -1,332 +1,553 @@
 ---
-// Hero — rotated dashed grid bg, falling collision beams, blur-in heading, framed product carousel
+// Home hero: the portfolio, full screen. Two projects at once, split by a
+// diagonal: one above the line, one below, a thin red line on the seam. Every
+// few seconds both halves open onto the next pair from the diagonal outward.
+//
+// Light by design: two <img> per half (front + incoming), only the first pair
+// loads eagerly, the rest are preloaded when the browser is idle, and the only
+// animation is one short GSAP tween per change. Autoplay stops off-screen, in
+// a hidden tab, and while hovered or focused; reduced motion swaps instantly.
+import { l } from '../data/locale';
+import { c } from '../data/site';
+import { credits, heroWork } from '../data/work';
 
-const words = ['Code-free,', 'cloud-fee.'];
-
-// hero carousel slides — real product screenshots; Rubrion Store keeps a stylized placeholder
-const slides = [
-	{ name: 'EdgeLetter', eyebrow: 'White-label product', outcome: 'Newsletters & publishing, under your brand', url: 'edgeletter.rubrion.ai', img: '/images/product-edgeletter.png' },
-	{ name: 'Rubrion Store', eyebrow: 'White-label product', outcome: 'A multi-vendor marketplace you own', url: 'rubrion.store', img: '/images/product-store.png' },
-	{ name: 'CurriClean', eyebrow: 'White-label product', outcome: 'CV scoring & hiring, powered by AI', url: '', img: '/images/product-specfit.png' },
-	{ name: 'Brad', eyebrow: 'AI agent', outcome: 'A marketing agent, on your brand', url: '', img: '/images/product-brad.png' },
-];
-
-// Falling beams: each beam drops 45deg (Δx === Δy) then explodes on the box top edge.
-// `frac` (0..1) spreads start columns across the full width; px resolved at runtime.
-const N = 8;
-const durs = [7, 4.5, 6, 8, 5, 6.5, 7.5, 5.5];
-const beams = Array.from({ length: N }, (_, i) => ({
-	frac: i / (N - 1),
-	dur: durs[i % durs.length],
-	repeatDelay: 5.5,
-	delay: +((i * 0.9) % 5).toFixed(2),
+const slides = heroWork.map((w) => ({
+	slug: w.slug,
+	name: l(w.name),
+	kind: l(w.kind),
+	credit: credits[w.credit].name,
+	src: `/work/${w.image}-1600.webp`,
+	srcset: `/work/${w.image}-900.webp 900w, /work/${w.image}-1600.webp 1600w`,
 }));
+const pairs = Math.ceil(slides.length / 2);
+const at = (i: number) => slides[i % slides.length];
 ---
 
-<div class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-neutral-50 px-4 py-20 md:px-8 md:py-40 dark:bg-neutral-900">
-	<!-- rotated dashed grid -->
-	<div class="pointer-events-none absolute top-1/2 left-1/2 z-0 grid h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 -rotate-45 transform grid-cols-2 gap-10 select-none md:grid-cols-4">
-		{[0, 1, 2, 3].map((i) => (
-			<div class:list={["relative h-full w-full", i === 2 && "bg-gradient-to-b from-transparent via-neutral-100 to-transparent dark:via-neutral-800"]}>
-				<div class="grid-line is-left"></div>
-				<div class="grid-line is-right"></div>
-			</div>
-		))}
-	</div>
+<section
+	data-hero
+	class="dhero relative h-[100svh] min-h-[36rem] overflow-hidden bg-black text-white"
+	aria-roledescription="carousel"
+	aria-label={c.work.kicker}
+	data-slides={JSON.stringify(slides)}
+>
+	{[0, 1].map((slot) => (
+		<div class:list={['dhero__slot', slot === 0 ? 'dhero__slot--top' : 'dhero__slot--bottom']} data-slot={slot}>
+			<img
+				class="dhero__img"
+				data-img
+				src={at(slot).src}
+				srcset={at(slot).srcset}
+				sizes="100vw"
+				alt=""
+				width="1600"
+				height="900"
+				loading="eager"
+				fetchpriority={slot === 0 ? 'high' : 'auto'}
+				decoding="async"
+			/>
+			<img class="dhero__img is-back" data-img alt="" width="1600" height="900" decoding="async" />
+			<span class="dhero__shade" aria-hidden="true"></span>
+		</div>
+	))}
 
-	<!-- falling beams layer (engine drives transforms + spawns explosions) -->
-	<div data-beams class="pointer-events-none absolute inset-0 z-10 overflow-hidden">
-		{beams.map((b) => (
-			<div data-beam data-frac={b.frac} data-dur={b.dur} data-repeat={b.repeatDelay} data-delay={b.delay} class="beam"></div>
-		))}
-	</div>
+	<svg class="dhero__line dhero__line--wide" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="78" x2="100" y2="38" /></svg>
+	<svg class="dhero__line dhero__line--narrow" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="72" x2="100" y2="56" /></svg>
 
-	<!-- heading: per-word blur-in -->
-	<h2 class="relative z-20 mx-auto mt-4 mb-4 max-w-4xl text-center text-3xl font-semibold tracking-tight text-balance text-gray-700 md:text-7xl dark:text-neutral-300">
-		{words.map((w, i) => (
-			<span class="hero-word" style={`--i:${i}`}>{w}&nbsp;</span>
-		))}
-	</h2>
-
-	<p class="fade-rise is-sub relative z-20 mx-auto mt-4 max-w-lg px-4 text-center text-base/6 text-gray-600 dark:text-gray-200">
-		Launch faster with products that already work, or commission a custom build. You own the result.
-	</p>
-
-	<div class="fade-rise is-cta mt-8 mb-10 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
-		<a href="mailto:hello@rubrion.ai" class="btn-primary w-40">Start a project</a>
-		<a href="/products" class="btn-ghost">See our products</a>
-	</div>
-
-	<!-- explosion overlay (above the hero box so the impact reads clearly) -->
-	<div data-explosions class="pointer-events-none absolute inset-0 z-40 overflow-hidden"></div>
-
-	<!-- framed dashboard; its top edge is the beam collision boundary -->
-	<div data-beam-target class="fade-rise is-img relative z-20 mx-auto w-full max-w-7xl rounded-[32px] border border-line/60 bg-neutral-100 p-2 backdrop-blur-lg md:p-4 dark:border-line-dark dark:bg-neutral-800/50">
-		<div class="rounded-[24px] border border-line bg-white p-2 dark:border-line-dark dark:bg-black">
-			<div class="hero-carousel" data-carousel>
-				<div class="hero-carousel-track" data-carousel-track>
-					{slides.map((s, i) => (
-						<figure class:list={['hero-slide', i === 0 && 'is-active']} data-slide>
-							{s.img ? (
-								<img
-									src={s.img}
-									alt={`${s.name} — ${s.outcome}`}
-									loading={i === 0 ? 'eager' : 'lazy'}
-									class="absolute inset-0 h-full w-full object-cover object-top"
-								/>
-							) : (
-								<Fragment>
-									<span class="font-mono text-[11px] tracking-[0.3em] text-brand-500 uppercase">{s.eyebrow}</span>
-							<h3 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">{s.name}</h3>
-							<p class="max-w-md text-sm text-neutral-600 md:text-base dark:text-neutral-400">{s.outcome}</p>
-							{s.url && <span class="font-mono text-xs text-neutral-500">{s.url} ↗</span>}
-								</Fragment>
-							)}
-						</figure>
-					))}
-				</div>
-				<div class="hero-dots" data-dots>
-					{slides.map((s, i) => (
-						<button type="button" class:list={['hero-dot', i === 0 && 'is-active']} aria-label={`Show ${s.name}`}></button>
-					))}
-				</div>
-			</div>
+	<div class="dhero__copy">
+		<p class="kicker !text-white/80">{c.hero.kicker}</p>
+		<h1 class="hl mt-4 font-display text-4xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl" set:html={c.hero.title} />
+		<p class="mt-5 max-w-md text-base/7 text-white/80 md:text-lg/8">{c.hero.lead}</p>
+		<div class="mt-8 flex flex-wrap gap-3">
+			<a href="#contact" class="btn-light">{c.hero.cta}</a>
+			<a href="/work" data-diagonal class="btn-outline-light">{c.hero.secondary}</a>
 		</div>
 	</div>
-</div>
 
-<script is:inline>
-	(() => {
-		const init = () => {
-			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-			const layer = document.querySelector('[data-beams]');
-			// collide on the framed box's outer top edge (the outer margin)
-			const target = document.querySelector('[data-beam-target]');
-			const explosions = document.querySelector('[data-explosions]');
-			if (!layer || !target || !explosions) return;
+	{[0, 1].map((slot) => (
+		<a href={`/work/${at(slot).slug}`} data-cap={slot} class:list={['dhero__cap', slot === 0 ? 'dhero__cap--top' : 'dhero__cap--bottom']}>
+			<span class="dhero__dir" aria-hidden="true">{slot === 0 ? '▲' : '▼'}</span>
+			<span class="min-w-0">
+				<span class="dhero__credit" data-cap-credit>{at(slot).credit}</span>
+				<span class="block truncate font-display text-lg font-bold md:text-xl" data-cap-name>{at(slot).name}</span>
+				<span class="block truncate text-xs text-white/70 md:text-sm" data-cap-kind>{at(slot).kind}</span>
+			</span>
+			<span class="dhero__go" aria-hidden="true">→</span>
+			<span class="visually-hidden">{c.hero.viewCase}</span>
+		</a>
+	))}
 
-			const beams = Array.from(layer.querySelectorAll('[data-beam]')).map((el) => ({
-				el,
-				frac: parseFloat(el.dataset.frac),
-				duration: parseFloat(el.dataset.dur) * 1000,
-				repeatDelay: parseFloat(el.dataset.repeat) * 1000,
-				delay: parseFloat(el.dataset.delay) * 1000,
-				start: null, // ms when the current fall began
-				exploded: false,
-				waitUntil: 0,
-			}));
+	<div class="dhero__controls">
+		<button type="button" class="dhero__arrow" data-prev aria-label={c.hero.prev}>←</button>
+		<div class="flex items-center" role="group" aria-label={c.hero.now}>
+			{Array.from({ length: pairs }, (_, i) => (
+				<button type="button" class:list={['dhero__dot', i === 0 && 'is-active']} data-dot={i} aria-label={`${c.hero.pick} ${i + 1}`} aria-current={i === 0 ? 'true' : undefined}></button>
+			))}
+		</div>
+		<button type="button" class="dhero__arrow" data-next aria-label={c.hero.next}>→</button>
+	</div>
+	<p class="visually-hidden" aria-live="polite" data-announce></p>
+</section>
 
-			const spawnExplosion = (x, y) => {
-				const ex = document.createElement('div');
-				ex.className = 'beam-explosion';
-				ex.style.left = x + 'px';
-				ex.style.top = y + 'px';
-				const frag = document.createDocumentFragment();
-				const glow = document.createElement('span');
-				glow.className = 'beam-explosion-glow';
-				frag.appendChild(glow);
-				for (let i = 0; i < 20; i++) {
-					const s = document.createElement('span');
-					s.className = 'beam-spark';
-					s.style.setProperty('--dx', Math.floor(Math.random() * 80 - 40) + 'px');
-					s.style.setProperty('--dy', Math.floor(Math.random() * 64 - 32) + 'px'); // radial: straddle the edge
-					s.style.setProperty('--dur', (Math.random() * 1.5 + 0.5).toFixed(2) + 's');
-					frag.appendChild(s);
-				}
-				ex.appendChild(frag);
-				explosions.appendChild(ex);
-				setTimeout(() => ex.remove(), 2100);
-			};
+<script>
+	type Slide = { slug: string; name: string; kind: string; credit: string; src: string; srcset: string };
 
-			// Nothing here depends on scroll position, so measure on resize/entrance instead
-			// of every frame — the old loop read 2 + one-per-beam rects per frame, each
-			// forcing a style recalc.
-			let fall = 0; // start ref -> box top edge
-			let D = 0; // travel distance; Δx === Δy keeps the fall a true 45deg
-			let boxLeft = 0;
-			let boxW = 0;
-			let hitAt = 0; // D * p at which the beam's rotated bbox reaches the box edge
-			let tipOffset = 0; // translate x -> leading tip (bbox right edge)
-			let backOff = 0; // 45deg up-left back-off that makes the tip land on landX
+	const hero = document.querySelector<HTMLElement>('[data-hero]');
+	if (hero) {
+		const slides: Slide[] = JSON.parse(hero.dataset.slides!);
+		const pairs = Math.ceil(slides.length / 2);
+		const motion = document.documentElement.classList.contains('has-motion');
+		const slots = [...hero.querySelectorAll<HTMLElement>('[data-slot]')];
+		const caps = [...hero.querySelectorAll<HTMLAnchorElement>('[data-cap]')];
+		const dots = [...hero.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+		const announce = hero.querySelector<HTMLElement>('[data-announce]')!;
+		const at = (i: number) => slides[((i % slides.length) + slides.length) % slides.length];
 
-			const measure = () => {
-				// offset* (not getBoundingClientRect) so the box's 20px entrance rise — a
-				// transform — doesn't skew the geometry and jolt every in-flight drop when we
-				// re-measure. Both elements share the hero as offsetParent, so it cancels.
-				fall = target.offsetTop - layer.offsetTop;
-				// travel just past the box top so beams always reach it on any viewport height
-				D = Math.max(900, fall + 260);
-				// rain only over the carousel: pick a landing x across the box width, then
-				// back off up-left by the fall distance so the 45deg drift lands it there.
-				boxLeft = target.offsetLeft - layer.offsetLeft;
-				boxW = target.offsetWidth;
-				// bbox half-extent of a w x h rect rotated 45deg — replaces the per-frame
-				// rect read that used to detect the collision
-				const w = beams[0].el.offsetWidth;
-				const h = beams[0].el.offsetHeight;
-				const half = ((w + h) / 2) * Math.SQRT1_2;
-				hitAt = fall + 200 - h / 2 - half;
-				tipOffset = w / 2 + half;
-				// solves x(hitAt) + tipOffset === landX (the old hard-coded +172)
-				backOff = hitAt + tipOffset - fall;
-			};
+		let pair = 0;
+		let busy = false;
 
-			const MAX_STEP = 32; // ms of animation time a single frame may advance
-			let rafId = 0;
-			let running = false;
-			let onScreen = false;
-			let lastFrame = 0;
-			let stoppedAt = 0;
-
-			const frame = (now) => {
-				// Position is derived from the wall clock, so a dropped frame used to teleport
-				// every drop by however long the gap was. Cap how much animation time a single
-				// frame may consume: on a slow device the rain runs slightly slow instead of
-				// jumping.
-				if (lastFrame) {
-					const skew = now - lastFrame - MAX_STEP;
-					if (skew > 0) {
-						for (const b of beams) {
-							if (b.start !== null) b.start += skew;
-							if (b.waitUntil) b.waitUntil += skew;
-						}
-					}
-				}
-				lastFrame = now;
-
-				for (const b of beams) {
-					if (b.start === null) b.start = now + b.delay;
-					if (now < b.start) continue;
-
-					if (b.exploded) {
-						if (now >= b.waitUntil) {
-							b.exploded = false;
-							b.start = now;
-						} else {
-							continue; // stay hidden during repeatDelay
-						}
-					}
-
-					const p = Math.min((now - b.start) / b.duration, 1);
-					// spread landings across the box width, inset from the edges so even the
-					// leftmost drop lands inside the box (not in empty space to its left)
-					const landX = boxLeft + boxW * (0.06 + 0.88 * b.frac);
-					// 45deg back-off so the bright tip (and its explosion) lands exactly at
-					// landX on the box edge
-					const travel = D * p;
-					const x = landX - fall - backOff + travel;
-					const y = -200 + travel;
-					b.el.style.opacity = '1';
-					b.el.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(-45deg)';
-
-					if (travel >= hitAt) {
-						b.exploded = true;
-						b.waitUntil = now + b.repeatDelay;
-						b.el.style.opacity = '0';
-						// beam falls down-right: leading tip is the bbox right edge, not left
-						spawnExplosion(x + tipOffset, fall);
-					} else if (p >= 1) {
-						b.start = now; // safety reset if it never reaches the boundary
-					}
-				}
-				rafId = requestAnimationFrame(frame);
-			};
-
-			const start = () => {
-				if (running || document.hidden || !onScreen) return;
-				running = true;
-				// carry the schedule across the pause so nothing teleports on resume
-				if (stoppedAt) {
-					const paused = performance.now() - stoppedAt;
-					for (const b of beams) {
-						if (b.start !== null) b.start += paused;
-						if (b.waitUntil) b.waitUntil += paused;
-					}
-					stoppedAt = 0;
-				}
-				lastFrame = 0;
-				measure();
-				rafId = requestAnimationFrame(frame);
-			};
-
-			const stop = () => {
-				if (!running) return;
-				running = false;
-				stoppedAt = performance.now();
-				cancelAnimationFrame(rafId);
-				rafId = 0;
-			};
-
-			// the hero is ~93% off-screen over a full scroll-through; don't animate (or spawn
-			// explosion nodes) while nobody can see it
-			new IntersectionObserver(
-				(entries) => {
-					onScreen = entries.some((e) => e.isIntersecting);
-					if (onScreen) start();
-					else stop();
-				},
-				{ rootMargin: '80px' },
-			).observe(layer);
-
-			document.addEventListener('visibilitychange', () => {
-				if (document.hidden) stop();
-				else start();
-			});
-
-			let resizeRaf = 0;
-			window.addEventListener(
-				'resize',
-				() => {
-					cancelAnimationFrame(resizeRaf);
-					resizeRaf = requestAnimationFrame(measure);
-				},
-				{ passive: true },
-			);
-
-			// re-measure once the entrance settles, in case fonts/images shifted the layout
-			target.addEventListener('animationend', measure, { once: true });
+		const load = (img: HTMLImageElement, s: Slide) => {
+			img.sizes = '100vw';
+			img.srcset = s.srcset;
+			img.src = s.src;
+			return img.decode().catch(() => {});
 		};
 
-		if (document.readyState !== 'loading') init();
-		else document.addEventListener('DOMContentLoaded', init);
-	})();
-</script>
+		const caption = (slot: number, s: Slide) => {
+			const cap = caps[slot];
+			cap.href = `/work/${s.slug}`;
+			cap.querySelector('[data-cap-credit]')!.textContent = s.credit;
+			cap.querySelector('[data-cap-name]')!.textContent = s.name;
+			cap.querySelector('[data-cap-kind]')!.textContent = s.kind;
+		};
 
-<script is:inline>
-	(() => {
-		const init = () => {
-			const carousel = document.querySelector('[data-carousel]');
-			if (!carousel) return;
-			const slides = Array.from(carousel.querySelectorAll('[data-slide]'));
-			const dots = Array.from(carousel.querySelectorAll('[data-dots] button'));
-			if (slides.length < 2) return;
+		const show = async (next: number) => {
+			if (busy) return;
+			next = ((next % pairs) + pairs) % pairs;
+			if (next === pair) return;
+			busy = true;
+			const incoming = [at(next * 2), at(next * 2 + 1)];
+			// Decode first, so the seam never opens onto a half-loaded image.
+			const backs = slots.map((slot) => slot.querySelector<HTMLImageElement>('img.is-back')!);
+			await Promise.all(backs.map((img, i) => load(img, incoming[i])));
 
-			let index = 0;
-			const show = (next) => {
-				index = (next + slides.length) % slides.length;
-				slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
-				dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+			caps.forEach((cap) => cap.classList.add('is-changing'));
+			hero.classList.add('is-turning');
+			const done = () => {
+				slots.forEach((slot, i) => {
+					const front = slot.querySelector<HTMLImageElement>('img:not(.is-back)')!;
+					const back = backs[i];
+					back.classList.remove('is-back');
+					back.style.removeProperty('--p');
+					front.classList.add('is-back');
+					front.style.setProperty('--p', '0');
+					caption(i, incoming[i]);
+				});
+				caps.forEach((cap) => cap.classList.remove('is-changing'));
+				hero.classList.remove('is-turning');
+				busy = false;
 			};
-
-			let timer = 0;
-			const advance = () => show(index + 1);
-			const start = () => { timer = window.setInterval(advance, 5000); };
-			const reset = () => { clearInterval(timer); start(); };
-
-			dots.forEach((d, i) => d.addEventListener('click', () => { show(i); reset(); }));
-
-			// reduced-motion: no auto-advance; collapse to a single visible slide
-			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-				slides.forEach((s, i) => s.classList.toggle('is-hidden', i !== index));
-				dots.forEach((d, i) => d.addEventListener('click', () => {
-					slides.forEach((s, j) => s.classList.toggle('is-hidden', j !== i));
-				}));
-				return;
+			if (motion) {
+				// GSAP is only fetched on the first turn, never before the hero paints.
+				const { gsap } = await import('gsap');
+				gsap.fromTo(backs, { '--p': 0 }, { '--p': 1, duration: 0.95, ease: 'power3.inOut', stagger: 0.12, onComplete: done });
+			} else {
+				done();
 			}
-			start();
+			pair = next;
+			dots.forEach((d, i) => {
+				d.classList.toggle('is-active', i === pair);
+				d.toggleAttribute('aria-current', i === pair);
+			});
+			announce.textContent = `${incoming[0].name} · ${incoming[1].name}`;
+			preload(pair + 1);
 		};
 
-		if (document.readyState !== 'loading') init();
-		else document.addEventListener('DOMContentLoaded', init);
-	})();
+		const preload = (p: number) => {
+			const run = () =>
+				[at(p * 2), at(p * 2 + 1)].forEach((s) => {
+					const img = new Image();
+					img.sizes = '100vw';
+					img.srcset = s.srcset;
+				});
+			'requestIdleCallback' in window ? requestIdleCallback(run) : setTimeout(run, 400);
+		};
+
+		// Autoplay, paused off-screen, in a hidden tab, and while the visitor is
+		// pointing at or focused inside the hero.
+		const DELAY = 6000;
+		let timer = 0;
+		let visible = true;
+		let held = false;
+		const stop = () => {
+			clearTimeout(timer);
+			timer = 0;
+		};
+		const play = () => {
+			stop();
+			if (!motion || !visible || held || document.hidden) return;
+			timer = window.setTimeout(() => show(pair + 1).then(play), DELAY);
+		};
+		const go = (p: number) => {
+			stop();
+			show(p).then(play);
+		};
+
+		hero.querySelector('[data-prev]')!.addEventListener('click', () => go(pair - 1));
+		hero.querySelector('[data-next]')!.addEventListener('click', () => go(pair + 1));
+		dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+		hero.addEventListener('pointerenter', (e) => {
+			if (e.pointerType === 'mouse') { held = true; stop(); }
+		});
+		hero.addEventListener('pointerleave', () => { held = false; play(); });
+		hero.addEventListener('focusin', () => { held = true; stop(); });
+		hero.addEventListener('focusout', (e) => {
+			if (!hero.contains(e.relatedTarget as Node)) { held = false; play(); }
+		});
+		hero.addEventListener('keydown', (e) => {
+			if (e.key === 'ArrowRight') go(pair + 1);
+			if (e.key === 'ArrowLeft') go(pair - 1);
+		});
+
+		// Swipe: a mostly horizontal drag of 50px turns the pair.
+		let sx = 0;
+		let sy = 0;
+		hero.addEventListener('pointerdown', (e) => { sx = e.clientX; sy = e.clientY; }, { passive: true });
+		hero.addEventListener('pointerup', (e) => {
+			const dx = e.clientX - sx;
+			if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(e.clientY - sy) * 1.5) go(pair + (dx < 0 ? 1 : -1));
+		}, { passive: true });
+
+		new IntersectionObserver(([entry]) => {
+			visible = entry.isIntersecting;
+			visible ? play() : stop();
+		}, { threshold: 0.25 }).observe(hero);
+		document.addEventListener('visibilitychange', () => (document.hidden ? stop() : play()));
+
+		addEventListener('load', () => preload(1), { once: true });
+		play();
+	}
 </script>
+
+<style>
+	/* The seam: (0, --a) on the left to (100%, --b) on the right. Each half's
+	 * images sit in the box that half can show, top-anchored, so a site's own
+	 * header and hero are what appear in the triangle. --tr / --bl are the
+	 * seam's ends in those boxes' own coordinates (the incoming image's clip). */
+	.dhero {
+		--a: 78%;
+		--b: 38%;
+		--tr: 48.72%; /* b / a */
+		--bl: 64.52%; /* (a - b) / (1 - b) */
+	}
+
+	.dhero__slot {
+		position: absolute;
+		inset: 0;
+	}
+
+	.dhero__slot--top {
+		clip-path: polygon(0 0, 100% 0, 100% var(--b), 0 var(--a));
+	}
+
+	.dhero__slot--bottom {
+		clip-path: polygon(0 var(--a), 100% var(--b), 100% 100%, 0 100%);
+	}
+
+	.dhero__img {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		object-fit: cover;
+		object-position: center top;
+	}
+
+	.dhero__slot--top .dhero__img {
+		top: 0;
+		height: var(--a);
+	}
+
+	.dhero__slot--bottom .dhero__img {
+		top: var(--b);
+		height: calc(100% - var(--b));
+	}
+
+	/* The incoming image opens from the seam outward as --p goes 0 → 1. */
+	.dhero__img.is-back {
+		z-index: 1;
+	}
+
+	.dhero__slot--top .is-back {
+		clip-path: polygon(0 calc(100% - 100% * var(--p, 0)), 100% calc(var(--tr) - var(--tr) * var(--p, 0)), 100% 100%, 0 100%);
+	}
+
+	.dhero__slot--bottom .is-back {
+		clip-path: polygon(0 0, 100% 0, 100% calc(100% * var(--p, 0)), 0 calc(var(--bl) + (100% - var(--bl)) * var(--p, 0)));
+	}
+
+	.dhero__shade {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		pointer-events: none;
+	}
+
+	/* Copy sits on the upper half: darken its left side. */
+	.dhero__slot--top .dhero__shade {
+		background:
+			linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.72) 40%, rgba(0, 0, 0, 0.2) 75%),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent 24%);
+	}
+
+	.dhero__slot--bottom .dhero__shade {
+		background: linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.18) 45%, rgba(0, 0, 0, 0.3));
+	}
+
+	.dhero__line {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		overflow: visible;
+	}
+
+	.dhero__line line {
+		stroke: var(--color-brand-500);
+		stroke-width: 2px;
+		vector-effect: non-scaling-stroke;
+		filter: drop-shadow(0 0 6px rgba(255, 60, 60, 0.85));
+	}
+
+	.dhero__line--narrow {
+		display: none;
+	}
+
+	:global(.has-motion) .dhero__line line {
+		stroke-dasharray: 100 100;
+		stroke-dashoffset: 100;
+		animation: dhero-draw 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+	}
+
+	@keyframes dhero-draw {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	.dhero.is-turning .dhero__line line {
+		animation: dhero-pulse 0.95s ease;
+		stroke-dashoffset: 0;
+	}
+
+	@keyframes dhero-pulse {
+		40% {
+			stroke-width: 4px;
+			filter: drop-shadow(0 0 14px rgba(255, 70, 70, 1));
+		}
+	}
+
+	.dhero__copy {
+		position: absolute;
+		z-index: 4;
+		left: max(1.25rem, calc((100vw - 80rem) / 2 + 2rem));
+		top: clamp(6rem, 20vh, 11rem);
+		max-width: min(40rem, calc(100vw - 2.5rem));
+	}
+
+	:global(.has-motion) .dhero__copy > * {
+		opacity: 0;
+		transform: translateY(14px);
+		animation: dhero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	.dhero__copy > :nth-child(2) {
+		animation-delay: 0.1s;
+	}
+	.dhero__copy > :nth-child(3) {
+		animation-delay: 0.2s;
+	}
+	.dhero__copy > :nth-child(4) {
+		animation-delay: 0.3s;
+	}
+
+	@keyframes dhero-in {
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.dhero__cap {
+		position: absolute;
+		z-index: 4;
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		max-width: min(24rem, calc(100vw - 2.5rem));
+		padding: 0.75rem 1rem;
+		border: 1px solid rgba(255, 255, 255, 0.16);
+		border-radius: 0.9rem;
+		background: rgba(0, 0, 0, 0.42);
+		backdrop-filter: blur(10px);
+		transition:
+			opacity 0.35s ease,
+			transform 0.35s ease,
+			border-color 0.25s ease;
+	}
+
+	.dhero__cap:hover {
+		border-color: var(--color-brand-500);
+	}
+
+	.dhero__cap.is-changing {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+
+	.dhero__cap--top {
+		right: max(1.25rem, calc((100vw - 80rem) / 2 + 2rem));
+		top: calc(var(--b) - 7.5rem);
+	}
+
+	.dhero__cap--bottom {
+		right: max(1.25rem, calc((100vw - 80rem) / 2 + 2rem));
+		bottom: 2rem;
+	}
+
+	.dhero__dir {
+		color: var(--color-brand-500);
+		font-size: 0.7rem;
+	}
+
+	.dhero__credit {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.65rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.65);
+	}
+
+	.dhero__go {
+		margin-left: auto;
+		font-size: 1.1rem;
+		transition: transform 0.25s ease;
+	}
+
+	.dhero__cap:hover .dhero__go {
+		transform: translateX(4px);
+		color: var(--color-brand-500);
+	}
+
+	.dhero__controls {
+		position: absolute;
+		z-index: 4;
+		left: max(1.25rem, calc((100vw - 80rem) / 2 + 2rem));
+		bottom: 2.25rem;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.dhero__arrow {
+		display: grid;
+		place-items: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		border-radius: 999px;
+		color: #fff;
+		cursor: pointer;
+		transition:
+			border-color 0.2s,
+			background-color 0.2s;
+	}
+
+	.dhero__arrow:hover {
+		border-color: var(--color-brand-500);
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	/* 24px tap target around a small visual dot. */
+	.dhero__dot {
+		position: relative;
+		width: 1.5rem;
+		height: 1.5rem;
+		border: 0;
+		padding: 0;
+		background: none;
+		cursor: pointer;
+		transition: width 0.3s ease;
+	}
+
+	.dhero__dot::before {
+		content: '';
+		position: absolute;
+		inset: 50% 0.5rem auto;
+		height: 0.45rem;
+		translate: 0 -50%;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.5);
+		transition: background-color 0.3s ease;
+	}
+
+	.dhero__dot.is-active {
+		width: 2.4rem;
+	}
+
+	.dhero__dot.is-active::before {
+		background: var(--color-brand-500);
+	}
+
+	/* Phones: a flatter seam lower down, captions stacked in the lower half. */
+	@media (max-width: 767px) {
+		.dhero {
+			--a: 72%;
+			--b: 56%;
+			--tr: 77.78%;
+			--bl: 36.36%;
+		}
+
+		.dhero__line--wide {
+			display: none;
+		}
+		.dhero__line--narrow {
+			display: block;
+		}
+
+		.dhero__copy {
+			top: 5.5rem;
+		}
+
+		.dhero__slot--top .dhero__shade {
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.66) 60%, rgba(0, 0, 0, 0.35));
+		}
+
+		.dhero__cap {
+			left: 1.25rem;
+			right: 1.25rem;
+			max-width: none;
+			padding: 0.55rem 0.8rem;
+		}
+
+		.dhero__cap--top {
+			top: auto;
+			bottom: 9.25rem;
+		}
+
+		.dhero__cap--bottom {
+			bottom: 5rem;
+		}
+
+		.dhero__controls {
+			bottom: 1.25rem;
+		}
+	}
+
+	@media (max-height: 640px) and (max-width: 767px) {
+		.dhero__cap--top {
+			display: none;
+		}
+	}
+</style>

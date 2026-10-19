@@ -1,36 +1,33 @@
 ---
 // Start a project — contact form + info aside
+import SectionHead from './SectionHead.astro';
+import { c, email } from '../data/site';
+
+const t = c.contact;
 ---
 
-<section id="contact" class="relative w-full overflow-hidden bg-white px-4 py-24 md:px-8 dark:bg-neutral-950">
+<section id="contact" class="bg-diag bg-glow relative w-full overflow-hidden bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
 	<div class="relative z-10 mx-auto max-w-5xl">
-		<header class="mx-auto max-w-2xl text-center">
-			<h2 class="font-display text-3xl font-bold tracking-tight text-neutral-900 md:text-5xl dark:text-neutral-100">
-				Start a project
-			</h2>
-			<p class="mx-auto mt-5 max-w-lg text-base/7 text-neutral-600 dark:text-neutral-400">
-				Tell us what you're building. We'll come back with scope, a fixed fee, and a timeline.
-			</p>
-		</header>
+		<SectionHead kicker={t.kicker} title={t.title} lead={t.lead} center />
 
-		<div class="mt-14 grid gap-12 md:grid-cols-2">
+		<div class="mt-14 grid gap-12 md:grid-cols-2" data-strings={JSON.stringify(t)} id="contact-grid">
 			<!-- form card -->
 			<div class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 shadow-brand md:p-8 dark:border-line-dark dark:bg-neutral-900">
 				<form id="contact-form" class="space-y-6">
 					<div>
-						<label for="contact-name" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Name *</label>
+						<label for="contact-name" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.name} *</label>
 						<input type="text" id="contact-name" name="name" required class="input" />
 					</div>
 					<div>
-						<label for="contact-email" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Email *</label>
+						<label for="contact-email" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.email} *</label>
 						<input type="email" id="contact-email" name="email" required class="input" />
 					</div>
 					<div>
-						<label for="contact-company" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Company</label>
+						<label for="contact-company" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.company}</label>
 						<input type="text" id="contact-company" name="company" class="input" />
 					</div>
 					<div>
-						<label for="contact-message" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">Message *</label>
+						<label for="contact-message" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.message} *</label>
 						<textarea id="contact-message" name="message" required rows="4" class="input resize-none"></textarea>
 					</div>
 
@@ -44,12 +41,12 @@
 
 					<div id="contact-error" class="hidden rounded-lg border border-brand-500/40 bg-brand-500/10 p-3">
 						<p class="font-mono text-sm text-brand-600">
-							Error: <span id="contact-error-text"></span>
+							{t.error}: <span id="contact-error-text"></span>
 						</p>
 					</div>
 
 					<button id="contact-submit" type="submit" class="btn-primary w-full py-3 disabled:cursor-not-allowed disabled:opacity-50">
-						Send message
+						{t.send}
 					</button>
 				</form>
 
@@ -58,46 +55,46 @@
 					<div class="mb-4 text-brand-500">
 						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></svg>
 					</div>
-					<h3 class="mb-2 font-display text-xl font-semibold text-neutral-900 dark:text-neutral-100">Message sent</h3>
-					<p class="font-mono text-sm text-neutral-600 dark:text-neutral-400">Response expected within 24 hours.</p>
+					<h3 class="mb-2 font-display text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t.sent}</h3>
+					<p class="font-mono text-sm text-neutral-600 dark:text-neutral-400">{t.sentNote}</p>
 				</div>
 			</div>
 
 			<!-- info aside -->
 			<aside class="space-y-8">
 				<div>
-					<h3 class="font-display text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">Let's talk</h3>
-					<p class="mt-3 text-base/7 text-neutral-600 dark:text-neutral-400">Brief us. We reply within 24 hours.</p>
+					<h3 class="font-display text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">{t.talk}</h3>
+					<p class="mt-3 text-base/7 text-neutral-600 dark:text-neutral-400">{t.talkLead}</p>
 				</div>
 
 				<div class="space-y-4">
 					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
 						</div>
 						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">Email</p>
-							<a href="mailto:hello@rubrion.ai" class="text-brand-500 hover:underline">hello@rubrion.ai</a>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.emailLabel}</p>
+							<a href={`mailto:${email}`} class="text-brand-500 hover:underline">{email}</a>
 						</div>
 					</div>
 
 					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 						</div>
 						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">Response time</p>
-							<p class="text-neutral-600 dark:text-neutral-400">Within 24 hours</p>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.responseLabel}</p>
+							<p class="text-neutral-600 dark:text-neutral-400">{t.response}</p>
 						</div>
 					</div>
 
 					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-500 dark:border-line-dark dark:bg-neutral-900">
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
 						</div>
 						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">Deployment</p>
-							<p class="text-neutral-600 dark:text-neutral-400">6–10 weeks to production</p>
+							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.deployLabel}</p>
+							<p class="text-neutral-600 dark:text-neutral-400">{t.deploy}</p>
 						</div>
 					</div>
 				</div>
@@ -121,6 +118,7 @@
 						'expired-callback'?: () => void;
 						'error-callback'?: () => void;
 						theme?: 'light' | 'dark' | 'auto';
+						size?: 'normal' | 'compact' | 'flexible';
 					}
 				) => string;
 				reset: (widgetId?: string) => void;
@@ -129,6 +127,7 @@
 		}
 	}
 
+	const t = JSON.parse(document.getElementById('contact-grid')?.dataset.strings ?? '{}') as Record<string, string>;
 	const form = document.getElementById('contact-form') as HTMLFormElement | null;
 	const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
 	const errorBox = document.getElementById('contact-error');
@@ -143,11 +142,7 @@
 	const updateSubmitState = (submitting = false) => {
 		if (!submitBtn) return;
 		submitBtn.disabled = submitting || (captchaRequired && !turnstileToken);
-		submitBtn.textContent = submitting
-			? 'Sending…'
-			: captchaRequired && !turnstileToken
-				? 'Verifying…'
-				: 'Send message';
+		submitBtn.textContent = submitting ? t.sending : captchaRequired && !turnstileToken ? t.verifying : t.send;
 	};
 
 	const renderTurnstile = () => {
@@ -187,10 +182,9 @@
 
 	if (captchaRequired) {
 		updateSubmitState();
-		const interval = window.setInterval(() => {
-			renderTurnstile();
-			if (widgetId) window.clearInterval(interval);
-		}, 250);
+		// Layout.astro loads Turnstile once the form is near the viewport.
+		if (window.turnstile) renderTurnstile();
+		else addEventListener('turnstile:ready', renderTurnstile, { once: true });
 	}
 
 	const showError = (message: string) => {
@@ -216,15 +210,15 @@
 		const honeypot = String(fd.get('honeypot') ?? '');
 
 		if (!name || !email || !message) {
-			showError('Please fill in all required fields.');
+			showError(t.required);
 			return;
 		}
 		if (!WORKER_URL) {
-			showError('Form endpoint is not configured. Please contact us directly.');
+			showError(t.noEndpoint);
 			return;
 		}
 		if (captchaRequired && !turnstileToken) {
-			showError('Please complete the captcha challenge.');
+			showError(t.captcha);
 			return;
 		}
 
@@ -233,8 +227,8 @@
 		const payload = {
 			name,
 			email,
-			subject: 'New contact form submission',
-			message: company ? `Company: ${company}\n\n${message}` : message,
+			subject: t.subject,
+			message: company ? `${t.companyLabel}: ${company}\n\n${message}` : message,
 			turnstileToken: turnstileToken ?? '',
 			honeypot,
 		};
@@ -247,9 +241,9 @@
 			});
 
 			if (!response.ok) {
-				let msg = 'Failed to send message. Please try again or contact us directly.';
+				let msg = t.failed;
 				try {
-					const data = await response.json();
+					const data = (await response.json()) as { error?: string };
 					if (data?.error) msg = data.error;
 				} catch {
 					/* keep default */
@@ -269,7 +263,7 @@
 			}, 4000);
 		} catch (submitError) {
 			console.error('Failed to send message:', submitError);
-			showError('Network error. Please try again or contact us directly.');
+			showError(t.network);
 			resetCaptcha();
 		} finally {
 			updateSubmitState(false);

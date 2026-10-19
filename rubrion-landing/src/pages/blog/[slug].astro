@@ -1,0 +1,69 @@
+---
+// Blog post: reading-progress bar, prose in the site's type, BlogPosting
+// JSON-LD, and the latest posts after it.
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import { SITE_URL } from '../../data/locale';
+import { c } from '../../data/site';
+import { category, formatDate, getPosts, type Post } from '../../data/blog';
+import { HTML_LANG } from '../../data/locale';
+
+export async function getStaticPaths() {
+	return (await getPosts()).map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const d = post.data;
+const { Content } = await render(post);
+const others = (await getPosts()).filter((p) => p.slug !== post.slug).slice(0, 3);
+const ld = {
+	'@context': 'https://schema.org',
+	'@type': 'BlogPosting',
+	headline: d.title,
+	description: d.excerpt,
+	image: `${SITE_URL}${d.cover}`,
+	datePublished: d.date.toISOString(),
+	inLanguage: HTML_LANG,
+	author: { '@type': 'Organization', name: 'Rubrion', url: SITE_URL },
+	publisher: { '@type': 'Organization', name: 'Rubrion', url: SITE_URL },
+};
+---
+
+<Layout title={d.title} description={d.excerpt} ogImage={`${SITE_URL}${d.cover}`}>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+	<PageHero kicker={`${category(d.category)} · ${formatDate(d.date)} · ${d.minutes} ${c.blog.read}`} title={d.title} lead={d.excerpt} crumbs={[{ label: c.nav.blog, href: '/blog' }, { label: d.title }]} />
+
+	<article class="bg-white px-4 pb-20 md:px-8 dark:bg-black">
+		<figure class="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-line shadow-brand dark:border-line-dark" data-reveal>
+			<img src={d.cover} alt="" width="1600" height="900" class="w-full" />
+		</figure>
+		<div class="prose-r mx-auto mt-14 max-w-2xl">
+			<Content />
+		</div>
+	</article>
+
+	{others.length > 0 && (
+		<section class="bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+			<div class="mx-auto max-w-7xl">
+				<p class="kicker">{c.blog.latest}</p>
+				<ul class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">{others.map((p) => <li data-reveal><PostCard post={p} /></li>)}</ul>
+			</div>
+		</section>
+	)}
+</Layout>
+
+<script>
+	// Reading progress along the top edge.
+	const bar = document.createElement('div');
+	bar.className = 'read-progress';
+	document.body.appendChild(bar);
+	const body = document.querySelector<HTMLElement>('.prose-r')!;
+	const update = () => {
+		const r = body.getBoundingClientRect();
+		bar.style.transform = `scaleX(${Math.min(1, Math.max(0, (innerHeight * 0.4 - r.top) / r.height))})`;
+	};
+	addEventListener('scroll', update, { passive: true });
+	update();
+</script>
