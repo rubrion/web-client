@@ -19,11 +19,11 @@ const first = heroWork[0].image;
 	</Fragment>
 	<Hero />
 	<Services />
-	<section id="work" class="bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
+	<section id="work" class="bg-surface px-5 py-28 md:px-8 md:py-40">
 		<div class="mx-auto max-w-7xl">
 			<div class="flex flex-wrap items-end justify-between gap-6">
 				<SectionHead kicker={c.work.kicker} title={c.work.title} lead={c.work.lead} />
-				<a href="/work" data-reveal class="font-mono text-xs tracking-wide text-brand-500 uppercase hover:text-brand-400">{c.work.allWork} →</a>
+				<a href="/work" data-reveal class="link-arrow link-arrow--in">{c.work.allWork}</a>
 			</div>
 			<WorkGrid limit={6} filters={false} />
 		</div>

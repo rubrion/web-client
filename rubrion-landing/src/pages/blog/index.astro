@@ -11,14 +11,14 @@ const posts = await getPosts();
 
 <Layout title={c.nav.blog} description={c.blog.lead} turnstile>
 	<PageHero kicker={c.blog.kicker} title={c.blog.title} lead={c.blog.lead} crumbs={[{ label: c.nav.blog }]} />
-	<section class="bg-white px-4 pb-24 md:px-8 md:pb-32 dark:bg-black">
+	<section class="bg-paper px-5 pb-28 md:px-8 md:pb-40">
 		<div class="mx-auto max-w-7xl">
 			{posts.length ? (
 				<ul class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
 					{posts.map((p) => <li data-reveal><PostCard post={p} /></li>)}
 				</ul>
 			) : (
-				<p class="text-neutral-600 dark:text-neutral-400">{c.blog.empty}</p>
+				<p class="text-ink-soft">{c.blog.empty}</p>
 			)}
 			<div class="mt-16"><Newsletter /></div>
 		</div>

@@ -12,7 +12,7 @@ interface Props {
 const { class: cls = '', diagonal = true } = Astro.props;
 ---
 
-<a href="/" data-diagonal={diagonal ? '' : undefined} aria-label={`Rubrion — ${c.nav.home}`} class:list={['relative z-20 flex items-center gap-2 px-1 py-1 text-sm', cls]}>
+<a href="/" data-diagonal={diagonal ? '' : undefined} aria-label={`Rubrion, ${c.nav.home}`} class:list={['relative z-20 flex items-center gap-2 px-1 py-1 text-sm', cls]}>
 	<Mark class="h-7 w-7" />
 	<span class="font-display text-lg font-bold tracking-tight">Rubrion</span>
 </a>

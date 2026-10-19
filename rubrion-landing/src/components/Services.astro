@@ -1,5 +1,7 @@
 ---
-// The seven services, numbered like the brand guide's sections.
+// Services as an editorial index, not a card grid: the heading holds still on
+// the left while the seven services run down the right, each a numbered row
+// on a hairline. Hovering a row draws its rule in red.
 import SectionHead from './SectionHead.astro';
 import ServiceIcon from './ServiceIcon.astro';
 import { c } from '../data/site';
@@ -8,26 +10,73 @@ import type { Service } from '../data/work';
 const items = Object.entries(c.services.items) as [Service, [string, string]][];
 ---
 
-<section id="services" class="bg-diag bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
-	<div class="mx-auto max-w-7xl">
-		<SectionHead kicker={c.services.kicker} title={c.services.title} lead={c.services.lead} />
-		<ul class="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4 dark:border-line-dark dark:bg-line-dark">
+<section id="services" class="bg-paper px-5 py-28 md:px-8 md:py-40">
+	<div class="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-24">
+		<div class="lg:sticky lg:top-32 lg:self-start">
+			<SectionHead kicker={c.services.kicker} title={c.services.title} lead={c.services.lead} />
+			<a href="#contact" class="btn btn--ink mt-10" data-reveal>{c.nav.cta}</a>
+		</div>
+		<ol class="border-t border-hair">
 			{items.map(([key, [name, text]], i) => (
-				<li class="group relative bg-white p-6 transition-colors hover:bg-neutral-50 md:p-7 dark:bg-neutral-950 dark:hover:bg-neutral-900" data-reveal>
-					<div class="flex items-center justify-between">
-						<span class="flex h-11 w-11 items-center justify-center rounded-xl border border-line text-neutral-800 transition group-hover:border-brand-500/50 group-hover:text-brand-500 group-hover:shadow-brand-ring dark:border-line-dark dark:text-neutral-200">
-							<ServiceIcon name={key} />
-						</span>
-						<span class="font-mono text-xs text-brand-500">{String(i + 1).padStart(2, '0')}</span>
+				<li class="svc group" data-reveal>
+					<span class="svc__num">{String(i + 1).padStart(2, '0')}</span>
+					<div>
+						<h3 class="display text-2xl md:text-[1.9rem]">{name}</h3>
+						<p class="mt-2 max-w-md text-[0.95rem]/7 text-ink-soft">{text}</p>
 					</div>
-					<h3 class="mt-6 font-display text-lg font-bold tracking-tight">{name}</h3>
-					<p class="mt-2 text-sm/6 text-neutral-600 dark:text-neutral-400">{text}</p>
+					<ServiceIcon name={key} class="svc__icon h-6 w-6" />
 				</li>
 			))}
-			<li class="relative flex flex-col justify-between bg-neutral-900 p-6 text-white md:p-7 dark:bg-black" data-reveal>
-				<p class="font-display text-lg font-bold tracking-tight">{c.footer.tagline}</p>
-				<a href="#contact" class="mt-6 inline-flex items-center gap-2 font-mono text-xs tracking-wide text-brand-400 uppercase hover:text-brand-500">{c.nav.cta} →</a>
-			</li>
-		</ul>
+		</ol>
 	</div>
 </section>
+
+<style>
+	.svc {
+		position: relative;
+		display: grid;
+		grid-template-columns: 3rem minmax(0, 1fr) auto;
+		align-items: start;
+		gap: 1rem;
+		padding: 2rem 0;
+		border-bottom: 1px solid var(--hair);
+	}
+
+	.svc::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -1px;
+		height: 1px;
+		background: var(--color-brand-500);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.svc:hover::after {
+		transform: scaleX(1);
+	}
+
+	.svc__num {
+		padding-top: 0.55rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		color: var(--ink-faint);
+	}
+
+	.svc :global(.svc__icon) {
+		margin-top: 0.35rem;
+		color: var(--ink-faint);
+		transition:
+			color 0.3s ease,
+			transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.svc:hover :global(.svc__icon) {
+		color: var(--color-brand-500);
+		transform: translateX(-4px);
+	}
+</style>

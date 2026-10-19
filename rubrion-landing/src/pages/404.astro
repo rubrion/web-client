@@ -5,13 +5,14 @@ import { c } from '../data/site';
 ---
 
 <Layout title="404" noindex>
-	<section class="bg-diag bg-glow relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-neutral-50 px-4 text-center dark:bg-neutral-950">
-		<Mark class="pointer-events-none absolute h-[70vh] w-[70vh] text-neutral-900/[0.04] dark:text-white/[0.04]" aria-hidden="true" />
+	<section class="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-paper px-5 text-center">
+		<canvas class="absolute inset-0 h-full w-full" data-ambient="paper" aria-hidden="true"></canvas>
+		<Mark class="pointer-events-none absolute h-[70vh] w-[70vh] text-ink/[0.04]" aria-hidden="true" />
 		<div class="relative">
-			<p class="font-display text-[clamp(6rem,22vw,14rem)] leading-none font-bold tracking-tighter">4<span class="text-brand-500">0</span>4</p>
-			<h1 class="hl mx-auto mt-4 max-w-xl font-display text-3xl font-bold tracking-tight md:text-4xl" set:html={c.notFound.title} />
-			<p class="mx-auto mt-4 max-w-md text-neutral-600 dark:text-neutral-400">{c.notFound.lead}</p>
-			<a href="/" class="btn-primary mt-8 inline-block px-6 py-3">{c.notFound.cta}</a>
+			<p class="display text-[clamp(6rem,22vw,14rem)] leading-none">4<em>0</em>4</p>
+			<h1 class="display mx-auto mt-6 max-w-xl text-3xl md:text-[2.6rem]" set:html={c.notFound.title} />
+			<p class="lead mx-auto mt-5 max-w-md">{c.notFound.lead}</p>
+			<a href="/" class="btn btn--ink mt-10">{c.notFound.cta}</a>
 		</div>
 	</section>
 </Layout>

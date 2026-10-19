@@ -35,8 +35,8 @@ const ld = {
 	<script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
 	<PageHero kicker={`${category(d.category)} · ${formatDate(d.date)} · ${d.minutes} ${c.blog.read}`} title={d.title} lead={d.excerpt} crumbs={[{ label: c.nav.blog, href: '/blog' }, { label: d.title }]} />
 
-	<article class="bg-white px-4 pb-20 md:px-8 dark:bg-black">
-		<figure class="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-line shadow-brand dark:border-line-dark" data-reveal>
+	<article class="bg-paper px-5 pb-24 md:px-8">
+		<figure class="mx-auto max-w-5xl overflow-hidden rounded-md border border-hair" data-reveal>
 			<img src={d.cover} alt="" width="1600" height="900" class="w-full" />
 		</figure>
 		<div class="prose-r mx-auto mt-14 max-w-2xl">
@@ -45,9 +45,9 @@ const ld = {
 	</article>
 
 	{others.length > 0 && (
-		<section class="bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+		<section class="bg-surface px-5 py-24 md:px-8 md:py-32">
 			<div class="mx-auto max-w-7xl">
-				<p class="kicker">{c.blog.latest}</p>
+				<p class="eyebrow">{c.blog.latest}</p>
 				<ul class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">{others.map((p) => <li data-reveal><PostCard post={p} /></li>)}</ul>
 			</div>
 		</section>

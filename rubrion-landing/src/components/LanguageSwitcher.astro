@@ -11,9 +11,9 @@ const altHref = `${ALT_URL}${cleanPath(Astro.url.pathname)}`;
 	href={altHref}
 	hreflang={ALT_LOCALE}
 	title={c.nav.switchLang}
-	class="flex items-center gap-1.5 rounded-xl px-2 py-2 font-mono text-xs font-semibold opacity-75 transition hover:text-brand-500 hover:opacity-100"
+	class="flex items-center gap-1.5 px-2 py-2 text-[0.78rem] font-bold tracking-[0.08em] opacity-75 transition hover:opacity-100"
 >
 	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
 	{ALT_LANG_LABEL}
-	<span class="visually-hidden"> — {c.nav.switchLang}</span>
+	<span class="visually-hidden">, {c.nav.switchLang}</span>
 </a>

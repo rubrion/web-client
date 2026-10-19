@@ -1,47 +1,55 @@
 ---
-// Footer: brand + tagline, pages, partners, socials, then the giant gradient
-// wordmark watermark.
+// Footer on the dark slab: brand + tagline, pages, partners, socials, then
+// the wordmark set large and faint.
 import Logo from './Logo.astro';
 import { c, email, pages, socials } from '../data/site';
 import { credits } from '../data/work';
 
 const year = new Date().getFullYear();
 const partners = Object.values(credits).filter((p) => p.url);
+const col = 'text-[0.68rem] font-bold tracking-[0.24em] uppercase text-slab-ink/55';
 ---
 
-<footer class="relative w-full overflow-hidden border-t border-line bg-white px-4 pt-20 pb-10 md:px-8 dark:border-line-dark dark:bg-neutral-950">
-	<span class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/70 to-transparent" aria-hidden="true"></span>
-	<div class="mx-auto grid max-w-7xl gap-10 text-sm text-neutral-600 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] dark:text-neutral-400">
+<footer class="relative w-full overflow-hidden bg-slab px-5 pt-24 pb-10 text-slab-ink md:px-8">
+	<div class="mx-auto grid max-w-7xl gap-12 text-[0.92rem] sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
 		<div>
-			<Logo class="-ml-1 text-neutral-900 dark:text-neutral-100" diagonal={false} />
-			<p class="mt-4 max-w-xs">{c.footer.tagline}</p>
-			<p class="mt-3 font-mono text-xs text-brand-500">{c.tagline}</p>
-			<a href={`mailto:${email}`} class="mt-5 inline-block font-medium text-neutral-900 hover:text-brand-500 dark:text-neutral-100">{email}</a>
+			<Logo class="-ml-1" diagonal={false} />
+			<p class="mt-5 max-w-xs text-slab-ink/70">{c.footer.tagline}</p>
+			<a href={`mailto:${email}`} class="mt-6 inline-block font-bold hover:text-brand-400">{email}</a>
 		</div>
 		<nav aria-label={c.footer.pages}>
-			<h2 class="font-mono text-[11px] tracking-[0.25em] text-neutral-600 uppercase dark:text-neutral-400">{c.footer.pages}</h2>
-			<ul class="mt-4 space-y-2.5">
-				<li><a href="/" class="hover:text-brand-500">{c.nav.home}</a></li>
-				{pages.map((p) => <li><a href={p.href} class="hover:text-brand-500">{c.nav[p.key]}</a></li>)}
-				<li><a href="/brand" class="hover:text-brand-500">{c.footer.brand}</a></li>
+			<h2 class={col}>{c.footer.pages}</h2>
+			<ul class="mt-5 space-y-3 text-slab-ink/80">
+				<li><a href="/" class="hover:text-slab-ink">{c.nav.home}</a></li>
+				{pages.map((p) => <li><a href={p.href} class="hover:text-slab-ink">{c.nav[p.key]}</a></li>)}
+				<li><a href="/brand" class="hover:text-slab-ink">{c.footer.brand}</a></li>
 			</ul>
 		</nav>
 		<div>
-			<h2 class="font-mono text-[11px] tracking-[0.25em] text-neutral-600 uppercase dark:text-neutral-400">{c.footer.work}</h2>
-			<ul class="mt-4 space-y-2.5">
-				{partners.map((p) => <li><a href={p.url} target="_blank" rel="noopener" class="hover:text-brand-500">{p.name} ↗</a></li>)}
-				<li><a href="https://mondesa.org" target="_blank" rel="noopener" class="hover:text-brand-500">MonDesa ↗</a></li>
+			<h2 class={col}>{c.footer.work}</h2>
+			<ul class="mt-5 space-y-3 text-slab-ink/80">
+				{partners.map((p) => <li><a href={p.url} target="_blank" rel="noopener" class="hover:text-slab-ink">{p.name} ↗</a></li>)}
+				<li><a href="https://mondesa.org" target="_blank" rel="noopener" class="hover:text-slab-ink">MonDesa ↗</a></li>
 			</ul>
 		</div>
 		<div>
-			<h2 class="font-mono text-[11px] tracking-[0.25em] text-neutral-600 uppercase dark:text-neutral-400">{c.footer.follow}</h2>
-			<ul class="mt-4 space-y-2.5">
-				{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener" class="hover:text-brand-500">{s.name} ↗</a></li>)}
+			<h2 class={col}>{c.footer.follow}</h2>
+			<ul class="mt-5 space-y-3 text-slab-ink/80">
+				{socials.map((s) => <li><a href={s.href} target="_blank" rel="noopener" class="hover:text-slab-ink">{s.name} ↗</a></li>)}
 			</ul>
 		</div>
 	</div>
-	<p class="mx-auto mt-14 max-w-7xl text-xs text-neutral-600 dark:text-neutral-400">© {year} Rubrion. {c.footer.rights}</p>
-	<p class="mt-8 bg-gradient-to-b from-neutral-50 to-neutral-200 bg-clip-text text-center font-display text-5xl font-bold text-transparent uppercase select-none md:text-9xl lg:text-[12rem] xl:text-[13rem] dark:from-neutral-950 dark:to-neutral-800" aria-hidden="true">
-		Rubrion
-	</p>
+	<div class="mx-auto mt-16 flex max-w-7xl flex-wrap justify-between gap-4 border-t border-white/10 pt-6 text-xs text-slab-ink/55">
+		<p>© {year} Rubrion. {c.footer.rights}</p>
+		<p>{c.tagline}</p>
+	</div>
+	<p class="footer-word display mt-10 text-center text-[22vw] leading-[0.8] select-none" data-word="Rubrion" aria-hidden="true"></p>
 </footer>
+
+<style>
+	/* Drawn from an attribute: decoration, not text to read (or contrast-check). */
+	.footer-word::before {
+		content: attr(data-word);
+		color: rgba(255, 255, 255, 0.04);
+	}
+</style>

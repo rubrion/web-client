@@ -1,6 +1,6 @@
 ---
-// Section heading in the brand guide's style: red mono kicker with a rule,
-// display title (one <em> lights up red), optional lead.
+// Section heading: tracked eyebrow led by the red spark, a display title
+// (its one <em> set in Unna italic), optional lead.
 interface Props {
 	kicker: string;
 	title: string;
@@ -14,14 +14,7 @@ const { kicker, title, lead, center = false, as: Tag = 'h2', class: cls } = Astr
 ---
 
 <div class:list={['max-w-3xl', center && 'mx-auto text-center', cls]}>
-	<p class="kicker" data-reveal>{kicker}</p>
-	<Tag
-		class:list={[
-			'hl mt-4 font-display font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100',
-			Tag === 'h1' ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl',
-		]}
-		data-split
-		set:html={title}
-	/>
-	{lead && <p class:list={['mt-5 max-w-xl text-base/7 text-neutral-600 dark:text-neutral-400', center && 'mx-auto']} data-reveal>{lead}</p>}
+	<p class="eyebrow" data-reveal>{kicker}</p>
+	<Tag class:list={['display mt-6 text-ink', Tag === 'h1' ? 'text-[2.7rem] md:text-7xl' : 'text-[2.2rem] md:text-[3.6rem]']} data-split set:html={title} />
+	{lead && <p class:list={['lead mt-6 max-w-xl', center && 'mx-auto']} data-reveal>{lead}</p>}
 </div>

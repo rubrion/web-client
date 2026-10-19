@@ -10,17 +10,11 @@ const { post } = Astro.props;
 const d = post.data;
 ---
 
-<a href={`/blog/${post.slug}`} class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-brand dark:border-line-dark dark:bg-neutral-900">
-	<div class="aspect-[16/9] overflow-hidden bg-neutral-900">
-		<img src={d.cover.replace('-1600', '-900')} alt="" width="900" height="506" loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
+<a href={`/blog/${post.slug}`} class="group block">
+	<div class="aspect-[16/10] overflow-hidden rounded-md bg-surface-2">
+		<img src={d.cover.replace('-1600', '-900')} alt="" width="900" height="563" loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition duration-[900ms] group-hover:scale-[1.03]" />
 	</div>
-	<div class="flex flex-1 flex-col p-5">
-		<p class="flex flex-wrap gap-x-2 font-mono text-[11px] tracking-wide text-neutral-600 dark:text-neutral-400 uppercase">
-			<span class="text-brand-500">{category(d.category)}</span>
-			<time datetime={d.date.toISOString()}>{formatDate(d.date)}</time>
-			<span>· {d.minutes} {c.blog.read}</span>
-		</p>
-		<h3 class="mt-2 font-display text-lg font-bold tracking-tight">{d.title}</h3>
-		<p class="mt-2 text-sm/6 text-neutral-600 dark:text-neutral-400">{d.excerpt}</p>
-	</div>
+	<p class="meta mt-5">{category(d.category)} · <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time> · {d.minutes} {c.blog.read}</p>
+	<h3 class="display mt-2 text-[1.4rem]">{d.title}</h3>
+	<p class="mt-2 line-clamp-2 text-[0.92rem]/6 text-ink-soft">{d.excerpt}</p>
 </a>

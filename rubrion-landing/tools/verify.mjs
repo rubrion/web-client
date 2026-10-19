@@ -158,14 +158,20 @@ await js(`document.querySelector("[data-next]").click()`);
 await sleep(1600);
 const second = await js(`document.querySelector("[data-cap='0'] [data-cap-name]").textContent`);
 check(first !== second, "next turns the pair", `${first} → ${second}`);
-check(await js(`document.querySelector(".dhero__dot.is-active").dataset.dot === "1"`), "dot follows");
-const imgs = await js(`[...document.querySelectorAll("[data-hero] img")].filter((i) => i.src).length`);
-check(imgs <= 4, "only two images per half in the DOM", `${imgs}`);
+check((await js(`document.querySelector("[data-count]").textContent`)) === "02", "counter follows");
+
+await js(`document.querySelector("[data-hero]").dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }))`);
+// One full cycle: the 1.5s dissolve plus the 6.5s hold.
+await sleep(9500);
+const hovered = await js(`document.querySelector("[data-cap='0'] [data-cap-name]").textContent`);
+check(hovered !== second, "keeps playing while hovered", `${second} → ${hovered}`);
 if (!reduced) {
 	await js(`window.scrollTo(0, document.body.scrollHeight)`);
+	await sleep(500);
+	const before = await js(`document.querySelector("[data-cap='0'] [data-cap-name]").textContent`);
 	await sleep(7500);
 	const parked = await js(`document.querySelector("[data-cap='0'] [data-cap-name]").textContent`);
-	check(parked === second, "autoplay paused off-screen", `${second} → ${parked}`);
+	check(parked === before, "autoplay paused off-screen", `${before} → ${parked}`);
 }
 
 console.log("\nheader");
@@ -201,6 +207,15 @@ await js(`document.querySelector('[data-filter="mt2"]').click()`);
 await sleep(900);
 const shown = await js(`[...document.querySelectorAll("[data-filter-list] > li")].filter((li) => !li.classList.contains("is-filtered")).length`);
 check(shown > 0 && shown < total, "credit filter narrows the list", `${shown}/${total}`);
+
+console.log("\nchat");
+await load("/faq", 1440);
+await js(`document.querySelector("[data-chat-toggle]").click()`);
+await sleep(300);
+check(!(await js(`document.querySelector("[data-chat-panel]").hidden`)), "opens");
+await js(`document.querySelector("[data-chat-options] button:nth-child(2)").click()`);
+await sleep(1200);
+check((await js(`document.querySelectorAll("[data-chat-log] > li").length`)) >= 3, "answers a question");
 
 console.log("\nforms");
 await load("/", 1440);

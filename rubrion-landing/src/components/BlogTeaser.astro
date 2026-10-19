@@ -9,15 +9,15 @@ import { getPosts } from '../data/blog';
 const posts = (await getPosts()).slice(0, 3);
 ---
 
-<section id="blog" class="bg-neutral-50 px-4 py-24 md:px-8 md:py-32 dark:bg-black">
+<section id="blog" class="bg-surface px-5 py-28 md:px-8 md:py-40">
 	<div class="mx-auto max-w-7xl">
 		<div class="flex flex-wrap items-end justify-between gap-6">
 			<SectionHead kicker={c.blog.kicker} title={c.blog.title} lead={c.blog.lead} />
-			<a href="/blog" data-reveal class="font-mono text-xs tracking-wide text-brand-500 uppercase hover:text-brand-400">{c.blog.all} →</a>
+			<a href="/blog" class="link-arrow link-arrow--in" data-reveal>{c.blog.all}</a>
 		</div>
-		<ul class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+		<ul class="mt-16 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-3">
 			{posts.map((p) => <li data-reveal><PostCard post={p} /></li>)}
 		</ul>
-		<div class="mt-12"><Newsletter /></div>
+		<div class="mt-24"><Newsletter /></div>
 	</div>
 </section>
