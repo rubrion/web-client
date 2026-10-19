@@ -26,7 +26,7 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 
 			<div class="dm-body">
 				<!-- nav rail: collapses in the mobile state -->
-				<nav class="dm-rail text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+				<nav class="dm-rail text-[11px] font-medium text-ink-faint">
 					<span class="whitespace-nowrap">{d.nav[0]}</span>
 					<span class="whitespace-nowrap">{d.nav[1]}</span>
 					<span class="whitespace-nowrap">{d.nav[2]}</span>
@@ -38,7 +38,7 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 					<div class="flex items-center justify-between">
 						<span class="flex items-center gap-1.5">
 							<Mark class="h-4 w-4 text-brand-500" />
-							<span class="font-display text-xs font-bold tracking-tight text-neutral-900 dark:text-neutral-100">Acme</span>
+							<span class="font-display text-xs font-bold tracking-tight text-ink">Acme</span>
 						</span>
 						<span class="rounded-md bg-brand-500 px-2 py-1 text-[10px] font-semibold text-white">Deploy</span>
 					</div>
@@ -46,28 +46,28 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 					<!-- stat cards: 3-up on desktop, stacked on mobile -->
 					<div class="dm-cards">
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.revenue}</span>
-							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">$142k</span>
+							<span class="text-[9px] text-ink-faint">{d.revenue}</span>
+							<span class="text-xs font-bold text-ink">$142k</span>
 						</div>
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.users}</span>
+							<span class="text-[9px] text-ink-faint">{d.users}</span>
 							<span class="text-xs font-bold text-brand-500">1.2k</span>
 						</div>
 						<div class="dm-card">
-							<span class="text-[9px] text-neutral-500 dark:text-neutral-400">{d.uptime}</span>
-							<span class="text-xs font-bold text-neutral-900 dark:text-neutral-100">99.9%</span>
+							<span class="text-[9px] text-ink-faint">{d.uptime}</span>
+							<span class="text-xs font-bold text-ink">99.9%</span>
 						</div>
 					</div>
 
 					<!-- mini chart -->
-					<div class="flex h-12 items-end gap-1 rounded-lg border border-line p-2 dark:border-line-dark" role="img" aria-label={d.chart}>
+					<div class="flex h-12 items-end gap-1 rounded-lg border border-hair p-2" role="img" aria-label={d.chart}>
 						{chart.map((h) => (
-							<span class="flex-1 rounded-sm bg-neutral-200 dark:bg-neutral-700" style={`height:${h}%`}></span>
+							<span class="flex-1 rounded-sm bg-surface-2" style={`height:${h}%`}></span>
 						))}
 						<span class="flex-1 rounded-sm bg-brand-500/60" style="height:100%"></span>
 					</div>
 
-					<p class="font-mono text-[9px] text-neutral-400 dark:text-neutral-500">Built with Rubrion · source delivered</p>
+					<p class="text-[9px] text-ink-faint">Built with Rubrion · source delivered</p>
 				</div>
 			</div>
 		</figure>

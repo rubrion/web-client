@@ -31,11 +31,13 @@ const en = {
 		next: 'Next projects',
 		pick: 'Show project',
 		now: 'Now showing',
+		pause: 'Pause slideshow',
+		play: 'Play slideshow',
 	},
 	services: {
 		kicker: 'Services',
-		title: 'Seven things we build <em>really well</em>',
-		lead: 'Focused products, not sprawling platforms: each one runs on the edge, so it’s fast for your users and cheap for you.',
+		title: 'Software that earns <em>its keep</em>',
+		lead: 'We build a few things and build them properly. Each one runs on the edge, so it’s fast for your customers and costs little to keep running.',
 		items: {
 			crm: ['CRMs', 'Pipelines shaped to how you actually sell and deliver, not a generic seat licence.'],
 			agents: ['Light AI agents', 'Small agents that do one job well: briefs, triage, reports, on WhatsApp or the web.'],
@@ -48,7 +50,7 @@ const en = {
 	},
 	work: {
 		kicker: 'Selected work',
-		title: 'Shipped, running, <em>paid for</em>',
+		title: 'Work in <em>production</em>',
 		lead: 'Our own products and client builds, some directly and some through our partners. Client work is anonymised.',
 		all: 'All',
 		allWork: 'All work',
@@ -183,6 +185,36 @@ const en = {
 		rights: 'All rights reserved.',
 		brand: 'Brand guide',
 	},
+	chat: {
+		open: 'Chat with us',
+		title: 'Rubrion',
+		status: 'Instant answers · a person on weekdays',
+		hello: 'Hi! I can answer the usual questions in a few taps, or put you through to a person.',
+		restart: 'Start over',
+		close: 'Close chat',
+		options: {
+			what: 'What do you build?',
+			cost: 'How much does it cost?',
+			budget: 'It’s over my budget',
+			time: 'How long does it take?',
+			work: 'Show me your work',
+			human: 'Talk to a person',
+		},
+		answers: {
+			what: 'Seven things, built properly:',
+			whatNote: 'All of it runs on lean infrastructure, so the monthly bill stays small.',
+			cost: 'Every project is a fixed fee, agreed before we start, plus your own hosting, usually a few dollars a month. A 30-minute call is enough for us to quote.',
+			budget: 'Tell us the budget you have. We can phase the work, start from one of our products, or trim scope until it fits.',
+			time: 'Most projects go live in six to ten weeks, from the first call to production. Small sites and agents can take two or three.',
+			work: 'Products, client builds and consulting work, {n} cases so far:',
+			human: 'We answer on weekdays, usually within a few hours.',
+			brief: 'Send a brief',
+			seeWork: 'See all work',
+			whatsapp: 'WhatsApp',
+			email: 'Email',
+			waMessage: 'Hello Rubrion! I’d like to talk about a project.',
+		},
+	},
 	notFound: {
 		title: 'This page shipped <em>somewhere else</em>',
 		lead: 'The link may be old, or the page moved. Let’s get you back.',
@@ -221,11 +253,13 @@ const pt: typeof en = {
 		next: 'Próximos projetos',
 		pick: 'Mostrar projeto',
 		now: 'Em destaque',
+		pause: 'Pausar apresentação',
+		play: 'Retomar apresentação',
 	},
 	services: {
 		kicker: 'Serviços',
-		title: 'Sete coisas que fazemos <em>muito bem</em>',
-		lead: 'Produtos focados, não plataformas inchadas: cada um roda na borda, então é rápido para seus usuários e barato para você.',
+		title: 'Software que <em>se paga</em>',
+		lead: 'Fazemos poucas coisas e fazemos direito. Cada uma roda na borda, então é rápida para seus clientes e custa pouco para manter.',
 		items: {
 			crm: ['CRMs', 'Funis do jeito que você realmente vende e entrega, não uma licença genérica por usuário.'],
 			agents: ['Agentes de IA leves', 'Agentes pequenos que fazem uma tarefa bem: briefings, triagem, relatórios, no WhatsApp ou na web.'],
@@ -238,7 +272,7 @@ const pt: typeof en = {
 	},
 	work: {
 		kicker: 'Trabalhos',
-		title: 'Entregue, rodando, <em>pago</em>',
+		title: 'Trabalho em <em>produção</em>',
 		lead: 'Nossos produtos e projetos para clientes, alguns diretos e alguns com nossos parceiros. Trabalhos de clientes são anonimizados.',
 		all: 'Todos',
 		allWork: 'Todos os trabalhos',
@@ -373,6 +407,36 @@ const pt: typeof en = {
 		rights: 'Todos os direitos reservados.',
 		brand: 'Guia de marca',
 	},
+	chat: {
+		open: 'Fale com a gente',
+		title: 'Rubrion',
+		status: 'Respostas na hora · uma pessoa em dias úteis',
+		hello: 'Olá! Respondo as dúvidas mais comuns em poucos toques, ou passo você para uma pessoa.',
+		restart: 'Recomeçar',
+		close: 'Fechar chat',
+		options: {
+			what: 'O que vocês constroem?',
+			cost: 'Quanto custa?',
+			budget: 'Está acima do meu orçamento',
+			time: 'Quanto tempo leva?',
+			work: 'Quero ver trabalhos',
+			human: 'Falar com uma pessoa',
+		},
+		answers: {
+			what: 'Sete coisas, feitas direito:',
+			whatNote: 'Tudo roda em infraestrutura enxuta, então a conta mensal fica pequena.',
+			cost: 'Todo projeto tem preço fixo, combinado antes de começar, mais a sua hospedagem, normalmente poucos reais por mês. Uma conversa de 30 minutos basta para orçarmos.',
+			budget: 'Conte qual orçamento você tem. Podemos dividir em fases, partir de um dos nossos produtos ou ajustar o escopo até caber.',
+			time: 'A maioria dos projetos entra no ar em seis a dez semanas, da primeira conversa até a produção. Sites pequenos e agentes podem levar duas ou três.',
+			work: 'Produtos, projetos para clientes e consultoria, {n} cases até agora:',
+			human: 'Respondemos em dias úteis, normalmente em poucas horas.',
+			brief: 'Enviar briefing',
+			seeWork: 'Ver todos os trabalhos',
+			whatsapp: 'WhatsApp',
+			email: 'E-mail',
+			waMessage: 'Olá, Rubrion! Gostaria de conversar sobre um projeto.',
+		},
+	},
 	notFound: {
 		title: 'Esta página foi <em>entregue em outro lugar</em>',
 		lead: 'O link pode ser antigo ou a página mudou. Vamos voltar.',
@@ -387,6 +451,7 @@ const pt: typeof en = {
 export const dict = { en, pt };
 export const c = dict[LANG];
 export const email = SUPPORT_EMAIL;
+export const whatsapp = 'https://wa.me/5511992562478';
 
 /** Main pages; `data-diagonal` links between these play the page transition. */
 export const pages = [

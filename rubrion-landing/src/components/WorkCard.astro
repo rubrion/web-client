@@ -1,6 +1,6 @@
 ---
-// One project: screenshot (or drawn mockup for anonymised work), credit,
-// name, kind, services. Links to its case page.
+// One project: screenshot (or drawn mockup for anonymised work), then credit
+// and kind, name, summary and services as quiet text. Links to its case page.
 import Mockup from './Mockup.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
@@ -9,12 +9,13 @@ import { credits, type Work } from '../data/work';
 interface Props {
 	work: Work;
 	index?: number;
+	large?: boolean;
 }
-const { work: w, index = 0 } = Astro.props;
+const { work: w, index = 0, large = false } = Astro.props;
 ---
 
-<a href={`/work/${w.slug}`} class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-brand dark:border-line-dark dark:bg-neutral-900">
-	<div class="relative aspect-[16/10] overflow-hidden bg-neutral-900">
+<a href={`/work/${w.slug}`} class="group block">
+	<div class:list={['relative overflow-hidden rounded-md bg-surface-2', large ? 'aspect-[16/10]' : 'aspect-[4/3]']}>
 		{w.image ? (
 			<img
 				src={`/work/${w.image}-900.webp`}
@@ -23,19 +24,17 @@ const { work: w, index = 0 } = Astro.props;
 				height="506"
 				loading="lazy"
 				decoding="async"
-				class="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]"
+				class="h-full w-full object-cover object-top transition duration-[900ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.03]"
 			/>
 		) : (
 			<Mockup kind={w.mock ?? 'site'} seed={index + 1} />
 		)}
-		<span class="absolute top-3 left-3 rounded-full bg-black/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.18em] text-white uppercase backdrop-blur">{credits[w.credit].name}</span>
 	</div>
-	<div class="flex flex-1 flex-col p-5">
-		<p class="font-mono text-[11px] tracking-wide text-neutral-600 dark:text-neutral-400 uppercase">{l(w.kind)}</p>
-		<h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">{l(w.name)}</h3>
-		<p class="mt-2 line-clamp-3 text-sm/6 text-neutral-600 dark:text-neutral-400">{l(w.summary)}</p>
-		<div class="mt-auto flex flex-wrap gap-1.5 pt-4">
-			{w.services.map((s) => <span class="tag-pill">{c.services.items[s][0]}</span>)}
-		</div>
-	</div>
+	<p class="meta mt-5">{credits[w.credit].name} · {l(w.kind)}</p>
+	<h3 class:list={['display mt-2 flex items-baseline justify-between gap-4', large ? 'text-[1.75rem]' : 'text-[1.4rem]']}>
+		<span>{l(w.name)}</span>
+		<span class="text-base text-ink-faint transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-500" aria-hidden="true">↗</span>
+	</h3>
+	<p class="mt-2 line-clamp-2 max-w-lg text-[0.92rem]/6 text-ink-soft">{l(w.summary)}</p>
+	<p class="mt-3 text-[0.78rem] text-ink-faint">{w.services.map((s) => c.services.items[s][0]).join(' · ')}</p>
 </a>

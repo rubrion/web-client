@@ -19,7 +19,7 @@ const current = (href: string) => !href.includes('#') && (here === href || here.
 
 <header
 	class:list={[
-		'site-header fixed inset-x-0 top-0 z-50 text-neutral-900 dark:text-neutral-100',
+		'site-header fixed inset-x-0 top-0 z-50 text-ink',
 		overlay ? 'is-overlay' : 'is-solid',
 	]}
 	data-header
@@ -28,13 +28,13 @@ const current = (href: string) => !href.includes('#') && (here === href || here.
 	<div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:h-[4.5rem] md:px-8">
 		<Logo />
 
-		<nav class="hidden items-center gap-1 text-sm font-medium lg:flex" aria-label={c.nav.primary}>
+		<nav class="hidden items-center gap-1 text-[0.86rem] font-bold lg:flex" aria-label={c.nav.primary}>
 			{pages.map((p) => (
 				<a
 					href={p.href}
 					data-diagonal
 					aria-current={current(p.href) ? 'page' : undefined}
-					class="relative rounded-md px-3.5 py-2 opacity-80 transition hover:opacity-100 aria-[current=page]:opacity-100 aria-[current=page]:after:absolute aria-[current=page]:after:inset-x-3.5 aria-[current=page]:after:-bottom-0.5 aria-[current=page]:after:h-px aria-[current=page]:after:bg-brand-500"
+					class="relative px-3.5 py-2 opacity-75 transition hover:opacity-100 aria-[current=page]:opacity-100 aria-[current=page]:after:absolute aria-[current=page]:after:inset-x-3.5 aria-[current=page]:after:bottom-0.5 aria-[current=page]:after:h-px aria-[current=page]:after:bg-brand-500"
 				>{c.nav[p.key]}</a>
 			))}
 		</nav>
@@ -45,7 +45,7 @@ const current = (href: string) => !href.includes('#') && (here === href || here.
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2m-7.07-17.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
 			</button>
-			<a href="/#contact" data-diagonal class="ml-2 hidden rounded-md border border-current/25 px-4 py-2 text-sm font-bold transition hover:border-brand-500 hover:text-brand-500 md:inline-block">{c.nav.cta}</a>
+			<a href="/#contact" data-diagonal class="ml-2 hidden rounded-[0.25rem] border border-current/30 px-4 py-2.5 text-[0.82rem] font-bold transition hover:border-current md:inline-block">{c.nav.cta}</a>
 			<button
 				type="button"
 				data-menu-button
@@ -62,13 +62,13 @@ const current = (href: string) => !href.includes('#') && (here === href || here.
 		</div>
 	</div>
 
-	<div id="mobile-menu" class="mx-4 hidden rounded-2xl border border-line bg-white p-4 text-neutral-900 shadow-brand lg:hidden dark:border-line-dark dark:bg-neutral-950 dark:text-neutral-100">
+	<div id="mobile-menu" class="mx-4 hidden rounded-lg border border-hair bg-surface p-4 text-ink shadow-soft lg:hidden">
 		<nav class="flex flex-col" aria-label={c.nav.primary}>
 			{pages.map((p) => (
-				<a href={p.href} data-diagonal class="border-b border-line px-2 py-3 text-base font-medium last:border-0 dark:border-line-dark">{c.nav[p.key]}</a>
+				<a href={p.href} data-diagonal class="border-b border-hair px-2 py-3 font-display text-lg font-semibold tracking-tight last:border-0">{c.nav[p.key]}</a>
 			))}
 		</nav>
-		<a href="/#contact" data-diagonal class="btn-primary mt-3 block">{c.nav.cta}</a>
+		<a href="/#contact" data-diagonal class="btn btn--ink mt-4 w-full justify-between">{c.nav.cta}</a>
 	</div>
 </header>
 

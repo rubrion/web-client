@@ -37,8 +37,10 @@ function initSmoothScroll() {
 	});
 }
 
-function initHeadlines() {
-	gsap.utils.toArray<HTMLElement>('[data-split]').forEach((el) => {
+/** One heading per task, so splitting a long page never blocks input. */
+async function initHeadlines() {
+	for (const el of gsap.utils.toArray<HTMLElement>('[data-split]')) {
+		await new Promise((r) => setTimeout(r, 0));
 		SplitText.create(el, {
 			type: 'lines',
 			mask: 'lines',
@@ -55,7 +57,8 @@ function initHeadlines() {
 				});
 			},
 		});
-	});
+	}
+	ScrollTrigger.refresh();
 }
 
 function initReveals() {
@@ -123,8 +126,5 @@ export function initMotion() {
 	initRollers();
 	settleVisible();
 	// Splitting before fonts settle measures the wrong line boxes.
-	document.fonts.ready.then(() => {
-		initHeadlines();
-		ScrollTrigger.refresh();
-	});
+	document.fonts.ready.then(initHeadlines);
 }
