@@ -1,7 +1,7 @@
 ---
 // Home hero: the portfolio, full screen. Two projects at once, split by a
-// diagonal hairline seam; every few seconds the next pair dissolves in from
-// the seam outward through a soft distortion (scripts/hero-gl.ts).
+// diagonal hairline seam; every few seconds the next pair opens from the seam
+// outward on a straight diagonal edge (scripts/hero-gl.ts).
 //
 // The first pair is plain <img> (fast first paint, and the fallback without
 // WebGL); the canvas takes over once its textures are decoded. It only draws
@@ -140,7 +140,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 				// Decode before the seam opens, so it never opens onto a gap.
 				await r.load(incoming);
 				if (reduced) r.setProgress(1);
-				else await tween(1500, (k) => { r.setProgress(k); r.draw(performance.now() / 1000); });
+				else await tween(1100, (k) => { r.setProgress(k); r.draw(performance.now() / 1000); });
 				r.commit();
 				r.draw(performance.now() / 1000);
 			} else {

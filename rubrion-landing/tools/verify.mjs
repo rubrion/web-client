@@ -161,7 +161,7 @@ check(first !== second, "next turns the pair", `${first} → ${second}`);
 check((await js(`document.querySelector("[data-count]").textContent`)) === "02", "counter follows");
 
 await js(`document.querySelector("[data-hero]").dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }))`);
-// One full cycle: the 1.5s dissolve plus the 6.5s hold.
+// One full cycle: the 1.1s sweep plus the 6.5s hold.
 await sleep(9500);
 const hovered = await js(`document.querySelector("[data-cap='0'] [data-cap-name]").textContent`);
 check(hovered !== second, "keeps playing while hovered", `${second} → ${hovered}`);

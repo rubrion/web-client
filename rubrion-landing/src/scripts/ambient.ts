@@ -1,7 +1,8 @@
 /**
- * Ambient background for `canvas[data-ambient]`: slow, domain-warped bands of
- * warm paper tones with a faint red glow, that arrive by settling out of a
- * strong distortion (the "fade in by distortion") and then drift.
+ * Ambient background for `canvas[data-ambient]`: a low-poly triangular
+ * lattice with hairline edges, each facet slowly changing tone, and a faint
+ * red light in one corner. It arrives pulled apart by a strong distortion
+ * that settles into the grid (the "fade in by distortion").
  *
  * `data-ambient="paper"` follows the theme (paper light, graphite dark);
  * `data-ambient="slab"` is always dark (contact, footer). Rendered at a
@@ -12,32 +13,52 @@ import { NOISE, createGL, fit, loop, reducedMotion } from './gl';
 
 const FRAG = `
 uniform vec2 uRes; uniform float uTime; uniform float uIntro;
-uniform vec3 uA; uniform vec3 uB; uniform vec3 uC; uniform vec3 uGlow;
+uniform vec3 uA; uniform vec3 uB; uniform vec3 uC; uniform vec3 uGlow; uniform vec3 uLine;
 ${NOISE}
+// Distance to the nearest edge of the triangle containing f (unit cell split
+// along its diagonal), in cell units.
+float edgeDist(vec2 f, bool upper){
+  float d = upper ? min(f.y, 1.0 - f.x) : min(f.x, 1.0 - f.y);
+  return min(d, abs(f.x - f.y) * 0.7071);
+}
 void main(){
   vec2 uv = gl_FragCoord.xy / uRes;
-  vec2 p = vec2(uv.x * uRes.x / uRes.y, uv.y) * 1.6;
-  float t = uTime * 0.035;
-  // Strong warp while arriving, settling to a gentle one.
-  float warp = mix(3.2, 0.9, uIntro);
-  vec2 q = vec2(fbm(p + t), fbm(p + vec2(5.2, 1.3) - t));
-  vec2 r = vec2(fbm(p + warp * q + vec2(1.7, 9.2) + t * 0.6), fbm(p + warp * q + vec2(8.3, 2.8)));
-  float f = fbm(p + warp * r);
-  // Diagonal bands, like light through blinds, bent by the noise.
-  float band = smoothstep(0.25, 0.85, sin((uv.x - uv.y) * 3.2 + f * 4.0 + t * 2.0) * 0.5 + 0.5);
-  vec3 col = mix(uA, uB, smoothstep(0.2, 0.9, f));
-  col = mix(col, uC, band * 0.55);
-  // Faint red glow in the upper right.
-  float g = exp(-3.2 * length((uv - vec2(0.85, 0.95)) * vec2(1.0, 1.4)));
-  col = mix(col, uGlow, g * 0.22 * uIntro);
+  float asp = uRes.x / uRes.y;
+  float t = uTime * 0.05;
+  // Lattice space: about eight cells across, skewed so facets read as
+  // triangles rather than squares.
+  vec2 p = vec2(uv.x * asp, uv.y) * 4.2;
+  p = vec2(p.x + p.y * 0.5, p.y * 0.866);
+  // Arriving, the lattice is pulled apart by a strong distortion that settles.
+  float amp = (1.0 - uIntro) * 1.6;
+  p += (vec2(fbm(p * 0.6 + 3.1), fbm(p * 0.6 + 7.7)) - 0.5) * amp;
+  vec2 id = floor(p);
+  vec2 f = fract(p);
+  bool upper = f.x > f.y;
+  float tri = upper ? 1.0 : 0.0;
+  // Each facet carries its own slowly changing tone.
+  float k = noise(id * 1.37 + tri * 4.1 + vec2(t, -t * 0.7));
+  k = smoothstep(0.2, 0.95, k);
+  // Calmer on the left, where page titles sit.
+  float calm = mix(0.35, 1.0, smoothstep(0.15, 0.85, uv.x));
+  vec3 col = mix(uA, mix(uB, uC, k), k * calm);
+  // Hairline edges.
+  float e = edgeDist(f, upper);
+  float px = 4.2 / uRes.y;
+  float line = 1.0 - smoothstep(px * 0.6, px * 1.6, e);
+  col = mix(col, uLine, line * 0.55 * calm);
+  // A faint red light in the upper right.
+  float g = exp(-3.0 * length((uv - vec2(0.9, 1.0)) * vec2(1.0, 1.5)));
+  col = mix(col, uGlow, g * 0.2);
   gl_FragColor = vec4(col * uIntro, uIntro);
 }`;
 
 const hex = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) as [number, number, number];
+// [base, facet, deep facet, glow, edge]
 const PALETTES = {
-	paper: [hex('#f3f2ee'), hex('#e6e3db'), hex('#d8d4ca'), hex('#e0473f')],
-	graphite: [hex('#0f0f0e'), hex('#1c1b19'), hex('#2a2825'), hex('#c2302b')],
-	slab: [hex('#121211'), hex('#1e1d1b'), hex('#2e2b28'), hex('#c2302b')],
+	paper: [hex('#f3f2ee'), hex('#ebe8e1'), hex('#ddd9cf'), hex('#e0473f'), hex('#cfcac0')],
+	graphite: [hex('#0f0f0e'), hex('#171715'), hex('#22211e'), hex('#c2302b'), hex('#2c2b27')],
+	slab: [hex('#121211'), hex('#191917'), hex('#24231f'), hex('#c2302b'), hex('#2e2d29')],
 };
 
 function mount(canvas: HTMLCanvasElement) {
@@ -56,7 +77,7 @@ function mount(canvas: HTMLCanvasElement) {
 	const draw = (t: number) => {
 		if (start < 0) start = t;
 		const [w, h] = fit(canvas, gl, 0.5);
-		const [a, b, c, glow] = palette();
+		const [a, b, c, glow, line] = palette();
 		const k = reduced ? 1 : Math.min(1, (t - start) / 2.2);
 		gl.uniform2f(u('uRes'), w, h);
 		gl.uniform1f(u('uTime'), reduced ? 12 : t);
@@ -65,6 +86,7 @@ function mount(canvas: HTMLCanvasElement) {
 		gl.uniform3fv(u('uB'), b);
 		gl.uniform3fv(u('uC'), c);
 		gl.uniform3fv(u('uGlow'), glow);
+		gl.uniform3fv(u('uLine'), line);
 		gl.drawArrays(gl.TRIANGLES, 0, 3);
 	};
 	canvas.classList.add('is-live');
