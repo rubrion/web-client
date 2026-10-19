@@ -66,16 +66,16 @@ export const work: Work[] = [
 		credit: 'rubrion',
 		kind: { en: 'Home vet care, São Carlos', pt: 'Veterinária a domicílio, São Carlos' },
 		summary: {
-			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home.',
-			pt: 'Site, agendamento e e-mails para uma veterinária que atende pets exóticos e domésticos em casa.',
+			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home, also running as a ready-made clinic site.',
+			pt: 'Site, agendamento e e-mails para uma veterinária que atende pets exóticos e domésticos em casa, também disponível como site pronto para clínicas.',
 		},
 		problem: {
 			en: 'A new practice with no clinic yet needed bookings, honest positioning and a way to answer “how much?” without a full-time assistant.',
 			pt: 'Uma prática nova, ainda sem clínica, precisava de agendamentos, um posicionamento honesto e um jeito de responder “quanto custa?” sem uma assistente em tempo integral.',
 		},
 		built: {
-			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP.',
-			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP.',
+			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP. The same build runs as a full clinic site, with a team, a 24/7 strip, a shop and a style guide, at vet.rubrion.ai.',
+			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP. A mesma base roda como site completo de clínica, com equipe, faixa 24h, loja e guia de estilo, em vet.rubrion.ai.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
 		services: ['seo', 'chatbots'],
@@ -130,29 +130,6 @@ export const work: Work[] = [
 		hero: 4,
 	},
 	{
-		slug: 'vet-clinic-template',
-		name: { en: 'Vet clinic template', pt: 'Template de clínica veterinária' },
-		credit: 'rubrion',
-		kind: { en: 'Clinic website template', pt: 'Template de site para clínicas' },
-		summary: {
-			en: 'The Animally design as a ready clinic site: team, 24/7 strip, shop, booking and utility pages.',
-			pt: 'O design da Animally como site pronto de clínica: equipe, faixa 24h, loja, agendamento e páginas utilitárias.',
-		},
-		problem: {
-			en: 'Clinics want a warm, fast site they can launch in days, not a six-month agency project.',
-			pt: 'Clínicas querem um site acolhedor e rápido que entre no ar em dias, não um projeto de seis meses com agência.',
-		},
-		built: {
-			en: 'The same component library as Animally with clinic content switches, a style guide, privacy, licenses and changelog pages.',
-			pt: 'A mesma biblioteca de componentes da Animally com chaves de conteúdo para clínicas, guia de estilo, privacidade, licenças e changelog.',
-		},
-		stack: ['Astro', 'Cloudflare Workers', 'GSAP', 'Lenis'],
-		services: ['seo'],
-		url: 'https://vet.rubrion.ai',
-		image: 'vet-demo',
-		hero: 5,
-	},
-	{
 		slug: 'curriclean',
 		name: { en: 'CurriClean', pt: 'CurriClean' },
 		credit: 'rubrion',
@@ -173,7 +150,7 @@ export const work: Work[] = [
 		services: ['agents', 'data'],
 		url: 'https://curriclean.rubrion.ai',
 		image: 'curriclean',
-		hero: 6,
+		hero: 5,
 	},
 	{
 		slug: 'edgeletter',
@@ -196,7 +173,7 @@ export const work: Work[] = [
 		services: ['publishing', 'seo'],
 		url: 'https://edgeletter.rubrion.ai',
 		image: 'edgeletter',
-		hero: 7,
+		hero: 6,
 	},
 	{
 		slug: 'rubrion-store',
@@ -218,7 +195,7 @@ export const work: Work[] = [
 		stack: ['Medusa', 'Mercur', 'Next.js', 'Docker'],
 		services: ['marketplace'],
 		image: 'rubrion-store',
-		hero: 8,
+		hero: 7,
 	},
 	{
 		slug: 'mondesa',
@@ -241,7 +218,7 @@ export const work: Work[] = [
 		services: ['seo'],
 		url: 'https://mondesa.com.br',
 		image: 'mondesa',
-		hero: 9,
+		hero: 8,
 	},
 	{
 		slug: 'architecture-project-intelligence',
