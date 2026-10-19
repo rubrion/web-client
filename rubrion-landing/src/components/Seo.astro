@@ -1,6 +1,6 @@
 ---
 // SEO / GEO head tags: canonical, hreflang, robots, Open Graph, Twitter, JSON-LD.
-// Locale-driven (locale.ts) so the EN and PT trees share this file unchanged.
+// Locale-driven (locale.ts): the EN and PT builds share this file.
 // Organization + WebSite schema render on every page; pass `jsonLd` for extras
 // (e.g. FAQPage on /faq).
 import {
@@ -19,6 +19,7 @@ import {
 	ALT_HTML_LANG,
 	ALT_URL,
 	EN_URL,
+	cleanPath,
 } from '../data/locale';
 
 interface Props {
@@ -27,15 +28,17 @@ interface Props {
 	canonical?: string;
 	ogImage?: string;
 	jsonLd?: JsonLd[];
+	noindex?: boolean;
 }
 
-const path = Astro.url.pathname;
+const path = cleanPath(Astro.url.pathname);
 const {
 	title,
 	description = DEFAULT_DESCRIPTION,
 	canonical = `${SITE_URL}${path}`,
 	ogImage = `${SITE_URL}${OG_IMAGE_PATH}`,
 	jsonLd = [],
+	noindex = false,
 } = Astro.props;
 
 const selfHref = `${SITE_URL}${path}`;
@@ -51,7 +54,7 @@ const blocks: JsonLd[] = [buildOrganizationSchema(), buildWebSiteSchema(), ...js
 <link rel="alternate" hreflang={ALT_HTML_LANG} href={altHref} />
 <link rel="alternate" hreflang="x-default" href={defaultHref} />
 
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
 <meta name="author" content={SITE_NAME} />
 <meta name="geo.region" content="BR" />
 <meta name="geo.placename" content="Brazil" />

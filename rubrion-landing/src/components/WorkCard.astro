@@ -1,0 +1,41 @@
+---
+// One project: screenshot (or drawn mockup for anonymised work), credit,
+// name, kind, services. Links to its case page.
+import Mockup from './Mockup.astro';
+import { l } from '../data/locale';
+import { c } from '../data/site';
+import { credits, type Work } from '../data/work';
+
+interface Props {
+	work: Work;
+	index?: number;
+}
+const { work: w, index = 0 } = Astro.props;
+---
+
+<a href={`/work/${w.slug}`} class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-brand dark:border-line-dark dark:bg-neutral-900">
+	<div class="relative aspect-[16/10] overflow-hidden bg-neutral-900">
+		{w.image ? (
+			<img
+				src={`/work/${w.image}-900.webp`}
+				alt={l(w.name)}
+				width="900"
+				height="506"
+				loading="lazy"
+				decoding="async"
+				class="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]"
+			/>
+		) : (
+			<Mockup kind={w.mock ?? 'site'} seed={index + 1} />
+		)}
+		<span class="absolute top-3 left-3 rounded-full bg-black/70 px-2.5 py-1 font-mono text-[10px] tracking-[0.18em] text-white uppercase backdrop-blur">{credits[w.credit].name}</span>
+	</div>
+	<div class="flex flex-1 flex-col p-5">
+		<p class="font-mono text-[11px] tracking-wide text-neutral-600 dark:text-neutral-400 uppercase">{l(w.kind)}</p>
+		<h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">{l(w.name)}</h3>
+		<p class="mt-2 line-clamp-3 text-sm/6 text-neutral-600 dark:text-neutral-400">{l(w.summary)}</p>
+		<div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+			{w.services.map((s) => <span class="tag-pill">{c.services.items[s][0]}</span>)}
+		</div>
+	</div>
+</a>

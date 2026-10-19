@@ -1,0 +1,93 @@
+---
+// Case page: what the problem was, what we built, the stack and services.
+// Anonymised work shows its drawn mockup and a note instead of a screenshot.
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Mockup from '../../components/Mockup.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import ServiceIcon from '../../components/ServiceIcon.astro';
+import { l } from '../../data/locale';
+import { c } from '../../data/site';
+import { credits, work, type Work } from '../../data/work';
+
+export function getStaticPaths() {
+	return work.map((w) => ({ params: { slug: w.slug }, props: { w } }));
+}
+
+const { w } = Astro.props as { w: Work };
+const credit = credits[w.credit];
+const i = work.indexOf(w);
+const more = [1, 2, 3].map((n) => work[(i + n) % work.length]);
+const ld = {
+	'@context': 'https://schema.org',
+	'@type': 'CreativeWork',
+	name: l(w.name),
+	description: l(w.summary),
+	creator: { '@type': 'Organization', name: credit.name, url: credit.url ?? 'https://rubrion.ai' },
+	...(w.url ? { url: w.url } : {}),
+	...(w.image ? { image: `/work/${w.image}-1600.webp` } : {}),
+	keywords: w.stack.join(', '),
+};
+---
+
+<Layout title={l(w.name)} description={l(w.summary)} ogImage={w.image ? new URL(`/work/${w.image}-1600.webp`, Astro.site).href : undefined}>
+	<PageHero kicker={`${credit.name} · ${l(w.kind)}`} title={l(w.name)} lead={l(w.summary)} crumbs={[{ label: c.nav.work, href: '/work' }, { label: l(w.name) }]}>
+		<div class="mt-8 flex flex-wrap items-center gap-3" data-reveal>
+			{w.url && <a href={w.url} target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5">{c.work.visit} ↗</a>}
+			<span class="font-mono text-xs text-neutral-600 dark:text-neutral-400">{l(credit.note)}</span>
+		</div>
+	</PageHero>
+
+	<section class="bg-white px-4 pb-20 md:px-8 dark:bg-black">
+		<div class="mx-auto max-w-6xl">
+			<figure class="overflow-hidden rounded-2xl border border-line shadow-brand dark:border-line-dark" data-reveal>
+				{w.image ? (
+					<img src={`/work/${w.image}-1600.webp`} srcset={`/work/${w.image}-900.webp 900w, /work/${w.image}-1600.webp 1600w`} sizes="(min-width: 72rem) 72rem, 100vw" alt={l(w.name)} width="1600" height="900" class="w-full" />
+				) : (
+					<div class="aspect-[16/8]"><Mockup kind={w.mock ?? 'site'} seed={i + 1} /></div>
+				)}
+				{!w.image && <figcaption class="border-t border-line px-5 py-3 font-mono text-[11px] text-neutral-600 dark:text-neutral-400 dark:border-line-dark">{c.work.anon}</figcaption>}
+			</figure>
+
+			<div class="mt-16 grid gap-12 md:grid-cols-[1fr_18rem]">
+				<div class="space-y-10 text-base/8 text-neutral-700 md:text-lg/8 dark:text-neutral-300">
+					<div data-reveal>
+						<h2 class="kicker">{c.work.problem}</h2>
+						<p class="mt-4">{l(w.problem)}</p>
+					</div>
+					<div data-reveal>
+						<h2 class="kicker">{c.work.built}</h2>
+						<p class="mt-4">{l(w.built)}</p>
+					</div>
+				</div>
+				<aside class="space-y-8 md:border-l md:border-line md:pl-8 md:dark:border-line-dark" data-reveal>
+					<div>
+						<h2 class="font-mono text-[11px] tracking-[0.25em] text-neutral-600 dark:text-neutral-400 uppercase">{c.work.services}</h2>
+						<ul class="mt-4 space-y-2.5">
+							{w.services.map((s) => (
+								<li class="flex items-center gap-2.5 text-sm font-medium"><ServiceIcon name={s} class="h-4 w-4 text-brand-500" />{c.services.items[s][0]}</li>
+							))}
+						</ul>
+					</div>
+					<div>
+						<h2 class="font-mono text-[11px] tracking-[0.25em] text-neutral-600 dark:text-neutral-400 uppercase">{c.work.stack}</h2>
+						<div class="mt-4 flex flex-wrap gap-1.5">{w.stack.map((s) => <span class="tag-pill">{s}</span>)}</div>
+					</div>
+				</aside>
+			</div>
+		</div>
+	</section>
+
+	<section class="bg-neutral-50 px-4 py-20 md:px-8 dark:bg-neutral-950">
+		<div class="mx-auto max-w-7xl">
+			<div class="flex items-end justify-between gap-6">
+				<p class="kicker">{c.work.more}</p>
+				<a href="/work" class="font-mono text-xs tracking-wide text-brand-500 uppercase hover:text-brand-400">{c.work.back} →</a>
+			</div>
+			<ul class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+				{more.map((m) => <li data-reveal><WorkCard work={m} index={work.indexOf(m)} /></li>)}
+			</ul>
+		</div>
+	</section>
+	<script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+</Layout>

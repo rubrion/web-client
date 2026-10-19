@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import WorkGrid from '../../components/WorkGrid.astro';
+import { c } from '../../data/site';
+---
+
+<Layout title={c.nav.work} description={c.work.pageLead}>
+	<PageHero kicker={c.work.kicker} title={c.work.pageTitle} lead={c.work.pageLead} crumbs={[{ label: c.nav.work }]} />
+	<section class="bg-white px-4 pb-24 md:px-8 md:pb-32 dark:bg-black">
+		<div class="mx-auto max-w-7xl">
+			<WorkGrid />
+		</div>
+	</section>
+</Layout>

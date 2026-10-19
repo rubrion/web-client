@@ -1,46 +1,51 @@
-# Astro Starter Kit: Basics
+# rubrion-landing
 
-```sh
-npm create astro@latest -- --template basics
-```
+Rubrion's marketing site. One codebase builds two sites:
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Build | Language | Domain | Worker |
+| :-- | :-- | :-- | :-- |
+| `npm run build:en` | English | rubrion.ai | `rubrion-landing` (`wrangler.jsonc`) |
+| `npm run build:pt` | Portuguese | rubrion.com.br | `rubrion-landing-pt` (`wrangler.pt.jsonc`) |
 
-## 🚀 Project Structure
+`SITE_LOCALE` (set by those scripts) picks the language, the `site` URL and the
+Worker config. Each output is a complete static site in one language with
+canonical + hreflang pointing at its twin, so search engines index each domain
+on its own.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Where things live
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+| What | Where |
+| :-- | :-- |
+| All copy, both languages side by side | `src/data/site.ts` |
+| Portfolio (cases, credits, hero order) | `src/data/work.ts` |
+| Locale, domains, support email | `src/data/locale.ts` |
+| SEO + JSON-LD | `src/data/seo.ts`, `src/components/Seo.astro` |
+| Blog posts | `src/content/blog/{en,pt}/<slug>.md` (same slug in both) |
+| Brand tokens + shared styles | `src/styles/global.css` |
+| Motion (GSAP, Lenis): reveals, split headings, rollers | `src/scripts/motion.ts` |
+| Diagonal page transition (`a[data-diagonal]` only) | `src/scripts/diagonal.ts` |
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Portfolio
 
-## 🧞 Commands
+`work.ts` lists everything we've shipped, credited to Rubrion, MT2 Data or
+Sennatech (mirroring `~/rubrion`, `~/rubrion/mt2data`, `~/rubrion/sennatech`).
+Client and internal work is **anonymised**: no client names or data, a drawn
+`mock` instead of a screenshot. Only public sites and our own products get an
+`image` (`public/work/<image>-{1600,900}.webp`, WebP, ~25–55 KB). Items with
+`hero` appear in the home slider, in that order.
 
-All commands are run from the root of the project, from a terminal:
+## Commands
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Node 24 (`.tool-versions`).
 
-## 👀 Want to learn more?
+| Command | Action |
+| :-- | :-- |
+| `npm run dev` / `npm run dev:pt` | Dev server in English / Portuguese |
+| `npm run check` | Type-check |
+| `npm run build:en` / `build:pt` | Build one site into `dist/` |
+| `npm run preview` | Serve the last build |
+| `node tools/verify.mjs <origin> [--reduced]` | Every page at 1440/390 + flows |
+| `npm run deploy:en` / `deploy:pt` / `deploy` | Build and deploy one or both |
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Both builds write to `dist/`, so build and deploy one language at a time (the
+deploy scripts do).
