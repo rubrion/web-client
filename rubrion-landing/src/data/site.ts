@@ -51,7 +51,7 @@ const en = {
 	work: {
 		kicker: 'Selected work',
 		title: 'Work in <em>production</em>',
-		lead: 'Our own products and client builds, some directly and some through our partners. Client work is anonymised.',
+		lead: 'Our own products and client builds, some directly and some through our partners MT2 Data and Sennatech.',
 		all: 'All',
 		allWork: 'All work',
 		problem: 'The problem',
@@ -63,7 +63,7 @@ const en = {
 		back: 'All work',
 		pageTitle: 'Everything we’ve <em>shipped</em>',
 		pageLead: 'Products, client builds and consulting work, credited to whoever we built it with.',
-		anon: 'Client and project names withheld. The mockup is illustrative.',
+		anon: 'Private app: the drawing is illustrative, not real data.',
 	},
 	build: {
 		kicker: 'How we build',
@@ -187,9 +187,9 @@ const en = {
 	},
 	chat: {
 		open: 'Chat with us',
-		title: 'Rubrion',
+		title: 'Rubot',
 		status: 'Instant answers · a person on weekdays',
-		hello: 'Hi! I can answer the usual questions in a few taps, or put you through to a person.',
+		hello: 'Hi, I’m Rubot, Rubrion’s agent. I can answer the usual questions in a few taps, or put you through to a person.',
 		restart: 'Start over',
 		close: 'Close chat',
 		options: {
@@ -273,7 +273,7 @@ const pt: typeof en = {
 	work: {
 		kicker: 'Trabalhos',
 		title: 'Trabalho em <em>produção</em>',
-		lead: 'Nossos produtos e projetos para clientes, alguns diretos e alguns com nossos parceiros. Trabalhos de clientes são anonimizados.',
+		lead: 'Nossos produtos e projetos para clientes, alguns diretos e alguns com nossos parceiros MT2 Data e Sennatech.',
 		all: 'Todos',
 		allWork: 'Todos os trabalhos',
 		problem: 'O problema',
@@ -285,7 +285,7 @@ const pt: typeof en = {
 		back: 'Todos os trabalhos',
 		pageTitle: 'Tudo o que já <em>entregamos</em>',
 		pageLead: 'Produtos, projetos para clientes e consultoria, creditados a quem construiu com a gente.',
-		anon: 'Nomes de clientes e projetos omitidos. O mockup é ilustrativo.',
+		anon: 'App privado: o desenho é ilustrativo, sem dados reais.',
 	},
 	build: {
 		kicker: 'Como construímos',
@@ -409,9 +409,9 @@ const pt: typeof en = {
 	},
 	chat: {
 		open: 'Fale com a gente',
-		title: 'Rubrion',
+		title: 'Rubot',
 		status: 'Respostas na hora · uma pessoa em dias úteis',
-		hello: 'Olá! Respondo as dúvidas mais comuns em poucos toques, ou passo você para uma pessoa.',
+		hello: 'Olá, sou o Rubot, o agente da Rubrion. Respondo as dúvidas mais comuns em poucos toques, ou passo você para uma pessoa.',
 		restart: 'Recomeçar',
 		close: 'Fechar chat',
 		options: {

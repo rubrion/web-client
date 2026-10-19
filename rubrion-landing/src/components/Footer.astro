@@ -43,13 +43,19 @@ const col = 'text-[0.68rem] font-bold tracking-[0.24em] uppercase text-slab-ink/
 		<p>© {year} Rubrion. {c.footer.rights}</p>
 		<p>{c.tagline}</p>
 	</div>
-	<p class="footer-word display mt-10 text-center text-[22vw] leading-[0.8] select-none" data-word="Rubrion" aria-hidden="true"></p>
+	<p class="footer-word display mt-10 text-center text-[18vw] leading-[0.82] tracking-[-0.04em] uppercase select-none" data-word="Rubrion" aria-hidden="true"></p>
 </footer>
 
 <style>
-	/* Drawn from an attribute: decoration, not text to read (or contrast-check). */
+	/* The wordmark under a spotlight: lit from below, fading into the slab
+	 * above. Drawn from an attribute, so it's decoration, not text to read. */
 	.footer-word::before {
 		content: attr(data-word);
-		color: rgba(255, 255, 255, 0.04);
+		background:
+			radial-gradient(ellipse 55% 90% at 50% 105%, rgba(243, 242, 238, 0.34), transparent 70%),
+			linear-gradient(180deg, rgba(243, 242, 238, 0) 15%, rgba(243, 242, 238, 0.1));
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 	}
 </style>

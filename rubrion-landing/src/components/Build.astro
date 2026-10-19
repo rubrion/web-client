@@ -95,12 +95,12 @@ const facts = [
 				<CustomBuildDevice />
 			</div>
 
-			<div class="feature-card relative md:col-span-2 !border-transparent !bg-slab text-slab-ink" data-reveal>
+			<div class="feature-card relative md:col-span-2" data-reveal>
 				<div class="grid h-full grid-cols-2">
 					{facts.map((f, i) => (
-						<div class:list={['flex flex-col justify-end p-6', i % 2 === 0 && 'border-r border-white/10', i < 2 && 'border-b border-white/10']}>
+						<div class:list={['flex flex-col justify-end p-6', i % 2 === 0 && 'border-r border-hair', i < 2 && 'border-b border-hair']}>
 							<Roller value={f.value} class="display text-5xl md:text-6xl" />
-							<p class="mt-3 text-[0.7rem] font-bold tracking-[0.18em] text-slab-ink/60 uppercase">{f.label}</p>
+							<p class="meta mt-3">{f.label}</p>
 						</div>
 					))}
 				</div>
@@ -121,23 +121,44 @@ const facts = [
 		}).observe(card);
 	});
 
-	// Red globe: cobe is only fetched once the card comes near the viewport.
-	const canvas = document.getElementById('edge-globe') as HTMLCanvasElement | null;
+	// Red-marker globe: cobe is only fetched once the card comes near the
+	// viewport, spun only while visible, and rebuilt on a theme switch.
+	let canvas = document.getElementById('edge-globe') as HTMLCanvasElement | null;
 	if (canvas) {
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		let start = () => {};
-		let stop = () => {};
+		const card = canvas.parentElement!;
 		let onScreen = false;
-		const boot = async () => {
-			const { default: createGlobe } = await import('cobe');
-			// Size the backing store from the real CSS box, not a fixed 1200 @2x.
-			const cssSize = canvas.clientWidth || 440;
+		let globe: { update(o: object): void; destroy(): void } | null = null;
+		let phi = 0;
+		let raf = 0;
+		const tick = () => {
+			phi += 0.008;
+			globe?.update({ phi });
+			raf = requestAnimationFrame(tick);
+		};
+		const start = () => {
+			if (!raf && globe && !reduce && !document.hidden && onScreen) raf = requestAnimationFrame(tick);
+		};
+		const stop = () => {
+			cancelAnimationFrame(raf);
+			raf = 0;
+		};
+		// cobe bakes the colours in, so a theme switch gets a fresh globe on a
+		// fresh canvas (a destroyed globe's WebGL context can't be reused).
+		const build = (createGlobe: typeof import('cobe').default) => {
+			stop();
+			globe?.destroy();
+			const fresh = canvas!.cloneNode() as HTMLCanvasElement;
+			canvas!.replaceWith(fresh);
+			canvas = fresh;
 			const dark = document.documentElement.classList.contains('dark');
-			const globe = createGlobe(canvas, {
+			// Size the backing store from the real CSS box, not a fixed 1200 @2x.
+			const cssSize = fresh.clientWidth || 440;
+			globe = createGlobe(fresh, {
 				devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
 				width: cssSize,
 				height: cssSize,
-				phi: 0,
+				phi,
 				theta: -0.2, // tilt so Brazil faces the viewer
 				// Paper globe on the light theme, graphite on dark; red markers on both.
 				dark: dark ? 1 : 0,
@@ -154,34 +175,31 @@ const facts = [
 					{ location: [38.9072, -77.0369], size: 0.04 }, // US-East (Ashburn)
 				],
 			});
-			let phi = 0;
-			let raf = 0;
-			const tick = () => {
-				phi += 0.008;
-				globe.update({ phi });
-				raf = requestAnimationFrame(tick);
-			};
-			start = () => {
-				if (!raf && !reduce && !document.hidden && onScreen) raf = requestAnimationFrame(tick);
-			};
-			stop = () => {
-				cancelAnimationFrame(raf);
-				raf = 0;
-			};
+			globe.update({ phi });
 			start();
 		};
 		let booted = false;
+		const boot = async () => {
+			booted = true;
+			const { default: createGlobe } = await import('cobe');
+			build(createGlobe);
+			let dark = document.documentElement.classList.contains('dark');
+			new MutationObserver(() => {
+				const now = document.documentElement.classList.contains('dark');
+				if (now !== dark) {
+					dark = now;
+					build(createGlobe);
+				}
+			}).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+		};
 		new IntersectionObserver(
 			([e]) => {
 				onScreen = e.isIntersecting;
-				if (onScreen && !booted) {
-					booted = true;
-					boot();
-				}
+				if (onScreen && !booted) boot();
 				onScreen ? start() : stop();
 			},
 			{ rootMargin: '200px' },
-		).observe(canvas);
+		).observe(card);
 		document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
 	}
 </script>
