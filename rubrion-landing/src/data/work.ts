@@ -3,10 +3,9 @@
 // built by Rubrion directly, `mt2data/*` (plus Dexplan) as consulting through
 // MT2 Data, `sennatech/*` through Sennatech.
 //
-// Client and internal work is anonymised: no client names or real data, just
-// the problem, what was built and the stack, with a drawn mockup (`mock`)
-// instead of a screenshot. Only public sites and our own products show real
-// screenshots (`image`, from public/work/<image>-{1600,900}.webp).
+// Public sites show a real screenshot (`image`, from
+// public/work/<image>-{1600,900}.webp); private apps and internal tools show a
+// drawn mockup of their kind (`mock`) instead, never real data.
 import type { L } from './locale';
 
 export type Credit = 'rubrion' | 'mt2' | 'sennatech';
@@ -221,10 +220,10 @@ export const work: Work[] = [
 		hero: 8,
 	},
 	{
-		slug: 'architecture-project-intelligence',
-		name: { en: 'Project intelligence for architects', pt: 'Inteligência de projeto para arquitetos' },
+		slug: 'cerne',
+		name: { en: 'Cerne', pt: 'Cerne' },
 		credit: 'rubrion',
-		kind: { en: 'Platform for architecture firms', pt: 'Plataforma para escritórios de arquitetura' },
+		kind: { en: 'Project intelligence for architecture firms', pt: 'Inteligência de projeto para escritórios de arquitetura' },
 		summary: {
 			en: 'Method, checklists and review for architecture projects, moved off a single SQLite file onto the edge.',
 			pt: 'Método, conferência e revisão de projetos de arquitetura, migrados de um arquivo SQLite para a borda.',
@@ -242,13 +241,13 @@ export const work: Work[] = [
 		mock: 'dashboard',
 	},
 	{
-		slug: 'board-conflict-analysis',
-		name: { en: 'Conflict checks for academic boards', pt: 'Análise de conflito em bancas acadêmicas' },
+		slug: 'equanime',
+		name: { en: 'Equânime', pt: 'Equânime' },
 		credit: 'rubrion',
-		kind: { en: 'Automated analysis + report', pt: 'Análise automatizada + relatório' },
+		kind: { en: 'Conflict checks for academic boards', pt: 'Análise de conflito em bancas acadêmicas' },
 		summary: {
-			en: 'Register a board, collect each member’s public CV, apply the conflict rules and download a PDF report.',
-			pt: 'Cadastre a banca, colete o currículo público de cada membro, aplique as regras de conflito e baixe um relatório em PDF.',
+			en: 'Register a board, collect each member’s Lattes CV, apply the conflict rules and download a PDF report.',
+			pt: 'Cadastre a banca, colete o currículo Lattes de cada membro, aplique as regras de conflito e baixe um relatório em PDF.',
 		},
 		problem: {
 			en: 'Checking every pair of examiners for co-authorship and shared affiliations was hours of manual cross-reading.',
@@ -263,13 +262,13 @@ export const work: Work[] = [
 		mock: 'report',
 	},
 	{
-		slug: 'video-studio-site',
-		name: { en: 'Video production studio site', pt: 'Site de produtora de vídeo' },
+		slug: 'nown-creative',
+		name: { en: 'NOWN Creative', pt: 'NOWN Creative' },
 		credit: 'rubrion',
-		kind: { en: 'Portfolio website', pt: 'Site de portfólio' },
+		kind: { en: 'Video production studio, Curitiba', pt: 'Produtora de vídeo, Curitiba' },
 		summary: {
-			en: 'A showreel-first site for a creative video studio whose clients include global consumer brands.',
-			pt: 'Um site com o showreel em primeiro lugar para uma produtora de vídeo que atende marcas globais.',
+			en: 'A showreel-first site for a creative video studio whose clients include Coca-Cola, Disney and Red Bull.',
+			pt: 'Um site com o showreel em primeiro lugar para uma produtora de vídeo que atende marcas como Coca-Cola, Disney e Red Bull.',
 		},
 		problem: {
 			en: 'The work is the pitch: the site had to play video fast and stay out of its way.',
@@ -284,10 +283,10 @@ export const work: Work[] = [
 		mock: 'site',
 	},
 	{
-		slug: 'edge-agent-starter',
-		name: { en: 'AI agent starter on Workers', pt: 'Base de agente de IA nos Workers' },
+		slug: 'mastra-cloudflare',
+		name: { en: 'Mastra on Cloudflare', pt: 'Mastra na Cloudflare' },
 		credit: 'rubrion',
-		kind: { en: 'Agent template', pt: 'Template de agente' },
+		kind: { en: 'AI agent starter on Workers', pt: 'Base de agente de IA nos Workers' },
 		summary: {
 			en: 'Our base for light agents: Mastra on a plain Worker, with conversation memory in D1.',
 			pt: 'Nossa base para agentes leves: Mastra num Worker comum, com memória de conversa no D1.',
@@ -305,10 +304,10 @@ export const work: Work[] = [
 		mock: 'chat',
 	},
 	{
-		slug: 'farm-agents-whatsapp',
-		name: { en: 'Farm decisions over WhatsApp', pt: 'Decisões do campo pelo WhatsApp' },
+		slug: 'colmeia',
+		name: { en: 'Colmeia', pt: 'Colmeia' },
 		credit: 'mt2',
-		kind: { en: 'Colony of AI agents', pt: 'Colônia de agentes de IA' },
+		kind: { en: 'Farm decisions over WhatsApp', pt: 'Decisões do campo pelo WhatsApp' },
 		summary: {
 			en: 'Specialised agents answer machine health, slaughter timing and crop forecasting questions in plain language.',
 			pt: 'Agentes especializados respondem sobre saúde de máquinas, ponto de abate e previsão de safra em linguagem natural.',
@@ -326,10 +325,10 @@ export const work: Work[] = [
 		mock: 'chat',
 	},
 	{
-		slug: 'production-planning',
-		name: { en: 'Production planning optimiser', pt: 'Otimizador de planejamento de produção' },
+		slug: 'dexplan',
+		name: { en: 'Dexplan', pt: 'Dexplan' },
 		credit: 'mt2',
-		kind: { en: 'Operations research', pt: 'Pesquisa operacional' },
+		kind: { en: 'Production planning optimiser', pt: 'Otimizador de planejamento de produção' },
 		summary: {
 			en: 'Allocates orders to production days with a MILP solver, respecting capacity and seller quotas.',
 			pt: 'Distribui pedidos entre dias de produção com um solver MILP, respeitando capacidade e cotas de vendedores.',
@@ -347,10 +346,10 @@ export const work: Work[] = [
 		mock: 'table',
 	},
 	{
-		slug: 'team-allocation-hub',
-		name: { en: 'Team allocation hub', pt: 'Central de alocação de equipe' },
+		slug: 'mt2-allocation',
+		name: { en: 'MT2 Allocation', pt: 'MT2 Allocation' },
 		credit: 'mt2',
-		kind: { en: 'Internal CRM', pt: 'CRM interno' },
+		kind: { en: 'Team allocation hub', pt: 'Central de alocação de equipe' },
 		summary: {
 			en: 'Who is on which project, at what capacity, with every project’s resources in one place.',
 			pt: 'Quem está em qual projeto, com qual dedicação, e os recursos de cada projeto num só lugar.',
@@ -368,10 +367,10 @@ export const work: Work[] = [
 		mock: 'dashboard',
 	},
 	{
-		slug: 'datalake-gateway',
-		name: { en: 'Datalake access gateway', pt: 'Gateway de acesso ao datalake' },
+		slug: 'mt2-datalake-gateway',
+		name: { en: 'MT2 Datalake Gateway', pt: 'MT2 Datalake Gateway' },
 		credit: 'mt2',
-		kind: { en: 'Data platform', pt: 'Plataforma de dados' },
+		kind: { en: 'Datalake access gateway', pt: 'Gateway de acesso ao datalake' },
 		summary: {
 			en: 'Clients reach exactly the datasets their API key allows, by API or through visual apps.',
 			pt: 'Cada cliente acessa exatamente os conjuntos de dados que sua chave permite, por API ou por apps visuais.',
@@ -389,10 +388,10 @@ export const work: Work[] = [
 		mock: 'table',
 	},
 	{
-		slug: 'farm-management-platform',
-		name: { en: 'Farm management platform', pt: 'Plataforma de gestão de granjas' },
+		slug: 'avilink',
+		name: { en: 'Avilink', pt: 'Avilink' },
 		credit: 'sennatech',
-		kind: { en: 'Mobile app + web admin', pt: 'App mobile + painel web' },
+		kind: { en: 'Farm management, mobile + web', pt: 'Gestão de granjas, mobile + web' },
 		summary: {
 			en: 'Field teams log flocks, vaccines and medication on their phones, online or off.',
 			pt: 'Equipes de campo registram lotes, vacinas e medicações no celular, com ou sem internet.',
@@ -410,13 +409,13 @@ export const work: Work[] = [
 		mock: 'mobile',
 	},
 	{
-		slug: 'chamber-of-commerce-portal',
-		name: { en: 'Chamber of commerce portal', pt: 'Portal de câmara de comércio' },
+		slug: 'bccc',
+		name: { en: 'BCCC', pt: 'BCCC' },
 		credit: 'sennatech',
-		kind: { en: 'Trilingual website', pt: 'Site trilíngue' },
+		kind: { en: 'Brazil-Canada Chamber of Commerce', pt: 'Câmara de Comércio Brasil-Canadá' },
 		summary: {
-			en: 'Events, membership, news and resources for a bilateral chamber, in English, Portuguese and French.',
-			pt: 'Eventos, associação, notícias e materiais de uma câmara bilateral, em inglês, português e francês.',
+			en: 'Events, membership, news and resources for the Brazil-Canada Chamber of Commerce, in English, Portuguese and French.',
+			pt: 'Eventos, associação, notícias e materiais da Câmara de Comércio Brasil-Canadá, em inglês, português e francês.',
 		},
 		problem: {
 			en: 'An outdated site in one language couldn’t serve members across two countries.',
@@ -431,13 +430,13 @@ export const work: Work[] = [
 		mock: 'site',
 	},
 	{
-		slug: 'live-commerce-war-room',
-		name: { en: 'Live-commerce war room', pt: 'Sala de guerra de live commerce' },
+		slug: 'mvm-war-room',
+		name: { en: 'MVM War Room', pt: 'MVM War Room' },
 		credit: 'sennatech',
-		kind: { en: 'Real-time sales dashboard', pt: 'Painel de vendas em tempo real' },
+		kind: { en: 'TikTok Shop KPI war room', pt: 'Sala de guerra de KPIs do TikTok Shop' },
 		summary: {
-			en: 'Sales, orders and performance from a social-commerce shop, synced and shown live for the team.',
-			pt: 'Vendas, pedidos e desempenho de uma loja de social commerce, sincronizados e exibidos ao vivo para a equipe.',
+			en: 'Sales, orders and performance from TikTok Shop, synced and shown live for the team.',
+			pt: 'Vendas, pedidos e desempenho do TikTok Shop, sincronizados e exibidos ao vivo para a equipe.',
 		},
 		problem: {
 			en: 'During live sales the team was refreshing a marketplace back office instead of reacting.',
@@ -449,7 +448,8 @@ export const work: Work[] = [
 		},
 		stack: ['Supabase', 'FastAPI', 'React', 'pnpm'],
 		services: ['data'],
-		mock: 'dashboard',
+		url: 'https://mvmwarroom.io',
+		image: 'mvm-war-room',
 	},
 ];
 

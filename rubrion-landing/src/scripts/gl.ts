@@ -10,6 +10,8 @@
  * better there.
  */
 function software(gl: WebGLRenderingContext) {
+	// `?gl=force` keeps WebGL on anyway, for reviewing the effects headless.
+	if (new URLSearchParams(location.search).get('gl') === 'force') return false;
 	const info = gl.getExtension('WEBGL_debug_renderer_info');
 	const name = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
 	return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
@@ -26,7 +28,7 @@ float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+ve
 `;
 
 export function createGL(canvas: HTMLCanvasElement, frag: string) {
-	const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
+	const gl = canvas.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: 'low-power', failIfMajorPerformanceCaveat: new URLSearchParams(location.search).get('gl') !== 'force' });
 	if (!gl || software(gl)) return null;
 	const shader = (type: number, src: string) => {
 		const s = gl.createShader(type)!;

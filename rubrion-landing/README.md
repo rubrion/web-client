@@ -24,21 +24,22 @@ on its own.
 | Brand tokens (paper/ink/hairline, red spark) + shared styles | `src/styles/global.css`, documented live at `/brand` |
 | Type: Plus Jakarta Sans (display), Lato (body), Unna italic (highlighted word) | `@fontsource/*`, preloaded in `Layout.astro` |
 | Hero slider (WebGL seam + distortion dissolve, CSS fallback) | `src/components/Hero.astro`, `src/scripts/hero-gl.ts` |
-| Ambient shader backgrounds (`canvas[data-ambient]`) | `src/scripts/ambient.ts`, `src/scripts/gl.ts` |
+| Geometric ambient backgrounds: triangular lattice (`canvas[data-ambient]`) | `src/scripts/ambient.ts`, `src/scripts/gl.ts` |
 | Scripted chat (no AI; WhatsApp/email handoff) | `src/components/ChatWidget.astro`, `src/scripts/chat.ts` |
 | Motion (GSAP, Lenis): reveals, split headings, rollers | `src/scripts/motion.ts` |
 | Diagonal page transition (`a[data-diagonal]` only) | `src/scripts/diagonal.ts` |
 
 WebGL is skipped on software renderers (no GPU) and with reduced motion the
-hero swaps instantly; both fall back to plain images and CSS gradients.
+hero swaps instantly; both fall back to plain images and CSS. Add `?gl=force`
+to a URL to keep WebGL on anyway (reviewing the effects in headless Chrome).
 
 ### Portfolio
 
 `work.ts` lists everything we've shipped, credited to Rubrion, MT2 Data or
 Sennatech (mirroring `~/rubrion`, `~/rubrion/mt2data`, `~/rubrion/sennatech`).
-Client and internal work is **anonymised**: no client names or data, a drawn
-`mock` instead of a screenshot. Only public sites and our own products get an
-`image` (`public/work/<image>-{1600,900}.webp`, WebP, ~25–55 KB). Items with
+Public sites and our own products get a screenshot (`image`,
+`public/work/<image>-{1600,900}.webp`, WebP, ~25–55 KB); private apps and
+internal tools get a drawn `mock` of their kind instead, never real data. Items with
 `hero` appear in the home slider, in that order.
 
 ## Commands

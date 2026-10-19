@@ -3,19 +3,18 @@
  *
  * Each half shows its project's screenshot cover-fitted into the box that half
  * can see (top-anchored, so a site's own header and hero are what show). On a
- * change, the next pair dissolves in from the seam outward through a noise
- * distortion, and the thin red seam is drawn in the shader. Images are
+ * change, the next pair opens from the seam outward on a straight diagonal
+ * edge, and the thin red seam (with a brief glow) is drawn in the shader. Images are
  * decoded off the main thread (createImageBitmap) before a change starts, so
  * a transition never opens onto a half-loaded image.
  */
-import { NOISE, createGL, fit } from './gl';
+import { createGL, fit } from './gl';
 
 const FRAG = `
 uniform vec2 uRes; uniform float uTime; uniform float uP; uniform float uIntro; uniform float uNarrow;
 uniform vec2 uSeam;                 // seam y (from top) at x=0 and x=1
 uniform sampler2D uCurA; uniform sampler2D uCurB; uniform sampler2D uNextA; uniform sampler2D uNextB;
 uniform vec4 uAspCur; uniform vec4 uAspNext;  // image aspects: (curA, curB) (nextA, nextB) in .xy
-${NOISE}
 vec2 cover(vec2 local, float boxAsp, float imgAsp){
   vec2 uv = local;
   if (imgAsp > boxAsp) uv.x = (local.x - 0.5) * boxAsp / imgAsp + 0.5;
@@ -53,20 +52,20 @@ void main(){
   vec2 local = vec2(x, (v - y0) / (y1 - y0));
   float boxAsp = uRes.x / (uRes.y * (y1 - y0));
 
-  // Reveal front: distance from the seam into this half, roughened by noise.
-  float d = top ? (s - v) : (v - s);
-  float n = fbm(vec2(x * uRes.x / uRes.y, v) * 3.5 + uTime * 0.15);
-  float front = uP * 1.35;
-  float f = d + (n - 0.5) * 0.3;
-  float m = 1.0 - smoothstep(front - 0.08, front, f);
-  // Distortion is strongest at the moving edge, gone at rest.
-  float edge = (1.0 - smoothstep(0.0, 0.18, abs(f - front))) * sin(3.14159 * uP);
-  vec2 warp = vec2(n - 0.5, fbm(vec2(v, x) * 4.0 - uTime * 0.1) - 0.5) * 0.07 * edge;
+  // The original sweep: the incoming image opens from the seam outward with
+  // a straight edge, the lower half a beat behind the upper.
+  float pt = clamp(uP * 1.12, 0.0, 1.0);
+  float pb = clamp(uP * 1.12 - 0.12, 0.0, 1.0);
+  float aa = 1.0 / uRes.y;
+  float m = top
+    ? smoothstep(s * (1.0 - pt) - aa, s * (1.0 - pt) + aa, v)
+    : 1.0 - smoothstep(s + (1.0 - s) * pb - aa, s + (1.0 - s) * pb + aa, v);
+  if (uP <= 0.0) m = 0.0;
 
   float aCur = top ? uAspCur.x : uAspCur.y;
   float aNext = top ? uAspNext.x : uAspNext.y;
-  vec2 uvCur = cover(local + warp, boxAsp, aCur);
-  vec2 uvNext = cover((local - 0.5) * (1.0 - 0.04 * (1.0 - uP)) + 0.5 - warp, boxAsp, aNext);
+  vec2 uvCur = cover(local, boxAsp, aCur);
+  vec2 uvNext = cover(local, boxAsp, aNext);
   // Behind the copy (upper half, left side) the image is softly blurred, so
   // a screenshot's own text never competes with ours.
   float soft = top ? mix(1.0, 0.25, smoothstep(0.35, 0.85, x)) : 0.0;
@@ -90,7 +89,7 @@ void main(){
   float dist = abs(v - s) * H * W / sqrt(W * W + dy * dy);
   float drawn = step(x, uIntro * 1.05);
   float core = (1.0 - smoothstep(0.4, 1.3, dist)) * drawn;
-  float glow = exp(-dist * 0.18) * 0.28 * drawn * (1.0 + 1.6 * sin(3.14159 * uP));
+  float glow = exp(-dist * 0.18) * 0.28 * drawn * (1.0 + 1.4 * sin(3.14159 * uP));
   col = mix(col, vec3(0.92, 0.22, 0.2), clamp(core + glow, 0.0, 1.0));
 
   gl_FragColor = vec4(col, 1.0);
