@@ -1,0 +1,23 @@
+---
+// Latest posts on the home page, then the newsletter.
+import SectionHead from './SectionHead.astro';
+import PostCard from './PostCard.astro';
+import Newsletter from './Newsletter.astro';
+import { c } from '../data/site';
+import { getPosts } from '../data/blog';
+
+const posts = (await getPosts()).slice(0, 3);
+---
+
+<section id="blog" class="bg-neutral-50 px-4 py-24 md:px-8 md:py-32 dark:bg-black">
+	<div class="mx-auto max-w-7xl">
+		<div class="flex flex-wrap items-end justify-between gap-6">
+			<SectionHead kicker={c.blog.kicker} title={c.blog.title} lead={c.blog.lead} />
+			<a href="/blog" data-reveal class="font-mono text-xs tracking-wide text-brand-500 uppercase hover:text-brand-400">{c.blog.all} →</a>
+		</div>
+		<ul class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+			{posts.map((p) => <li data-reveal><PostCard post={p} /></li>)}
+		</ul>
+		<div class="mt-12"><Newsletter /></div>
+	</div>
+</section>

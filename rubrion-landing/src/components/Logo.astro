@@ -1,13 +1,18 @@
 ---
+// Mark + wordmark in currentColor, so it follows the header (white over the
+// hero, ink or white with the theme elsewhere).
 import Mark from '../assets/rubrion-mark.svg';
+import { c } from '../data/site';
 
 interface Props {
 	class?: string;
+	/** Play the diagonal page transition (header only). */
+	diagonal?: boolean;
 }
-const { class: cls = '' } = Astro.props;
+const { class: cls = '', diagonal = true } = Astro.props;
 ---
 
-<a href="/" class:list={['relative z-20 flex items-center gap-2 px-2 py-1 text-sm', cls]}>
-	<Mark class="h-7 w-7 text-black dark:text-white" />
-	<span class="font-display text-lg font-bold tracking-tight text-black dark:text-white">Rubrion</span>
+<a href="/" data-diagonal={diagonal ? '' : undefined} aria-label={`Rubrion — ${c.nav.home}`} class:list={['relative z-20 flex items-center gap-2 px-1 py-1 text-sm', cls]}>
+	<Mark class="h-7 w-7" />
+	<span class="font-display text-lg font-bold tracking-tight">Rubrion</span>
 </a>

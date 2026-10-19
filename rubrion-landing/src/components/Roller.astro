@@ -1,0 +1,115 @@
+---
+/**
+ * Digit-roller number, after the advogue template's `counter_wrapper`: every digit is
+ * a vertical strip of ten that slides into place when scrolled into view
+ * (motion.ts `initRollers`). Columns alternate direction — odd ones roll
+ * down from -90% to 0, even ones up from 0 to -90% — so the target digit is
+ * first in a down-roller and last in an up-roller. Separators and the
+ * prefix/suffix stay still.
+ *
+ * Without motion (no JS, reduced motion) each strip rests on its target, so
+ * the plain number is what renders. A visually-hidden copy carries the value
+ * for screen readers; the strips are aria-hidden.
+ */
+interface Props {
+	value: string;
+	prefix?: string;
+	suffix?: string;
+	class?: string;
+}
+
+const { value, prefix = '', suffix = '', class: className } = Astro.props;
+
+// Each column: ten digits, target first (down) or last (up). The filler runs
+// backwards from the target so the roll reads as counting toward it.
+let digitIndex = 0;
+const parts = [...value].map((ch) => {
+	if (!/\d/.test(ch)) return { static: ch };
+	const target = Number(ch);
+	const run = Array.from({ length: 9 }, (_, i) => (target + 1 + i) % 10);
+	const down = digitIndex++ % 2 === 0;
+	return { down, target, digits: down ? [target, ...run] : [...run.reverse(), target] };
+});
+---
+
+<span class:list={["roller", className]} data-roller>
+	<span class="visually-hidden">{prefix}{value}{suffix}</span>
+	<span class="roller__digits" aria-hidden="true">
+		{prefix && <span class="roller__static">{prefix}</span>}
+		{
+			parts.map((p) =>
+				"static" in p ? (
+					<span class="roller__static">{p.static}</span>
+				) : (
+					<span class="roller__col">
+						<span class="roller__sizer">{p.target}</span>
+						<span class="roller__strip" data-dir={p.down ? "down" : "up"}>
+							{p.digits.map((d) => <span>{d}</span>)}
+						</span>
+					</span>
+				),
+			)
+		}
+		{suffix && <span class="roller__static">{suffix}</span>}
+	</span>
+</span>
+
+<style>
+	.roller {
+		display: inline-block;
+	}
+
+	.roller__digits {
+		display: inline-flex;
+		align-items: flex-start;
+	}
+
+	/* Each column is as wide as its own target digit (the hidden sizer), with
+	 * the strip centred over it — so a narrow "1" doesn't leave a gap. */
+	.roller__col {
+		position: relative;
+		display: inline-block;
+		height: 1em;
+		overflow: hidden;
+		line-height: 1;
+	}
+
+	.roller__sizer {
+		visibility: hidden;
+	}
+
+	.roller__strip {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-left: -0.5em;
+		width: 1em;
+		line-height: 1;
+	}
+
+	.roller__strip span {
+		display: block;
+		height: 1em;
+	}
+
+	/* Resting state = the target digit. */
+	.roller__strip[data-dir="up"] {
+		transform: translateY(-90%);
+	}
+
+	.roller__static {
+		line-height: 1;
+	}
+
+	/* Motion start state: the strips wait on the far end of their roll. */
+	:global(.has-motion) .roller:not(.is-rolled) .roller__strip[data-dir="down"] {
+		transform: translateY(-90%);
+	}
+
+	:global(.has-motion) .roller:not(.is-rolled) .roller__strip[data-dir="up"] {
+		transform: translateY(0);
+	}
+</style>

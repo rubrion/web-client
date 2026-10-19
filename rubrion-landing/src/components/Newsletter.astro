@@ -1,34 +1,34 @@
 ---
-// Newsletter — compact row under the "What we build" grid. EdgeLetter double opt-in.
+// Newsletter row. Subscriptions still go to EdgeLetter (double opt-in).
+import { c } from '../data/site';
+
+const n = c.newsletter;
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 ---
 
-<div id="newsletter" class="mx-auto mt-4 max-w-7xl overflow-hidden rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
+<div id="newsletter" class="relative mx-auto max-w-7xl overflow-hidden rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
 	<div class="grid gap-6 md:grid-cols-2 md:items-center">
 		<div>
 			<h3 class="font-display text-xl font-semibold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-100">
-				Subscribe to the newsletter
+				{n.title}
 			</h3>
-			<p class="mt-2 max-w-md text-sm text-neutral-600 dark:text-neutral-400">
-				New posts, ship logs, and engagement notes. No spam, unsubscribe in one click.
-				Distributed by <a href="https://edgeletter.rubrion.ai" class="text-brand-500 hover:underline" rel="noopener" target="_blank">EdgeLetter</a>, double opt-in.
-			</p>
+			<p class="mt-2 max-w-md text-sm text-neutral-600 dark:text-neutral-400">{n.lead}</p>
 		</div>
 
 		<form id="ep-subscribe" class="flex flex-col gap-3">
 			<div class="flex flex-col gap-3 sm:flex-row">
-				<label for="ep-email" class="sr-only">Email</label>
+				<label for="ep-email" class="sr-only">{n.email}</label>
 				<input
 					id="ep-email"
 					name="email"
 					type="email"
 					required
 					autocomplete="email"
-					placeholder="you@example.com"
+					placeholder={n.placeholder}
 					class="input sm:flex-1"
 				/>
 				<button type="submit" class="btn-primary shrink-0 px-6 py-3 disabled:opacity-50">
-					Subscribe
+					{n.submit}
 				</button>
 			</div>
 
@@ -51,15 +51,15 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 	</div>
 </div>
 
-<script is:inline>
+<script is:inline define:vars={{ n }}>
 	(function () {
 		var f = document.getElementById('ep-subscribe');
 		if (!f) return;
 		var st = document.getElementById('ep-status');
-		var msgSubmitting = 'Submitting…';
-		var msgConfirm = 'Check your inbox to confirm.';
-		var msgAlready = "You're already subscribed.";
-		var msgNetwork = 'Network error. Try again.';
+		var msgSubmitting = n.submitting;
+		var msgConfirm = n.confirm;
+		var msgAlready = n.already;
+		var msgNetwork = n.network;
 		f.addEventListener('submit', function (e) {
 			e.preventDefault();
 			var fd = new FormData(f);
@@ -79,7 +79,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 				})
 				.then(function (o) {
 					if (!o.ok) {
-						st.textContent = (o.j && o.j.error) || 'Error.';
+						st.textContent = (o.j && o.j.error) || n.error;
 						return;
 					}
 					st.textContent = o.j.alreadyActive ? msgAlready : msgConfirm;

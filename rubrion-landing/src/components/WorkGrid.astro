@@ -1,0 +1,33 @@
+---
+// Work list with credit filters (scripts/filters.ts): all, Rubrion, MT2 Data,
+// Sennatech. `limit` shows the first n (home); the full list lives on /work.
+import WorkCard from './WorkCard.astro';
+import WorkFilters from './WorkFilters.astro';
+import { c } from '../data/site';
+import { credits, work, type Credit } from '../data/work';
+
+interface Props {
+	limit?: number;
+	filters?: boolean;
+}
+const { limit, filters = true } = Astro.props;
+const list = limit ? work.slice(0, limit) : work;
+const used = (Object.keys(credits) as Credit[]).filter((k) => list.some((w) => w.credit === k));
+---
+
+{filters && (
+	<div class="mt-10 flex flex-wrap gap-2" role="group" data-reveal>
+		<button type="button" data-filter="all" aria-pressed="true" class="filter-pill">{c.work.all} <span>{list.length}</span></button>
+		{used.map((k) => (
+			<button type="button" data-filter={k} aria-pressed="false" class="filter-pill">{credits[k].name} <span>{list.filter((w) => w.credit === k).length}</span></button>
+		))}
+	</div>
+)}
+<ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" data-filter-list>
+	{list.map((w, i) => (
+		<li data-cat={w.credit} data-reveal>
+			<WorkCard work={w} index={i} />
+		</li>
+	))}
+</ul>
+{filters && <WorkFilters />}

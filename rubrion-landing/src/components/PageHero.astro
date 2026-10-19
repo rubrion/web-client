@@ -1,0 +1,66 @@
+---
+// Inner-page hero band: dashed diagonal hairlines, a red glow, the brand mark
+// as a faint watermark and a diagonal lower edge, so no page opens on a blank
+// sheet. Emits BreadcrumbList JSON-LD.
+import Mark from '../assets/rubrion-mark.svg';
+import SectionHead from './SectionHead.astro';
+import { buildBreadcrumbSchema } from '../data/seo';
+import { cleanPath } from '../data/locale';
+import { c } from '../data/site';
+
+interface Props {
+	kicker: string;
+	title: string;
+	lead?: string;
+	crumbs?: { label: string; href?: string }[];
+}
+const { kicker, title, lead, crumbs = [] } = Astro.props;
+const here = cleanPath(Astro.url.pathname);
+const trail = [{ label: c.nav.home, href: '/' }, ...crumbs];
+const ld = buildBreadcrumbSchema(trail.map((t) => ({ name: t.label, path: t.href ?? here })));
+---
+
+<div class="relative">
+<section class="phero bg-diag bg-glow relative overflow-hidden bg-neutral-50 px-4 pt-32 pb-28 md:px-8 md:pt-40 md:pb-36 dark:bg-neutral-950">
+	<Mark class="pointer-events-none absolute -right-24 -bottom-24 h-[26rem] w-[26rem] text-neutral-900/[0.04] md:h-[34rem] md:w-[34rem] dark:text-white/[0.04]" aria-hidden="true" />
+	<div class="relative mx-auto max-w-7xl">
+		<nav aria-label={c.common.breadcrumb} class="mb-8 font-mono text-[11px] tracking-wide text-neutral-600 dark:text-neutral-400 uppercase" data-reveal>
+			<ol class="flex flex-wrap items-center gap-2">
+				{trail.map((t, i) => (
+					<li class="flex items-center gap-2">
+						{i > 0 && <span aria-hidden="true">/</span>}
+						{t.href ? <a href={t.href} class="hover:text-brand-500">{t.label}</a> : <span class="text-neutral-800 dark:text-neutral-200" aria-current="page">{t.label}</span>}
+					</li>
+				))}
+			</ol>
+		</nav>
+		<SectionHead as="h1" kicker={kicker} title={title} lead={lead} />
+		<slot />
+	</div>
+</section>
+	<svg class="phero__seam" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="100" x2="100" y2="0" /></svg>
+</div>
+
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+<style>
+	/* Diagonal lower edge with the red seam, echoing the home hero. */
+	.phero {
+		clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4.5rem), 0 100%);
+	}
+	.phero__seam {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		height: 4.5rem;
+		overflow: visible;
+		pointer-events: none;
+	}
+	.phero__seam line {
+		stroke: var(--color-brand-500);
+		stroke-width: 1.5px;
+		vector-effect: non-scaling-stroke;
+		filter: drop-shadow(0 0 5px rgba(255, 60, 60, 0.7));
+	}
+</style>

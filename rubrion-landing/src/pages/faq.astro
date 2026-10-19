@@ -1,19 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
+import PageHero from '../components/PageHero.astro';
 import Faq from '../components/Faq.astro';
-import Footer from '../components/Footer.astro';
 import { FAQS, buildFaqSchema } from '../data/seo';
+import { c } from '../data/site';
 ---
 
-<Layout
-	title="Rubrion, FAQ"
-	description="Why Rubrion: how fast we ship, how pricing works, who owns the source, and where we host."
-	jsonLd={[buildFaqSchema(FAQS)]}
->
-	<Navbar />
-	<main class="pt-24">
-		<Faq />
-	</main>
-	<Footer />
+<Layout title={c.nav.faq} description={c.faq.lead} jsonLd={[buildFaqSchema(FAQS)]}>
+	<PageHero kicker={c.faq.kicker} title={c.faq.title} lead={c.faq.lead} crumbs={[{ label: c.nav.faq }]} />
+	<Faq head={false} />
 </Layout>

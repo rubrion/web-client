@@ -1,0 +1,27 @@
+---
+// Section heading in the brand guide's style: red mono kicker with a rule,
+// display title (one <em> lights up red), optional lead.
+interface Props {
+	kicker: string;
+	title: string;
+	lead?: string;
+	center?: boolean;
+	/** Heading level: h1 on a page hero, h2 inside a page. */
+	as?: 'h1' | 'h2';
+	class?: string;
+}
+const { kicker, title, lead, center = false, as: Tag = 'h2', class: cls } = Astro.props;
+---
+
+<div class:list={['max-w-3xl', center && 'mx-auto text-center', cls]}>
+	<p class="kicker" data-reveal>{kicker}</p>
+	<Tag
+		class:list={[
+			'hl mt-4 font-display font-bold tracking-tight text-balance text-neutral-900 dark:text-neutral-100',
+			Tag === 'h1' ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl',
+		]}
+		data-split
+		set:html={title}
+	/>
+	{lead && <p class:list={['mt-5 max-w-xl text-base/7 text-neutral-600 dark:text-neutral-400', center && 'mx-auto']} data-reveal>{lead}</p>}
+</div>

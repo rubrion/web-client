@@ -1,14 +1,85 @@
 ---
+// Live products only. Rubrion Store is offline, so it appears as work (a
+// case page), with a note here for anyone looking for a marketplace.
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Products from '../components/Products.astro';
-import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import { c } from '../data/site';
+
+const p = c.products;
+const groups = [
+	{
+		label: p.saas,
+		items: [{ name: 'CurriClean', logo: '/logos/curriclean.webp', desc: p.curriclean, chips: p.curricleanChips, href: 'https://curriclean.rubrion.ai', link: 'curriclean.rubrion.ai', shot: '/work/curriclean-900.webp' }],
+	},
+	{
+		label: p.whitelabel,
+		items: [{ name: 'EdgeLetter', logo: '/logos/edgeletter.webp', desc: p.edgeletter, chips: p.edgeletterChips, href: 'https://edgeletter.rubrion.ai', link: 'edgeletter.rubrion.ai', shot: '/work/edgeletter-900.webp' }],
+	},
+];
 ---
 
-<Layout title="Rubrion, Products" description="Live, working products you launch under your own brand: EdgeLetter, Rubrion Store, CurriClean, and the Rubot agent platform.">
-	<Navbar />
-	<main class="pt-24">
-		<Products />
-	</main>
-	<Footer />
+<Layout title={c.nav.products} description={p.lead}>
+	<PageHero kicker={p.kicker} title={p.title} lead={p.lead} crumbs={[{ label: c.nav.products }]} />
+
+	<section class="bg-white px-4 pb-24 md:px-8 md:pb-32 dark:bg-black">
+		<div class="mx-auto max-w-7xl space-y-14">
+			{groups.map((g) => (
+				<div>
+					<h2 class="kicker" data-reveal>{g.label}</h2>
+					{g.items.map((it) => (
+						<article class="feature-card mt-6 grid overflow-hidden md:grid-cols-[1fr_1.1fr]" data-reveal>
+							<div class="flex flex-col justify-between p-7 md:p-10">
+								<div>
+									<div class="flex items-center gap-3">
+										<span class="product-mark"><img src={it.logo} alt="" width="28" height="28" loading="lazy" class="h-7 w-7 object-contain" /></span>
+										<h3 class="font-display text-2xl font-bold tracking-tight">{it.name}</h3>
+									</div>
+									<p class="mt-4 max-w-md text-base/7 text-neutral-600 dark:text-neutral-400">{it.desc}</p>
+									<div class="mt-5 flex flex-wrap gap-2">{it.chips.map((ch) => <span class="tag-pill">{ch}</span>)}</div>
+								</div>
+								<a href={it.href} target="_blank" rel="noopener" class="mt-8 inline-flex items-center gap-1 font-mono text-xs text-brand-500 hover:text-brand-400">{it.link} ↗</a>
+							</div>
+							<div class="relative min-h-60 overflow-hidden bg-neutral-900">
+								<img src={it.shot} alt="" width="900" height="563" loading="lazy" class="absolute inset-0 h-full w-full object-cover object-top" />
+							</div>
+						</article>
+					))}
+				</div>
+			))}
+
+			<div id="agents">
+				<h2 class="kicker" data-reveal>{p.agents}</h2>
+				<div class="feature-card mt-6 p-7 md:p-10" data-reveal>
+					<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+						<div class="max-w-md">
+							<div class="flex items-center gap-3">
+								<span class="product-mark"><img src="/logos/rubot.webp" alt="" width="32" height="32" loading="lazy" class="rubot-img h-8 w-8 object-contain" /></span>
+								<div>
+									<h3 class="font-display text-2xl font-bold tracking-tight">Rubot</h3>
+									<p class="font-mono text-[11px] tracking-widest text-brand-500 uppercase">{p.platform}</p>
+								</div>
+							</div>
+							<p class="mt-4 text-base/7 text-neutral-600 dark:text-neutral-400">{p.rubotText}</p>
+							<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-1 font-mono text-xs text-brand-500 hover:text-brand-400">chat.rubrion.ai ↗</a>
+						</div>
+						<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
+							<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-xl border border-line p-4 transition hover:border-brand-500/50 dark:border-line-dark">
+								<div class="flex items-center gap-2">
+									<img src="/logos/brad.svg" alt="" width="24" height="24" class="h-6 w-6" />
+									<span class="text-sm font-semibold">Brad</span>
+								</div>
+								<p class="mt-2 text-xs/5 text-neutral-500 dark:text-neutral-400">{p.bradText}</p>
+								<span class="mt-3 inline-flex items-center gap-1 font-mono text-[11px] text-brand-500 group-hover:text-brand-400">brad.rubrion.ai ↗</span>
+							</a>
+							<div class="flex items-center justify-center rounded-xl border border-dashed border-line p-4 text-center text-xs text-neutral-400 dark:border-line-dark dark:text-neutral-500">{p.moreAgents}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p class="rounded-2xl border border-dashed border-line px-6 py-5 text-sm text-neutral-600 dark:border-line-dark dark:text-neutral-400" data-reveal>
+				{p.marketplaceNote} <a href="/work/rubrion-store" class="font-medium text-brand-500 hover:text-brand-400">{p.seeCase} →</a>
+			</p>
+		</div>
+	</section>
 </Layout>
