@@ -1,6 +1,7 @@
 ---
 // Work list with credit filters (scripts/filters.ts): all, Rubrion, MT2 Data,
-// Sennatech. `limit` shows the first n (home); the full list lives on /work.
+// Sennatech. `limit` shows the first n, two to a row and larger (home); the
+// full list on /work runs three to a row with filters.
 import WorkCard from './WorkCard.astro';
 import WorkFilters from './WorkFilters.astro';
 import { c } from '../data/site';
@@ -16,17 +17,17 @@ const used = (Object.keys(credits) as Credit[]).filter((k) => list.some((w) => w
 ---
 
 {filters && (
-	<div class="mt-10 flex flex-wrap gap-2" role="group" data-reveal>
-		<button type="button" data-filter="all" aria-pressed="true" class="filter-pill">{c.work.all} <span>{list.length}</span></button>
+	<div class="mt-12 flex flex-wrap gap-x-7 gap-y-2 border-b border-hair" role="group" data-reveal>
+		<button type="button" data-filter="all" aria-pressed="true" class="filter-pill">{c.work.all}<span>{list.length}</span></button>
 		{used.map((k) => (
-			<button type="button" data-filter={k} aria-pressed="false" class="filter-pill">{credits[k].name} <span>{list.filter((w) => w.credit === k).length}</span></button>
+			<button type="button" data-filter={k} aria-pressed="false" class="filter-pill">{credits[k].name}<span>{list.filter((w) => w.credit === k).length}</span></button>
 		))}
 	</div>
 )}
-<ul class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" data-filter-list>
+<ul class:list={['mt-12 grid grid-cols-1 gap-x-8 gap-y-16', limit ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']} data-filter-list>
 	{list.map((w, i) => (
 		<li data-cat={w.credit} data-reveal>
-			<WorkCard work={w} index={i} />
+			<WorkCard work={w} index={i} large={!!limit} />
 		</li>
 	))}
 </ul>

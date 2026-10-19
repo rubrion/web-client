@@ -1,104 +1,67 @@
 ---
-// Start a project — contact form + info aside
-import SectionHead from './SectionHead.astro';
-import { c, email } from '../data/site';
+// Start a project: the closing dark slab, with the ambient shader behind a
+// short brief form (Turnstile-protected, posts to the support-email-worker).
+import { c, email, whatsapp } from '../data/site';
 
 const t = c.contact;
+const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/60';
 ---
 
-<section id="contact" class="bg-diag bg-glow relative w-full overflow-hidden bg-white px-4 py-24 md:px-8 md:py-32 dark:bg-neutral-950">
-	<div class="relative z-10 mx-auto max-w-5xl">
-		<SectionHead kicker={t.kicker} title={t.title} lead={t.lead} center />
+<section id="contact" class="on-slab relative w-full overflow-hidden bg-slab px-5 py-28 text-slab-ink md:px-8 md:py-40">
+	<canvas class="absolute inset-0 h-full w-full" data-ambient="slab" aria-hidden="true"></canvas>
+	<div class="relative z-10 mx-auto grid max-w-7xl gap-16 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-24">
+		<div>
+			<p class="eyebrow !text-slab-ink/70" data-reveal>{t.kicker}</p>
+			<h2 class="display mt-6 text-[2.4rem] md:text-[4rem]" data-split set:html={t.title} />
+			<p class="mt-6 max-w-md text-[1.02rem]/8 text-slab-ink/70" data-reveal>{t.lead}</p>
+			<dl class="mt-12 grid max-w-md gap-6 border-t border-white/10 pt-8 text-[0.95rem]" data-reveal>
+				<div class="flex justify-between gap-6"><dt class="text-slab-ink/55">{t.emailLabel}</dt><dd><a href={`mailto:${email}`} class="font-bold hover:text-brand-400">{email}</a></dd></div>
+				<div class="flex justify-between gap-6"><dt class="text-slab-ink/55">WhatsApp</dt><dd><a href={whatsapp} target="_blank" rel="noopener" class="font-bold hover:text-brand-400">+55 11 99256-2478</a></dd></div>
+				<div class="flex justify-between gap-6"><dt class="text-slab-ink/55">{t.responseLabel}</dt><dd>{t.response}</dd></div>
+				<div class="flex justify-between gap-6"><dt class="text-slab-ink/55">{t.deployLabel}</dt><dd>{t.deploy}</dd></div>
+			</dl>
+		</div>
 
-		<div class="mt-14 grid gap-12 md:grid-cols-2" data-strings={JSON.stringify(t)} id="contact-grid">
-			<!-- form card -->
-			<div class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 shadow-brand md:p-8 dark:border-line-dark dark:bg-neutral-900">
-				<form id="contact-form" class="space-y-6">
+		<div class="relative" data-reveal>
+			<form id="contact-form" class="space-y-8" data-strings={JSON.stringify(t)} >
+				<div class="grid gap-8 sm:grid-cols-2">
 					<div>
-						<label for="contact-name" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.name} *</label>
-						<input type="text" id="contact-name" name="name" required class="input" />
+						<label for="contact-name" class={label}>{t.name} *</label>
+						<input type="text" id="contact-name" name="name" required autocomplete="name" class="input" />
 					</div>
 					<div>
-						<label for="contact-email" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.email} *</label>
-						<input type="email" id="contact-email" name="email" required class="input" />
+						<label for="contact-email" class={label}>{t.email} *</label>
+						<input type="email" id="contact-email" name="email" required autocomplete="email" class="input" />
 					</div>
-					<div>
-						<label for="contact-company" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.company}</label>
-						<input type="text" id="contact-company" name="company" class="input" />
-					</div>
-					<div>
-						<label for="contact-message" class="mb-2 block text-sm font-medium text-neutral-900 dark:text-neutral-100">{t.message} *</label>
-						<textarea id="contact-message" name="message" required rows="4" class="input resize-none"></textarea>
-					</div>
-
-					{/* Honeypot — bots fill it, humans never see it */}
-					<div aria-hidden="true" style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;">
-						<label for="contact-website">Website</label>
-						<input type="text" id="contact-website" name="honeypot" tabindex="-1" autocomplete="off" />
-					</div>
-
-					<div id="contact-turnstile" class="flex justify-center"></div>
-
-					<div id="contact-error" class="hidden rounded-lg border border-brand-500/40 bg-brand-500/10 p-3">
-						<p class="font-mono text-sm text-brand-600">
-							{t.error}: <span id="contact-error-text"></span>
-						</p>
-					</div>
-
-					<button id="contact-submit" type="submit" class="btn-primary w-full py-3 disabled:cursor-not-allowed disabled:opacity-50">
-						{t.send}
-					</button>
-				</form>
-
-				<!-- success state -->
-				<div id="contact-success" class="absolute inset-0 hidden flex-col items-center justify-center rounded-2xl bg-white/95 p-8 text-center dark:bg-neutral-950/95">
-					<div class="mb-4 text-brand-500">
-						<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></svg>
-					</div>
-					<h3 class="mb-2 font-display text-xl font-semibold text-neutral-900 dark:text-neutral-100">{t.sent}</h3>
-					<p class="font-mono text-sm text-neutral-600 dark:text-neutral-400">{t.sentNote}</p>
 				</div>
-			</div>
-
-			<!-- info aside -->
-			<aside class="space-y-8">
 				<div>
-					<h3 class="font-display text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">{t.talk}</h3>
-					<p class="mt-3 text-base/7 text-neutral-600 dark:text-neutral-400">{t.talkLead}</p>
+					<label for="contact-company" class={label}>{t.company}</label>
+					<input type="text" id="contact-company" name="company" autocomplete="organization" class="input" />
+				</div>
+				<div>
+					<label for="contact-message" class={label}>{t.message} *</label>
+					<textarea id="contact-message" name="message" required rows="4" class="input resize-none"></textarea>
 				</div>
 
-				<div class="space-y-4">
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-						</div>
-						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.emailLabel}</p>
-							<a href={`mailto:${email}`} class="text-brand-500 hover:underline">{email}</a>
-						</div>
-					</div>
-
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-						</div>
-						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.responseLabel}</p>
-							<p class="text-neutral-600 dark:text-neutral-400">{t.response}</p>
-						</div>
-					</div>
-
-					<div class="flex items-center gap-4">
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-neutral-100 text-neutral-600 dark:text-neutral-400 dark:border-line-dark dark:bg-neutral-900">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
-						</div>
-						<div>
-							<p class="font-medium text-neutral-900 dark:text-neutral-100">{t.deployLabel}</p>
-							<p class="text-neutral-600 dark:text-neutral-400">{t.deploy}</p>
-						</div>
-					</div>
+				{/* Honeypot: bots fill it, humans never see it */}
+				<div aria-hidden="true" style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;">
+					<label for="contact-website">Website</label>
+					<input type="text" id="contact-website" name="honeypot" tabindex="-1" autocomplete="off" />
 				</div>
-			</aside>
+
+				<div id="contact-turnstile"></div>
+
+				<p id="contact-error" class="hidden border-l border-brand-500 pl-3 text-sm text-brand-400">
+					{t.error}: <span id="contact-error-text"></span>
+				</p>
+
+				<button id="contact-submit" type="submit" class="btn btn--light disabled:cursor-not-allowed disabled:opacity-50">{t.send}</button>
+			</form>
+
+			<div id="contact-success" class="absolute inset-0 hidden flex-col items-start justify-center bg-slab">
+				<p class="eyebrow !text-slab-ink/70">{t.sent}</p>
+				<p class="display mt-5 text-3xl">{t.sentNote}</p>
+			</div>
 		</div>
 	</div>
 </section>
@@ -127,7 +90,7 @@ const t = c.contact;
 		}
 	}
 
-	const t = JSON.parse(document.getElementById('contact-grid')?.dataset.strings ?? '{}') as Record<string, string>;
+	const t = JSON.parse(document.getElementById('contact-form')?.dataset.strings ?? '{}') as Record<string, string>;
 	const form = document.getElementById('contact-form') as HTMLFormElement | null;
 	const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement | null;
 	const errorBox = document.getElementById('contact-error');
@@ -150,7 +113,7 @@ const t = c.contact;
 		if (widgetId) return;
 		widgetId = window.turnstile.render(turnstileContainer, {
 			sitekey: TURNSTILE_SITE_KEY!,
-			theme: 'auto',
+			theme: 'dark',
 			size: 'flexible',
 			callback: (token: string) => {
 				turnstileToken = token;

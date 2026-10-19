@@ -1,13 +1,22 @@
 ---
 // Page shell: head/SEO, header, footer and the page-wide scripts. Every page
 // is static HTML; the interactive parts are small bundled scripts.
-import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
 import '@fontsource/plus-jakarta-sans/600.css';
-import '@fontsource/plus-jakarta-sans/700.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '@fontsource/unna/400-italic.css';
 import '../styles/global.css';
+// The faces the first screen paints with, preloaded so they arrive before the
+// first layout instead of swapping in and re-laying out the page.
+import jakarta600 from '@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2?url';
+import lato400 from '@fontsource/lato/files/lato-latin-400-normal.woff2?url';
+import lato700 from '@fontsource/lato/files/lato-latin-700-normal.woff2?url';
+import unnaItalic from '@fontsource/unna/files/unna-latin-400-italic.woff2?url';
 import Seo from '../components/Seo.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import ChatWidget from '../components/ChatWidget.astro';
 import type { JsonLd } from '../data/seo';
 import { DEFAULT_DESCRIPTION } from '../data/seo';
 import { HTML_LANG } from '../data/locale';
@@ -44,7 +53,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 ---
 
 <!doctype html>
-<html lang={HTML_LANG} class="dark" style="color-scheme:dark">
+<html lang={HTML_LANG} style="color-scheme:light">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,8 +61,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 		<link rel="icon" href="/favicon.ico" sizes="32x32" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="/site.webmanifest" />
-		<meta name="theme-color" content="#000000" />
-		<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+		<meta name="theme-color" content="#f3f2ee" />
+		{[jakarta600, lato400, lato700, unnaItalic].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
@@ -65,8 +74,8 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 			(() => {
 				const el = document.documentElement;
 				try {
-					const stored = localStorage.getItem('theme');
-					const dark = stored ? stored === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+					// Light is the brand; dark only when the visitor picks it.
+					const dark = localStorage.getItem('theme') === 'dark';
 					el.classList.toggle('dark', dark);
 					el.style.colorScheme = dark ? 'dark' : 'light';
 				} catch (e) {}
@@ -101,21 +110,24 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 			)
 		}
 	</head>
-	<body class="bg-white text-neutral-900 antialiased dark:bg-black dark:text-neutral-100">
+	<body class="bg-paper text-ink antialiased">
 		<a href="#main" class="visually-hidden focus:not-sr-only">{c.common.skip}</a>
 		<Navbar overlay={overlay} />
 		<main id="main">
 			<slot />
 		</main>
 		<Footer />
+		<ChatWidget />
 		<script>
 			import { initDiagonal } from '../scripts/diagonal';
+			import { initAmbient } from '../scripts/ambient';
 
 			initDiagonal();
+			initAmbient();
 			// Motion (GSAP, Lenis) loads once the first screen has painted, so it
 			// never competes with the hero image.
 			const motion = () => import('../scripts/motion').then((m) => m.initMotion());
-			'requestIdleCallback' in window ? requestIdleCallback(motion, { timeout: 700 }) : setTimeout(motion, 200);
+			'requestIdleCallback' in window ? requestIdleCallback(motion, { timeout: 1600 }) : setTimeout(motion, 200);
 		</script>
 	</body>
 </html>

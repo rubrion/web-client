@@ -6,17 +6,15 @@ const n = c.newsletter;
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 ---
 
-<div id="newsletter" class="relative mx-auto max-w-7xl overflow-hidden rounded-2xl border border-line bg-white p-6 md:p-8 dark:border-line-dark dark:bg-neutral-900">
-	<div class="grid gap-6 md:grid-cols-2 md:items-center">
+<div id="newsletter" class="relative mx-auto max-w-7xl border-t border-hair pt-14">
+	<div class="grid gap-10 md:grid-cols-2 md:items-end">
 		<div>
-			<h3 class="font-display text-xl font-semibold tracking-tight text-neutral-900 md:text-2xl dark:text-neutral-100">
-				{n.title}
-			</h3>
-			<p class="mt-2 max-w-md text-sm text-neutral-600 dark:text-neutral-400">{n.lead}</p>
+			<h3 class="display text-3xl md:text-[2.4rem]">{n.title}</h3>
+			<p class="lead mt-4 max-w-md !text-[0.95rem]">{n.lead}</p>
 		</div>
 
 		<form id="ep-subscribe" class="flex flex-col gap-3">
-			<div class="flex flex-col gap-3 sm:flex-row">
+			<div class="flex flex-col gap-4 sm:flex-row sm:items-end">
 				<label for="ep-email" class="sr-only">{n.email}</label>
 				<input
 					id="ep-email"
@@ -27,7 +25,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 					placeholder={n.placeholder}
 					class="input sm:flex-1"
 				/>
-				<button type="submit" class="btn-primary shrink-0 px-6 py-3 disabled:opacity-50">
+				<button type="submit" class="btn btn--ink shrink-0 justify-center disabled:opacity-50">
 					{n.submit}
 				</button>
 			</div>
@@ -46,7 +44,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 				<div class="cf-turnstile max-w-full overflow-hidden" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-size="flexible" />
 			)}
 
-			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] font-mono text-sm text-neutral-600 dark:text-neutral-400"></p>
+			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] text-sm text-ink-soft"></p>
 		</form>
 	</div>
 </div>

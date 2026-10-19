@@ -1,6 +1,6 @@
 ---
-// FAQ — Why Rubrion, as an accordion on native <details> (no JS). Questions
-// live in site.ts and feed the FAQPage JSON-LD too (seo.ts), so they never drift.
+// FAQ on native <details> (no JS). Questions live in site.ts and feed the
+// FAQPage JSON-LD too (seo.ts), so the two never drift.
 import SectionHead from './SectionHead.astro';
 import { FAQS as faqs } from '../data/seo';
 import { c } from '../data/site';
@@ -12,20 +12,17 @@ interface Props {
 const { head = true } = Astro.props;
 ---
 
-<section id="faq" class:list={['bg-diag w-full bg-white px-4 md:px-8 dark:bg-black', head ? 'py-20 md:py-28' : 'pt-4 pb-24 md:pb-32']}>
-	<div class="mx-auto max-w-3xl">
-		{head && <SectionHead kicker={c.faq.kicker} title={c.faq.title} lead={c.faq.lead} center />}
-		<div class:list={[head && 'mt-12', 'divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark']}>
+<section id="faq" class:list={['bg-paper px-5 md:px-8', head ? 'py-28 md:py-40' : 'pt-6 pb-28 md:pb-40']}>
+	<div class:list={['mx-auto max-w-7xl', head && 'grid gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-24']}>
+		{head && <SectionHead kicker={c.faq.kicker} title={c.faq.title} lead={c.faq.lead} />}
+		<div class:list={['border-t border-hair', !head && 'mx-auto max-w-3xl']}>
 			{faqs.map((f, i) => (
-				<details class="faq-item group" open={i === 0} data-reveal>
-					<summary class="flex cursor-pointer items-center justify-between gap-6 py-6">
-						<span class="flex items-baseline gap-4">
-							<span class="font-mono text-xs text-brand-500">{String(i + 1).padStart(2, '0')}</span>
-							<span class="text-base font-medium text-neutral-800 md:text-lg dark:text-neutral-100">{f.q}</span>
-						</span>
-						<svg class="faq-chevron h-5 w-5 shrink-0 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+				<details class="faq-item border-b border-hair" open={i === 0} data-reveal>
+					<summary class="flex cursor-pointer items-start justify-between gap-6 py-7">
+						<span class="display text-xl md:text-[1.45rem]">{f.q}</span>
+						<span class="faq-plus mt-1 text-xl leading-none text-ink-faint" aria-hidden="true">+</span>
 					</summary>
-					<p class="pb-6 pl-9 pr-10 text-sm/7 text-neutral-600 md:text-base/7 dark:text-neutral-400">{f.a}</p>
+					<p class="max-w-2xl pb-8 text-[0.98rem]/7 text-ink-soft">{f.a}</p>
 				</details>
 			))}
 		</div>

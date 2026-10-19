@@ -21,9 +21,16 @@ on its own.
 | Locale, domains, support email | `src/data/locale.ts` |
 | SEO + JSON-LD | `src/data/seo.ts`, `src/components/Seo.astro` |
 | Blog posts | `src/content/blog/{en,pt}/<slug>.md` (same slug in both) |
-| Brand tokens + shared styles | `src/styles/global.css` |
+| Brand tokens (paper/ink/hairline, red spark) + shared styles | `src/styles/global.css`, documented live at `/brand` |
+| Type: Plus Jakarta Sans (display), Lato (body), Unna italic (highlighted word) | `@fontsource/*`, preloaded in `Layout.astro` |
+| Hero slider (WebGL seam + distortion dissolve, CSS fallback) | `src/components/Hero.astro`, `src/scripts/hero-gl.ts` |
+| Ambient shader backgrounds (`canvas[data-ambient]`) | `src/scripts/ambient.ts`, `src/scripts/gl.ts` |
+| Scripted chat (no AI; WhatsApp/email handoff) | `src/components/ChatWidget.astro`, `src/scripts/chat.ts` |
 | Motion (GSAP, Lenis): reveals, split headings, rollers | `src/scripts/motion.ts` |
 | Diagonal page transition (`a[data-diagonal]` only) | `src/scripts/diagonal.ts` |
+
+WebGL is skipped on software renderers (no GPU) and with reduced motion the
+hero swaps instantly; both fall back to plain images and CSS gradients.
 
 ### Portfolio
 

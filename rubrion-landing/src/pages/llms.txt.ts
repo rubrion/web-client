@@ -9,8 +9,8 @@ import { credits, work } from '../data/work';
 export const prerender = true;
 
 export const GET: APIRoute = () => {
-	const services = Object.values(c.services.items).map(([name, text]) => `- **${name}** — ${text}`);
-	const cases = work.map((w) => `- [${l(w.name)}](${SITE_URL}/work/${w.slug}) — ${l(w.kind)}. ${l(w.summary)} (${credits[w.credit].name}${w.url ? `, live: ${w.url}` : ''})`);
+	const services = Object.values(c.services.items).map(([name, text]) => `- **${name}**: ${text}`);
+	const cases = work.map((w) => `- [${l(w.name)}](${SITE_URL}/work/${w.slug}): ${l(w.kind)}. ${l(w.summary)} (${credits[w.credit].name}${w.url ? `, live: ${w.url}` : ''})`);
 	const faq = c.faq.items.map(([q, a]) => `- **${q}** ${a}`);
 	const body = `# Rubrion
 
@@ -24,9 +24,9 @@ ${services.join('\n')}
 
 ## ${c.products.kicker}
 
-- **EdgeLetter** — ${c.products.edgeletter} https://edgeletter.rubrion.ai
-- **CurriClean** — ${c.products.curriclean} https://curriclean.rubrion.ai
-- **Rubot / Brad** — ${c.products.rubotText} https://chat.rubrion.ai, https://brad.rubrion.ai
+- **EdgeLetter**: ${c.products.edgeletter} https://edgeletter.rubrion.ai
+- **CurriClean**: ${c.products.curriclean} https://curriclean.rubrion.ai
+- **Rubot / Brad**: ${c.products.rubotText} https://chat.rubrion.ai, https://brad.rubrion.ai
 
 ## ${c.work.kicker}
 
