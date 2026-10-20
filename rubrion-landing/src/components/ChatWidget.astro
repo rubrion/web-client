@@ -5,6 +5,7 @@
 // anywhere on the page open it.
 import { c, email, whatsapp } from '../data/site';
 import { work } from '../data/work';
+import Rubry from './Rubry.astro';
 
 const t = c.chat;
 const data = {
@@ -19,7 +20,7 @@ const data = {
 <div class="chat" data-chat>
 	<section class="chat__panel" id="chat-panel" role="dialog" aria-label={t.open} data-chat-panel hidden>
 		<header class="chat__head">
-			<span class="chat__mark" aria-hidden="true"><img src="/logos/rubot.webp" alt="" width="36" height="36" /></span>
+			<span class="chat__mark" aria-hidden="true"><Rubry /></span>
 			<div class="min-w-0">
 				<p class="chat__title">{t.title}</p>
 				<p class="chat__status"><span aria-hidden="true"></span>{t.status}</p>
@@ -33,7 +34,7 @@ const data = {
 		<div class="chat__options" role="group" data-chat-options></div>
 	</section>
 	<button class="chat__launcher" type="button" aria-controls="chat-panel" aria-expanded="false" data-chat-toggle>
-		<span class="chat__face" aria-hidden="true"><img src="/logos/rubot.webp" alt="" width="36" height="36" /><span class="chat__dot"></span></span>
+		<span class="chat__face" aria-hidden="true"><Rubry /><span class="chat__dot"></span></span>
 		<span class="chat__label">{t.open}</span>
 	</button>
 	<script type="application/json" data-chat-data set:html={JSON.stringify(data)} />
@@ -76,7 +77,7 @@ const data = {
 		border-color: var(--ink);
 	}
 
-	/* Rubot, our conversational agent, with a live dot. */
+	/* Rubry, our conversational agent, with a live dot. */
 	.chat__face {
 		position: relative;
 		display: grid;
@@ -87,7 +88,7 @@ const data = {
 		background: var(--paper);
 	}
 
-	.chat__face img {
+	.chat__face :global(.rubry) {
 		width: 1.9rem;
 		height: 1.9rem;
 		object-fit: contain;
@@ -167,7 +168,7 @@ const data = {
 		background: var(--paper);
 	}
 
-	.chat__mark img {
+	.chat__mark :global(.rubry) {
 		width: 1.7rem;
 		height: 1.7rem;
 		object-fit: contain;
@@ -265,10 +266,11 @@ const data = {
 		position: absolute;
 		left: -0.8rem;
 		top: 0.6em;
-		width: 0.3rem;
-		height: 0.3rem;
+		width: 0.5rem;
+		height: 0.45rem;
 		background: var(--color-brand-500);
-		transform: rotate(45deg);
+		-webkit-mask: var(--ruby-mask);
+		mask: var(--ruby-mask);
 	}
 
 	.chat__log :global(small) {

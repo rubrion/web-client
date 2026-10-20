@@ -1,0 +1,88 @@
+---
+// Rubry, Rubrion's agent: a cut ruby with a glowing pixel face. Two small
+// gems sit on top like antennas, white facet lines cross the body, and the
+// face blinks. `float` adds a slow bob. Ids are per instance, so several
+// can share a page.
+interface Props {
+	class?: string;
+	float?: boolean;
+	title?: string;
+}
+const { class: cls = '', float = false, title } = Astro.props;
+const id = `ry${Math.random().toString(36).slice(2, 8)}`;
+const body = 'M24.31 31.80Q28.80 24.00 37.80 24.00L82.20 24.00Q91.20 24.00 95.69 31.80L107.06 51.54Q112.00 60.11 105.29 67.40L67.92 107.99Q60.00 116.60 52.08 107.99L14.71 67.40Q8.00 60.11 12.94 51.54Z';
+---
+
+<svg viewBox="0 0 120 120" class:list={['rubry', float && 'rubry--float', cls]} role={title ? 'img' : undefined} aria-label={title} aria-hidden={title ? undefined : 'true'} xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<linearGradient id={`${id}g`} x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#f03c46"></stop>
+			<stop offset="1" stop-color="#c3161f"></stop>
+		</linearGradient>
+		<clipPath id={`${id}c`}><path d={body}></path></clipPath>
+		<filter id={`${id}f`} x="-30%" y="-30%" width="160%" height="160%">
+			<feGaussianBlur stdDeviation="1.5" result="b"></feGaussianBlur>
+			<feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+		</filter>
+	</defs>
+	<g class="rubry__bob">
+		<path d="M18.60 4.77Q20.20 2.00 23.40 2.00L29.60 2.00Q32.80 2.00 34.40 4.77L35.24 6.24Q37.00 9.29 34.62 11.88L29.32 17.64Q26.50 20.70 23.68 17.64L18.38 11.88Q16.00 9.29 17.76 6.24Z" fill="#f7a1a6"></path>
+		<path d="M85.60 4.77Q87.20 2.00 90.40 2.00L96.60 2.00Q99.80 2.00 101.40 4.77L102.24 6.24Q104.00 9.29 101.62 11.88L96.32 17.64Q93.50 20.70 90.68 17.64L85.38 11.88Q83.00 9.29 84.76 6.24Z" fill="#ec4a53"></path>
+		<path d={body} fill={`url(#${id}g)`}></path>
+		<g clip-path={`url(#${id}c)`}>
+			<g stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity=".32" fill="none">
+				<path d="M0 60.1H120M40 24 28 60.1 60 116.6 92 60.1 80 24"></path>
+			</g>
+			<rect x="30" y="35" width="60" height="40" rx="10" fill="#5a0d12" opacity=".92"></rect>
+			<g class="rubry__face" filter={`url(#${id}f)`} fill="#ffe3e7">
+				<g class="rubry__eyes">
+					<rect x="43" y="46" width="7" height="7" rx="2"></rect>
+					<rect x="70" y="46" width="7" height="7" rx="2"></rect>
+				</g>
+				<rect x="53" y="63" width="14" height="4" rx="1"></rect>
+				<rect x="49" y="59" width="4" height="4" rx="1"></rect>
+				<rect x="67" y="59" width="4" height="4" rx="1"></rect>
+			</g>
+		</g>
+	</g>
+</svg>
+
+<style>
+	.rubry {
+		overflow: visible;
+	}
+
+	.rubry__eyes {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: rubry-blink 5s infinite;
+	}
+
+	.rubry--float .rubry__bob {
+		animation: rubry-bob 4s ease-in-out infinite;
+	}
+
+	@keyframes rubry-blink {
+		0%,
+		92%,
+		100% {
+			transform: scaleY(1);
+		}
+		95% {
+			transform: scaleY(0.15);
+		}
+	}
+
+	@keyframes rubry-bob {
+		50% {
+			transform: translateY(-4px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.rubry__eyes,
+		.rubry--float .rubry__bob {
+			animation: none;
+		}
+	}
+</style>

@@ -70,7 +70,7 @@ const en = {
 		kicker: 'How we build',
 		title: 'Small bills, <em>big systems</em>',
 		agentTitle: 'Add an AI agent',
-		agentText: 'We wire Rubot into your infrastructure and shape it to your context, turning your operations into automation. Brad, our marketing agent, is one example of what it becomes.',
+		agentText: 'We wire Rubry into your infrastructure and shape it to your context, turning your operations into automation. Brad, our marketing agent, is one example of what it becomes.',
 		infra: 'your infrastructure',
 		automation: 'automation',
 		hostTitle: 'Managed hosting, your region',
@@ -192,9 +192,9 @@ const en = {
 	},
 	chat: {
 		open: 'Chat with us',
-		title: 'Rubot',
+		title: 'Rubry',
 		status: 'Instant answers · a person on weekdays',
-		hello: 'Hi, I’m Rubot, Rubrion’s agent. I can answer the usual questions in a few taps, or put you through to a person.',
+		hello: 'Hi, I’m Rubry, Rubrion’s agent. I can answer the usual questions in a few taps, or put you through to a person.',
 		restart: 'Start over',
 		close: 'Close chat',
 		options: {
@@ -297,7 +297,7 @@ const pt: typeof en = {
 		kicker: 'Como construímos',
 		title: 'Conta pequena, <em>sistema grande</em>',
 		agentTitle: 'Adicione um agente de IA',
-		agentText: 'Conectamos o Rubot à sua infraestrutura e o moldamos ao seu contexto, transformando sua operação em automação. O Brad, nosso agente de marketing, é um exemplo do que ele vira.',
+		agentText: 'Conectamos o Rubry à sua infraestrutura e o moldamos ao seu contexto, transformando sua operação em automação. O Brad, nosso agente de marketing, é um exemplo do que ele vira.',
 		infra: 'sua infraestrutura',
 		automation: 'automação',
 		hostTitle: 'Hospedagem gerenciada, na sua região',
@@ -419,9 +419,9 @@ const pt: typeof en = {
 	},
 	chat: {
 		open: 'Fale com a gente',
-		title: 'Rubot',
+		title: 'Rubry',
 		status: 'Respostas na hora · uma pessoa em dias úteis',
-		hello: 'Olá, sou o Rubot, o agente da Rubrion. Respondo as dúvidas mais comuns em poucos toques, ou passo você para uma pessoa.',
+		hello: 'Olá, sou o Rubry, o agente da Rubrion. Respondo as dúvidas mais comuns em poucos toques, ou passo você para uma pessoa.',
 		restart: 'Recomeçar',
 		close: 'Fechar chat',
 		options: {
