@@ -138,6 +138,19 @@ body {
 
 /* ---- buttons ---- */
 
+.form-spinner {
+  display: none;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.55em;
+  border: 1.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: form-spin 0.7s linear infinite;
+}
+.is-busy .form-spinner { display: inline-block; }
+.btn.is-busy::after, .btn.is-done::after { display: none; }
+@keyframes form-spin { to { transform: rotate(360deg); } }
 .btn {
   display: inline-flex;
   align-items: center;

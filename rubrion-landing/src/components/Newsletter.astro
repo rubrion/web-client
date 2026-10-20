@@ -25,8 +25,10 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 					placeholder={n.placeholder}
 					class="input sm:flex-1"
 				/>
-				<button type="submit" class="btn btn--ink shrink-0 justify-center disabled:opacity-50">
-					{n.submit}
+				<button type="submit" class="nl-btn btn btn--ink shrink-0 justify-center disabled:opacity-50">
+					<span class="form-spinner" aria-hidden="true"></span>
+					<svg class="nl-tick" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5"></path></svg>
+					<span data-label>{n.submit}</span>
 				</button>
 			</div>
 
@@ -44,7 +46,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 				<div class="cf-turnstile max-w-full overflow-hidden" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-size="flexible" />
 			)}
 
-			<p id="ep-status" role="status" aria-live="polite" class="min-h-[1.25rem] text-sm text-ink-soft"></p>
+			<p id="ep-status" role="status" aria-live="polite" class="nl-status min-h-[1.25rem] text-sm text-ink-soft"></p>
 		</form>
 	</div>
 </div>
@@ -54,17 +56,35 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 		var f = document.getElementById('ep-subscribe');
 		if (!f) return;
 		var st = document.getElementById('ep-status');
-		var msgSubmitting = n.submitting;
-		var msgConfirm = n.confirm;
-		var msgAlready = n.already;
-		var msgNetwork = n.network;
+		var btn = f.querySelector('button[type=submit]');
+		var label = btn.querySelector('[data-label]');
+		// Each new status line slides in; errors read in red.
+		var say = function (text, kind) {
+			st.textContent = text;
+			st.dataset.kind = kind || '';
+			st.classList.remove('is-in');
+			void st.offsetWidth;
+			st.classList.add('is-in');
+		};
+		var busy = function (on) {
+			btn.disabled = on;
+			btn.classList.toggle('is-busy', on);
+			label.textContent = on ? n.submitting : n.submit;
+		};
+		// Typing a new address puts the button back to "Subscribe".
+		f.addEventListener('input', function () {
+			if (!btn.classList.contains('is-done')) return;
+			btn.classList.remove('is-done');
+			label.textContent = n.submit;
+		});
 		f.addEventListener('submit', function (e) {
 			e.preventDefault();
 			var fd = new FormData(f);
 			var body = { email: fd.get('email'), website: fd.get('website') || '' };
 			var t = fd.get('cf-turnstile-response');
 			if (t) body.turnstile = t;
-			st.textContent = msgSubmitting;
+			say('');
+			busy(true);
 			fetch('https://edgeletter.rubrion.ai/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -76,11 +96,14 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 					});
 				})
 				.then(function (o) {
+					busy(false);
 					if (!o.ok) {
-						st.textContent = (o.j && o.j.error) || n.error;
+						say((o.j && o.j.error) || n.error, 'error');
 						return;
 					}
-					st.textContent = o.j.alreadyActive ? msgAlready : msgConfirm;
+					btn.classList.add('is-done');
+					label.textContent = n.done;
+					say(o.j.alreadyActive ? n.already : n.confirm, 'ok');
 					if (!o.j.alreadyActive) f.reset();
 					if (window.turnstile) {
 						try {
@@ -89,8 +112,65 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 					}
 				})
 				.catch(function () {
-					st.textContent = msgNetwork;
+					busy(false);
+					say(n.network, 'error');
 				});
 		});
 	})();
 </script>
+
+<style>
+	.nl-tick {
+		display: none;
+		width: 1em;
+		height: 1em;
+		margin-right: 0.45em;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.nl-tick path {
+		stroke-dasharray: 16;
+		stroke-dashoffset: 16;
+	}
+
+	.nl-btn.is-done .nl-tick {
+		display: inline-block;
+	}
+
+	.nl-btn.is-done .nl-tick path {
+		animation: nl-draw 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+	}
+
+	@keyframes nl-draw {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
+	.nl-status.is-in {
+		animation: nl-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.nl-status[data-kind='error'] {
+		color: var(--color-brand-500);
+	}
+
+	@keyframes nl-in {
+		from {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.nl-status.is-in,
+		.nl-btn.is-done .nl-tick path {
+			animation: none;
+			stroke-dashoffset: 0;
+		}
+	}
+</style>
