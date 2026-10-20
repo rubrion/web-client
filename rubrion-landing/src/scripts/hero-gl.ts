@@ -15,10 +15,12 @@ uniform vec2 uRes; uniform float uTime; uniform float uP; uniform float uIntro; 
 uniform vec2 uSeam;                 // seam y (from top) at x=0 and x=1
 uniform sampler2D uCurA; uniform sampler2D uCurB; uniform sampler2D uNextA; uniform sampler2D uNextB;
 uniform vec4 uAspCur; uniform vec4 uAspNext;  // image aspects: (curA, curB) (nextA, nextB) in .xy
+// Wide screens anchor the screenshot to its top (the site's own header and
+// hero); phones centre it, since only a narrow band of each half shows.
 vec2 cover(vec2 local, float boxAsp, float imgAsp){
   vec2 uv = local;
   if (imgAsp > boxAsp) uv.x = (local.x - 0.5) * boxAsp / imgAsp + 0.5;
-  else uv.y = local.y * imgAsp / boxAsp;
+  else uv.y = mix(local.y, local.y - 0.5, uNarrow) * imgAsp / boxAsp + 0.5 * uNarrow;
   return uv;
 }
 vec3 tap(bool top, bool isCur, vec2 uv){
@@ -70,7 +72,7 @@ void main(){
   // a screenshot's own text never competes with ours.
   float soft = top ? mix(1.0, 0.25, smoothstep(0.35, 0.85, x)) : 0.0;
   soft = max(soft, uNarrow * (top ? 1.0 : 0.0));
-  vec2 px = vec2(5.0 / uRes.x, 5.0 / uRes.y) * soft;
+  vec2 px = vec2(5.0 / uRes.x, 5.0 / uRes.y) * soft * mix(1.0, 0.4, uNarrow);
   vec3 cur = sampleHalf(top, true, uvCur, px);
   vec3 nxt = sampleHalf(top, false, uvNext, px);
   vec3 col = mix(cur, nxt, m);
@@ -82,6 +84,8 @@ void main(){
   } else {
     col *= mix(0.8, 0.3, smoothstep(0.5, 1.0, v));
   }
+  // Phones: darker left and right edges frame the narrow slice.
+  col *= mix(1.0, mix(0.2, 1.0, smoothstep(0.0, 0.32, min(x, 1.0 - x))), uNarrow);
 
   // The seam: a hairline with a soft red glow, drawn in left to right.
   float W = uRes.x, H = uRes.y;

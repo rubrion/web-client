@@ -1,0 +1,139 @@
+---
+// Our story: a short founder bio and a horizontal roadmap from the founding
+// (10 Oct 2024) to today, then two goals 3 and 5 years out. Past points are
+// solid and joined by a red line; future ones are hollow on a dashed line.
+// Stacks vertically on phones.
+import { l } from '../data/locale';
+
+const steps = l({
+	en: [
+		{ when: '10 Oct 2024', title: 'Founded', text: 'Samuel starts Rubrion on his own, as a freelance professional registered as an MEI.' },
+		{ when: 'Consulting', title: 'Bigger projects', text: 'Consulting work through MT2 Data and Sennatech brings larger systems and a steady pipeline.' },
+		{ when: 'Today', title: 'Teams and many projects', text: 'We work in teams and run several client projects and our own products side by side.' },
+		{ when: '2029 · in 3 years', title: 'An in-house team', text: 'Grow the team and hire our own professionals to staff consulting projects.', next: true },
+		{ when: '2031 · in 5 years', title: 'Our own products, at scale', text: 'Invest in innovative products of our own, built to sell at scale.', next: true },
+	],
+	pt: [
+		{ when: '10 out. 2024', title: 'Fundação', text: 'Samuel abre a Rubrion sozinho, como profissional freelancer registrado como MEI.' },
+		{ when: 'Consultoria', title: 'Projetos maiores', text: 'Consultorias com a MT2 Data e a Sennatech trazem sistemas maiores e demanda constante.' },
+		{ when: 'Hoje', title: 'Equipes e vários projetos', text: 'Trabalhamos em equipes e tocamos vários projetos de clientes e produtos próprios ao mesmo tempo.' },
+		{ when: '2029 · em 3 anos', title: 'Equipe própria', text: 'Crescer o time e contratar profissionais próprios para os projetos de consultoria.', next: true },
+		{ when: '2031 · em 5 anos', title: 'Produtos próprios, em escala', text: 'Investir em produtos inovadores nossos, feitos para vender em escala.', next: true },
+	],
+});
+const t = l({
+	en: {
+		kicker: 'Our story',
+		role: 'Founder',
+		bio: 'Rubrion began on 10 October 2024 as one person, Samuel, taking freelance work as an MEI (Brazil’s micro-entrepreneur registration). Consulting projects grew it into a studio that now works in teams across several projects at once.',
+	},
+	pt: {
+		kicker: 'Nossa história',
+		role: 'Fundador',
+		bio: 'A Rubrion começou em 10 de outubro de 2024 com uma pessoa só, o Samuel, atendendo como freelancer registrado como MEI. Os projetos de consultoria a transformaram num estúdio que hoje trabalha em equipes, em vários projetos ao mesmo tempo.',
+	},
+});
+---
+
+<div class="mt-24 md:mt-32">
+	<div class="grid gap-8 border-t border-hair pt-10 md:grid-cols-[minmax(0,22rem)_1fr] md:gap-16" data-reveal>
+		<div class="flex items-center gap-4">
+			<img src="/images/founder.webp" alt="Samuel Rubens Souza Oliveira" width="240" height="240" loading="lazy" decoding="async" class="h-20 w-20 rounded-full object-cover ring-1 ring-hair" />
+			<div>
+				<p class="eyebrow">{t.kicker}</p>
+				<p class="display mt-2 text-[1.2rem] leading-tight">Samuel Rubens Souza Oliveira</p>
+				<p class="meta mt-1">{t.role}</p>
+			</div>
+		</div>
+		<p class="lead max-w-2xl">{t.bio}</p>
+	</div>
+
+	<ol class="roadmap mt-14">
+		{steps.map((s) => (
+			<li class:list={['roadmap__step', s.next && 'is-next']} data-reveal>
+				<span class="roadmap__dot" aria-hidden="true"></span>
+				<p class="meta">{s.when}</p>
+				<h3 class="display mt-2 text-[1.2rem]">{s.title}</h3>
+				<p class="mt-2 text-[0.9rem]/6 text-ink-soft">{s.text}</p>
+			</li>
+		))}
+	</ol>
+</div>
+
+<style>
+	.roadmap {
+		display: grid;
+		gap: 2.25rem;
+	}
+
+	.roadmap__step {
+		position: relative;
+		padding-left: 2rem;
+	}
+
+	/* The line: solid red through the past, dashed hairline into the future. */
+	.roadmap__step::before {
+		content: '';
+		position: absolute;
+		left: 0.36rem;
+		top: 0.5rem;
+		bottom: -2.25rem;
+		border-left: 1px solid var(--color-brand-500);
+	}
+
+	.roadmap__step:last-child::before {
+		display: none;
+	}
+
+	.roadmap__step.is-next::before,
+	.roadmap__step:has(+ .is-next)::before {
+		border-left: 1px dashed var(--ink-faint);
+	}
+
+	.roadmap__dot {
+		position: absolute;
+		left: 0;
+		top: 0.2rem;
+		width: 0.75rem;
+		height: 0.75rem;
+		border-radius: 50%;
+		background: var(--color-brand-500);
+		box-shadow: 0 0 0 4px var(--paper);
+	}
+
+	.is-next .roadmap__dot {
+		border: 1px solid var(--ink-faint);
+		background: var(--paper);
+	}
+
+	@media (min-width: 768px) {
+		.roadmap {
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+			gap: 2rem;
+		}
+
+		.roadmap__step {
+			padding-left: 0;
+			padding-top: 2rem;
+		}
+
+		.roadmap__step::before {
+			left: 0.5rem;
+			right: -2rem;
+			top: 0.36rem;
+			bottom: auto;
+			border-left: 0;
+			border-top: 1px solid var(--color-brand-500);
+		}
+
+		.roadmap__step.is-next::before,
+		.roadmap__step:has(+ .is-next)::before {
+			border-left: 0;
+			border-top: 1px dashed var(--ink-faint);
+		}
+
+		.roadmap__dot {
+			top: 0;
+		}
+	}
+</style>

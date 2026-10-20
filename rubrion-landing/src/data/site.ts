@@ -64,6 +64,7 @@ const en = {
 		pageTitle: 'Everything we’ve <em>shipped</em>',
 		pageLead: 'Products, client builds and consulting work, credited to whoever we built it with.',
 		anon: 'Private app: the drawing is illustrative, not real data.',
+		source: 'Source on GitHub',
 	},
 	build: {
 		kicker: 'How we build',
@@ -176,7 +177,7 @@ const en = {
 			['Do we own what you build?', 'Yes. We deliver the source. Fork it, self-host it, or take it in-house anytime.'],
 			['Where do you host?', 'We run managed hosting in Brazil, Europe-West and US-East. Pick the region for your latency and data residency, or let us host across all three. We also cover network and infrastructure support and security across your systems.'],
 			['What do you build?', 'Web platforms and portals, AI agents, data and optimisation, websites, and our own white-label products. Fullstack web and mobile, on a fixed fee and a fixed timeline.'],
-			['Can we launch a product under our own brand?', 'Yes. EdgeLetter (newsletters and blogs) and our AI agents run under your brand. See the products page.'],
+			['Can we launch a product under our own brand?', 'Yes. EdgeLetter (newsletters and blogs) and our AI agents run under your brand. See our work page.'],
 		] as [string, string][],
 	},
 	footer: {
@@ -288,6 +289,7 @@ const pt: typeof en = {
 		pageTitle: 'Tudo o que já <em>entregamos</em>',
 		pageLead: 'Produtos, projetos para clientes e consultoria, creditados a quem construiu com a gente.',
 		anon: 'App privado: o desenho é ilustrativo, sem dados reais.',
+		source: 'Código no GitHub',
 	},
 	build: {
 		kicker: 'Como construímos',
@@ -400,7 +402,7 @@ const pt: typeof en = {
 			['O que vocês constroem é nosso?', 'Sim. Entregamos o código-fonte. Faça um fork, hospede você mesmo ou leve para dentro de casa quando quiser.'],
 			['Onde vocês hospedam?', 'Mantemos hospedagem gerenciada no Brasil, Europa-Oeste e EUA-Leste. Escolha a região pela latência e residência de dados, ou deixe que hospedemos nas três. Também cobrimos suporte de rede e infraestrutura e segurança em seus sistemas.'],
 			['O que vocês constroem?', 'Plataformas e portais, agentes de IA, dados e otimização, sites e nossos próprios produtos white-label. Web e mobile fullstack, com preço e prazo fixos.'],
-			['Podemos lançar um produto com a nossa marca?', 'Sim. O EdgeLetter (newsletters e blogs) e nossos agentes de IA rodam com a sua marca. Veja a página de produtos.'],
+			['Podemos lançar um produto com a nossa marca?', 'Sim. O EdgeLetter (newsletters e blogs) e nossos agentes de IA rodam com a sua marca. Veja a página de trabalhos.'],
 		],
 	},
 	footer: {

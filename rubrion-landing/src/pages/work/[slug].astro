@@ -34,6 +34,7 @@ const ld = {
 	<PageHero kicker={`${l(kinds[w.type])} · ${l(w.kind)}`} title={l(w.name)} lead={l(w.summary)} crumbs={[{ label: c.nav.work, href: '/work' }, { label: l(w.name) }]}>
 		<div class="mt-8 flex flex-wrap items-center gap-3" data-reveal>
 			{w.url && <a href={w.url} target="_blank" rel="noopener" class="btn btn--ink btn--out">{c.work.visit}</a>}
+			{w.repo && <a href={w.repo} target="_blank" rel="noopener" class="btn btn--line btn--out">{c.work.source}</a>}
 			<span class="text-[0.82rem] text-ink-faint">{l(credit.note)}</span>
 		</div>
 	</PageHero>

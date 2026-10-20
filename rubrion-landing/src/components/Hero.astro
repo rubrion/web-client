@@ -48,8 +48,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
 	<canvas class="dhero__gl" data-hero-gl aria-hidden="true"></canvas>
 
 	<div class="dhero__copy">
-		<p class="eyebrow !text-white/75">{c.hero.kicker}</p>
-		<h1 class="display mt-5 text-[2.6rem] sm:text-6xl lg:text-[5.2rem]" set:html={c.hero.title} />
+		<p class="eyebrow !text-white/75 max-md:!hidden">{c.hero.kicker}</p>
+		<h1 class="display mt-5 max-md:mt-0 text-[2.6rem] sm:text-6xl lg:text-[5.2rem]" set:html={c.hero.title} />
 		<p class="mt-6 max-w-md text-base/7 text-white/75 md:text-[1.05rem]/8">{c.hero.lead}</p>
 		<div class="mt-9 flex flex-wrap gap-3">
 			<a href="#contact" class="btn btn--light">{c.hero.cta}</a>
@@ -530,9 +530,27 @@ const pad = (n: number) => String(n).padStart(2, '0');
 			right: auto;
 		}
 
+		/* Phones: the project name only; the hero is busy enough. */
+		.dhero__meta {
+			display: none;
+		}
+
+		.dhero__img {
+			object-position: center;
+		}
+
+		/* The edges of the slice, darker. */
+		.dhero__slot::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.55));
+			pointer-events: none;
+		}
+
 		.dhero__cap--top {
 			top: auto;
-			bottom: 9rem;
+			bottom: 7.5rem;
 		}
 
 		.dhero__cap--bottom {
