@@ -1,7 +1,8 @@
 ---
-// Home hero: the portfolio, full screen. Two projects at once, split by a
-// diagonal hairline seam; every few seconds the next pair opens from the seam
-// outward on a straight diagonal edge (scripts/hero-gl.ts).
+// Home hero: the portfolio, full screen. It opens on Rubry alone (a "single"
+// frame over the whole screen), then two projects at a time, split by a
+// diagonal hairline seam; every few seconds the next frame opens from the
+// seam outward on a straight diagonal edge (scripts/hero-gl.ts).
 //
 // The first pair is plain <img> (fast first paint, and the fallback without
 // WebGL); the canvas takes over once its textures are decoded. It only draws
@@ -11,20 +12,26 @@ import { l } from '../data/locale';
 import { c } from '../data/site';
 import { credits, heroWork } from '../data/work';
 
-const slides = heroWork.map((w) => ({
+const toSlide = (w: (typeof heroWork)[number]) => ({
 	slug: w.slug,
 	name: l(w.name),
 	kind: l(w.kind),
 	credit: credits[w.credit].name,
-	src: `/work/${w.image}-1600.webp`,
-	small: `/work/${w.image}-900.webp`,
-}));
-const pairs = Math.ceil(slides.length / 2);
-const at = (i: number) => slides[i % slides.length];
+	src: `/work/${w.heroImage ?? w.image}-1600.webp`,
+	small: `/work/${w.heroImage ?? w.image}-900.webp`,
+});
+// Frames: each single slide on its own, the rest two by two.
+type Slide = ReturnType<typeof toSlide>;
+const frames: Slide[][] = heroWork.filter((w) => w.single).map((w) => [toSlide(w)]);
+const rest = heroWork.filter((w) => !w.single).map(toSlide);
+for (let i = 0; i < rest.length; i += 2) frames.push(rest.slice(i, i + 2).length === 2 ? rest.slice(i, i + 2) : [rest[i], rest[0]]);
+const pairs = frames.length;
+const first = frames[0];
+const at = (i: number) => first[i] ?? first[0];
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 
-<section data-hero class="dhero relative h-[100svh] min-h-[38rem] overflow-hidden bg-[#141413] text-white" aria-roledescription="carousel" aria-label={c.work.kicker} data-slides={JSON.stringify(slides)}>
+<section data-hero class:list={['dhero relative h-[100svh] min-h-[38rem] overflow-hidden bg-[#141413] text-white', first.length === 1 && 'is-single']} aria-roledescription="carousel" aria-label={c.work.kicker} data-frames={JSON.stringify(frames)}>
 	{[0, 1].map((slot) => (
 		<div class:list={['dhero__slot', slot === 0 ? 'dhero__slot--top' : 'dhero__slot--bottom']}>
 			<img
@@ -32,7 +39,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 				data-fallback={slot}
 				src={at(slot).src}
 				srcset={`${at(slot).small} 900w, ${at(slot).src} 1600w`}
-				sizes="100vw"
+				sizes={first.length === 1 ? '(max-width: 767px) 300vw, 100vw' : '100vw'}
 				alt=""
 				width="1600"
 				height="900"
@@ -58,7 +65,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 	</div>
 
 	{[0, 1].map((slot) => (
-		<a href={`/work/${at(slot).slug}`} data-cap={slot} class:list={['dhero__cap', slot === 0 ? 'dhero__cap--top' : 'dhero__cap--bottom']}>
+		<a href={`/work/${at(slot).slug}`} data-cap={slot} hidden={!first[slot]} class:list={['dhero__cap', slot === 0 ? 'dhero__cap--top' : 'dhero__cap--bottom']}>
 			<span class="dhero__meta"><span data-cap-credit>{at(slot).credit}</span> · <span data-cap-kind>{at(slot).kind}</span></span>
 			<span class="dhero__name" data-cap-name>{at(slot).name}</span>
 			<span class="visually-hidden">{c.hero.viewCase}</span>
@@ -87,8 +94,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 	const hero = document.querySelector<HTMLElement>('[data-hero]');
 	if (hero) {
-		const slides: Slide[] = JSON.parse(hero.dataset.slides!);
-		const pairs = Math.ceil(slides.length / 2);
+		// A frame is a pair, or one slide that takes the whole screen.
+		const frames: Slide[][] = JSON.parse(hero.dataset.frames!);
+		const pairs = frames.length;
 		const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const narrow = () => innerWidth < 768;
 		const caps = [...hero.querySelectorAll<HTMLAnchorElement>('[data-cap]')];
@@ -98,8 +106,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 		const pauseBtn = hero.querySelector<HTMLButtonElement>('[data-pause]')!;
 		const announce = hero.querySelector<HTMLElement>('[data-announce]')!;
 		const canvas = hero.querySelector<HTMLCanvasElement>('[data-hero-gl]')!;
-		const at = (i: number) => slides[((i % slides.length) + slides.length) % slides.length];
-		const pairOf = (p: number) => [at(p * 2), at(p * 2 + 1)] as [Slide, Slide];
+		const pairOf = (p: number) => frames[((p % pairs) + pairs) % pairs];
 
 		// Created on idle after load (below): context creation and shader
 		// compilation stay off the critical path.
@@ -107,8 +114,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
 		let pair = 0;
 		let busy = false;
 
-		const caption = (slot: number, s: Slide) => {
+		const caption = (slot: number, s: Slide | undefined) => {
 			const cap = caps[slot];
+			cap.hidden = !s;
+			if (!s) return;
 			cap.href = `/work/${s.slug}`;
 			cap.querySelector('[data-cap-credit]')!.textContent = s.credit;
 			cap.querySelector('[data-cap-kind]')!.textContent = s.kind;
@@ -145,9 +154,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
 				r.draw(performance.now() / 1000);
 			} else {
 				// No (hardware) WebGL: fade the halves out, swap once decoded, fade in.
-				const pre = incoming.map((s) => {
+				const pre = [incoming[0], incoming[1] ?? incoming[0]].map((s) => {
 					const img = new Image();
-					img.src = innerWidth < 1000 ? s.small : s.src;
+					img.src = innerWidth < 1000 && incoming.length > 1 ? s.small : s.src;
 					return img.decode().then(() => img.src).catch(() => img.src);
 				});
 				hero.classList.add('is-swapping');
@@ -156,13 +165,15 @@ const pad = (n: number) => String(n).padStart(2, '0');
 					img.srcset = '';
 					img.src = srcs[i];
 				});
+				hero.classList.toggle('is-single', incoming.length === 1);
 				hero.classList.remove('is-swapping');
 			}
-			incoming.forEach((s, i) => caption(i, s));
+			[0, 1].forEach((i) => caption(i, incoming[i]));
+			hero.classList.toggle('is-single', incoming.length === 1);
 			caps.forEach((cap) => cap.classList.remove('is-changing'));
 			pair = next;
 			count.textContent = String(pair + 1).padStart(2, '0');
-			announce.textContent = `${incoming[0].name} · ${incoming[1].name}`;
+			announce.textContent = incoming.map((s) => s.name).join(' · ');
 			gl?.preload(pairOf(pair + 1));
 			busy = false;
 		};
@@ -307,6 +318,34 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 	.dhero__slot--bottom .dhero__shade {
 		background: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.15) 50%);
+	}
+
+	/* A single frame: one image over the whole screen, shaded as one piece,
+	   no seam, its caption low on the right. */
+	.dhero.is-single .dhero__img {
+		top: 0;
+		height: 100%;
+	}
+
+	.dhero.is-single .dhero__slot .dhero__shade {
+		background:
+			linear-gradient(90deg, rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.6) 45%, rgba(0, 0, 0, 0.2) 85%),
+			linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 22%, transparent 65%, rgba(0, 0, 0, 0.55));
+	}
+
+	/* One unclipped layer, so no hairline shows where the halves would meet. */
+	.dhero.is-single .dhero__slot--top {
+		clip-path: none;
+	}
+
+	.dhero.is-single .dhero__slot--bottom,
+	.dhero.is-single .dhero__seam {
+		display: none;
+	}
+
+	.dhero.is-single .dhero__cap--top {
+		top: auto;
+		bottom: 6rem;
 	}
 
 	.dhero__gl {
@@ -523,6 +562,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 		.dhero__slot--top .dhero__shade {
 			background: rgba(0, 0, 0, 0.6);
+		}
+
+		.dhero.is-single .dhero__slot .dhero__shade {
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 75%, rgba(0, 0, 0, 0.6));
+		}
+
+		.dhero.is-single .dhero__cap--top {
+			bottom: 5rem;
+		}
+
+		.dhero.is-single .dhero__img {
+			object-position: 66% top;
 		}
 
 		.dhero__cap {
