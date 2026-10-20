@@ -22,8 +22,8 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 			</dl>
 		</div>
 
-		<div class="relative" data-reveal>
-			<form id="contact-form" class="space-y-8" data-strings={JSON.stringify(t)} >
+		<div class="contact-box relative" data-reveal data-contact-box>
+			<form id="contact-form" class="contact-form space-y-8" data-strings={JSON.stringify(t)} >
 				<div class="grid gap-8 sm:grid-cols-2">
 					<div>
 						<label for="contact-name" class={label}>{t.name} *</label>
@@ -55,12 +55,14 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 					{t.error}: <span id="contact-error-text"></span>
 				</p>
 
-				<button id="contact-submit" type="submit" class="btn btn--light disabled:cursor-not-allowed disabled:opacity-50">{t.send}</button>
+				<button id="contact-submit" type="submit" class="btn btn--light disabled:cursor-not-allowed disabled:opacity-50"><span class="form-spinner" aria-hidden="true"></span><span data-label>{t.send}</span></button>
 			</form>
 
-			<div id="contact-success" class="absolute inset-0 hidden flex-col items-start justify-center bg-slab">
-				<p class="eyebrow !text-slab-ink/70">{t.sent}</p>
-				<p class="display mt-5 text-3xl">{t.sentNote}</p>
+			<div id="contact-success" class="contact-sent" role="status" aria-live="polite">
+				<svg class="sent-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"></circle><path d="M15 27l7 7 15-16"></path></svg>
+				<p class="eyebrow mt-8 !text-slab-ink/70">{t.sent}</p>
+				<p class="display mt-4 text-3xl">{t.sentNote}</p>
+				<button type="button" class="link-arrow link-arrow--in mt-8 !text-slab-ink" data-contact-again>{t.another}</button>
 			</div>
 		</div>
 	</div>
@@ -96,6 +98,11 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 	const errorBox = document.getElementById('contact-error');
 	const errorText = document.getElementById('contact-error-text');
 	const successBox = document.getElementById('contact-success');
+	const box = document.querySelector<HTMLElement>('[data-contact-box]');
+	successBox?.querySelector('[data-contact-again]')?.addEventListener('click', () => {
+		box?.classList.remove('is-sent');
+		(document.getElementById('contact-name') as HTMLInputElement | null)?.focus({ preventScroll: true });
+	});
 	const turnstileContainer = document.getElementById('contact-turnstile');
 
 	const captchaRequired = Boolean(TURNSTILE_SITE_KEY);
@@ -105,7 +112,8 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 	const updateSubmitState = (submitting = false) => {
 		if (!submitBtn) return;
 		submitBtn.disabled = submitting || (captchaRequired && !turnstileToken);
-		submitBtn.textContent = submitting ? t.sending : captchaRequired && !turnstileToken ? t.verifying : t.send;
+		submitBtn.classList.toggle('is-busy', submitting);
+		submitBtn.querySelector('[data-label]')!.textContent = submitting ? t.sending : captchaRequired && !turnstileToken ? t.verifying : t.send;
 	};
 
 	const renderTurnstile = () => {
@@ -216,14 +224,12 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 				return;
 			}
 
-			successBox?.classList.remove('hidden');
-			successBox?.classList.add('flex');
-			window.setTimeout(() => {
-				successBox?.classList.add('hidden');
-				successBox?.classList.remove('flex');
-				form.reset();
-				resetCaptcha();
-			}, 4000);
+			// The form steps back and the confirmation draws in over it; it stays
+			// until the visitor asks to write again.
+			box?.classList.add('is-sent');
+			form.reset();
+			resetCaptcha();
+			(successBox?.querySelector('[data-contact-again]') as HTMLElement | null)?.focus({ preventScroll: true });
 		} catch (submitError) {
 			console.error('Failed to send message:', submitError);
 			showError(t.network);
@@ -233,3 +239,81 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-slab-ink/
 		}
 	});
 </script>
+
+<style>
+	/* Sent: the form fades back and lifts away, the confirmation rises in
+	   with its check drawing itself. */
+	.contact-form {
+		transition:
+			opacity 0.5s ease,
+			transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.5s ease,
+			visibility 0s linear 0s;
+	}
+
+	.contact-box.is-sent .contact-form {
+		opacity: 0;
+		transform: translateY(-14px) scale(0.98);
+		filter: blur(6px);
+		visibility: hidden;
+		pointer-events: none;
+		transition-delay: 0s, 0s, 0s, 0.6s;
+	}
+
+	.contact-sent {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		opacity: 0;
+		transform: translateY(16px);
+		visibility: hidden;
+		pointer-events: none;
+		transition:
+			opacity 0.5s ease,
+			transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+			visibility 0s linear 0.7s;
+	}
+
+	.contact-box.is-sent .contact-sent {
+		opacity: 1;
+		transform: none;
+		visibility: visible;
+		pointer-events: auto;
+		transition-delay: 0.25s, 0.25s, 0s;
+	}
+
+	.sent-check {
+		width: 3.5rem;
+		height: 3.5rem;
+		fill: none;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.sent-check circle {
+		stroke: rgba(255, 255, 255, 0.18);
+	}
+
+	.sent-check path {
+		stroke: var(--color-brand-400);
+		stroke-dasharray: 40;
+		stroke-dashoffset: 40;
+	}
+
+	.contact-box.is-sent .sent-check path {
+		transition: stroke-dashoffset 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.65s;
+		stroke-dashoffset: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-form,
+		.contact-sent,
+		.contact-box.is-sent .sent-check path {
+			transition: none;
+		}
+	}
+</style>
