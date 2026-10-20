@@ -9,13 +9,16 @@
 import type { L } from './locale';
 
 export type Credit = 'rubrion' | 'mt2' | 'sennatech';
-export type Service = 'crm' | 'agents' | 'data' | 'seo' | 'chatbots' | 'publishing' | 'marketplace';
+export type Service = 'crm' | 'agents' | 'data' | 'platforms' | 'seo' | 'chatbots' | 'publishing' | 'marketplace';
+/** What the work is, for grouping and filtering. */
+export type Kind = 'saas' | 'platform' | 'site' | 'library';
 export type Mock = 'dashboard' | 'chat' | 'site' | 'mobile' | 'table' | 'report';
 
 export interface Work {
 	slug: string;
 	name: L;
 	credit: Credit;
+	type: Kind;
 	kind: L;
 	summary: L;
 	problem: L;
@@ -40,6 +43,7 @@ export const work: Work[] = [
 		slug: 'advogue',
 		name: { en: 'Advogue', pt: 'Advogue' },
 		credit: 'rubrion',
+		type: 'platform',
 		kind: { en: 'Law firm website template', pt: 'Template de site para advocacia' },
 		summary: {
 			en: 'A 17-page bilingual law-firm site with digit-roller counters, a page wipe and a scripted intake chat.',
@@ -63,6 +67,7 @@ export const work: Work[] = [
 		slug: 'animally',
 		name: { en: 'Animally', pt: 'Animally' },
 		credit: 'rubrion',
+		type: 'site',
 		kind: { en: 'Home vet care, São Carlos', pt: 'Veterinária a domicílio, São Carlos' },
 		summary: {
 			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home, also running as a ready-made clinic site.',
@@ -73,19 +78,20 @@ export const work: Work[] = [
 			pt: 'Uma prática nova, ainda sem clínica, precisava de agendamentos, um posicionamento honesto e um jeito de responder “quanto custa?” sem uma assistente em tempo integral.',
 		},
 		built: {
-			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP. The same build runs as a full clinic site, with a team, a 24/7 strip, a shop and a style guide, at vet.rubrion.ai.',
-			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP. A mesma base roda como site completo de clínica, com equipe, faixa 24h, loja e guia de estilo, em vet.rubrion.ai.',
+			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP. The same build runs as a full clinic site, with a team, a 24/7 strip, a shop and a style guide.',
+			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP. A mesma base roda como site completo de clínica, com equipe, faixa 24h, loja e guia de estilo.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
 		services: ['seo', 'chatbots'],
-		url: 'https://animally.pet',
-		image: 'animally',
+		url: 'https://vet.rubrion.ai',
+		image: 'vet-demo',
 		hero: 2,
 	},
 	{
 		slug: 'mt2-data-site',
 		name: { en: 'MT2 Data website', pt: 'Site da MT2 Data' },
 		credit: 'mt2',
+		type: 'site',
 		kind: { en: 'Data-science consultancy site', pt: 'Site de consultoria em ciência de dados' },
 		summary: {
 			en: 'The consultancy’s bilingual site, with an insights section its team publishes to directly.',
@@ -109,6 +115,7 @@ export const work: Work[] = [
 		slug: 'brad',
 		name: { en: 'Brad', pt: 'Brad' },
 		credit: 'rubrion',
+		type: 'saas',
 		kind: { en: 'Marketing agent on WhatsApp', pt: 'Agente de marketing no WhatsApp' },
 		summary: {
 			en: 'A B2B marketing agent that writes briefs, social posts and on-brand banners from a WhatsApp chat.',
@@ -132,6 +139,7 @@ export const work: Work[] = [
 		slug: 'curriclean',
 		name: { en: 'CurriClean', pt: 'CurriClean' },
 		credit: 'rubrion',
+		type: 'saas',
 		kind: { en: 'CV scoring, SaaS', pt: 'Avaliação de currículos, SaaS' },
 		summary: {
 			en: 'Paste a role and a CV, get a structured fit score with matched skills, gaps and a recommendation.',
@@ -155,6 +163,7 @@ export const work: Work[] = [
 		slug: 'edgeletter',
 		name: { en: 'EdgeLetter', pt: 'EdgeLetter' },
 		credit: 'rubrion',
+		type: 'platform',
 		kind: { en: 'Newsletter & blog platform', pt: 'Plataforma de newsletter e blog' },
 		summary: {
 			en: 'Blog, editor, media and newsletter dispatch for a whole publication on one Worker.',
@@ -178,6 +187,7 @@ export const work: Work[] = [
 		slug: 'rubrion-store',
 		name: { en: 'Rubrion Store', pt: 'Rubrion Store' },
 		credit: 'rubrion',
+		type: 'platform',
 		kind: { en: 'Multi-vendor marketplace', pt: 'Marketplace multivendedor' },
 		summary: {
 			en: 'A marketplace where independent sellers onboard, list and sell under one brand.',
@@ -200,6 +210,7 @@ export const work: Work[] = [
 		slug: 'mondesa',
 		name: { en: 'MonDesa', pt: 'MonDesa' },
 		credit: 'rubrion',
+		type: 'site',
 		kind: { en: 'IoT disaster monitoring, sister org', pt: 'Monitoramento de desastres com IoT, organização irmã' },
 		summary: {
 			en: 'The site of our sister organisation, which builds IoT early-warning systems for natural disasters.',
@@ -223,6 +234,7 @@ export const work: Work[] = [
 		slug: 'cerne',
 		name: { en: 'Cerne', pt: 'Cerne' },
 		credit: 'rubrion',
+		type: 'saas',
 		kind: { en: 'Project intelligence for architecture firms', pt: 'Inteligência de projeto para escritórios de arquitetura' },
 		summary: {
 			en: 'Method, checklists and review for architecture projects, moved off a single SQLite file onto the edge.',
@@ -238,12 +250,15 @@ export const work: Work[] = [
 		},
 		stack: ['Hono', 'D1', 'Drizzle', 'Astro', 'Playwright'],
 		services: ['crm', 'data'],
-		mock: 'dashboard',
+		url: 'https://cerne.arq.br',
+		image: 'cerne',
+		hero: 9,
 	},
 	{
 		slug: 'equanime',
 		name: { en: 'Equânime', pt: 'Equânime' },
 		credit: 'rubrion',
+		type: 'saas',
 		kind: { en: 'Conflict checks for academic boards', pt: 'Análise de conflito em bancas acadêmicas' },
 		summary: {
 			en: 'Register a board, collect each member’s Lattes CV, apply the conflict rules and download a PDF report.',
@@ -262,30 +277,10 @@ export const work: Work[] = [
 		mock: 'report',
 	},
 	{
-		slug: 'nown-creative',
-		name: { en: 'NOWN Creative', pt: 'NOWN Creative' },
-		credit: 'rubrion',
-		kind: { en: 'Video production studio, Curitiba', pt: 'Produtora de vídeo, Curitiba' },
-		summary: {
-			en: 'A showreel-first site for a creative video studio whose clients include Coca-Cola, Disney and Red Bull.',
-			pt: 'Um site com o showreel em primeiro lugar para uma produtora de vídeo que atende marcas como Coca-Cola, Disney e Red Bull.',
-		},
-		problem: {
-			en: 'The work is the pitch: the site had to play video fast and stay out of its way.',
-			pt: 'O trabalho é o argumento: o site precisava tocar vídeo rápido e não atrapalhar.',
-		},
-		built: {
-			en: 'A React and Vite single-page site with a project grid, autoplaying reels and contact.',
-			pt: 'Um site React e Vite de página única com grade de projetos, vídeos em reprodução automática e contato.',
-		},
-		stack: ['React', 'Vite', 'Tailwind'],
-		services: ['seo'],
-		mock: 'site',
-	},
-	{
 		slug: 'mastra-cloudflare',
 		name: { en: 'Mastra on Cloudflare', pt: 'Mastra na Cloudflare' },
 		credit: 'rubrion',
+		type: 'library',
 		kind: { en: 'AI agent starter on Workers', pt: 'Base de agente de IA nos Workers' },
 		summary: {
 			en: 'Our base for light agents: Mastra on a plain Worker, with conversation memory in D1.',
@@ -307,6 +302,7 @@ export const work: Work[] = [
 		slug: 'colmeia',
 		name: { en: 'Colmeia', pt: 'Colmeia' },
 		credit: 'mt2',
+		type: 'saas',
 		kind: { en: 'Farm decisions over WhatsApp', pt: 'Decisões do campo pelo WhatsApp' },
 		summary: {
 			en: 'Specialised agents answer machine health, slaughter timing and crop forecasting questions in plain language.',
@@ -322,12 +318,14 @@ export const work: Work[] = [
 		},
 		stack: ['Python', 'LLM agents', 'WhatsApp', 'Grafana'],
 		services: ['agents', 'chatbots', 'data'],
-		mock: 'chat',
+		url: 'https://colmeia.agr.br',
+		image: 'colmeia',
 	},
 	{
 		slug: 'dexplan',
 		name: { en: 'Dexplan', pt: 'Dexplan' },
 		credit: 'mt2',
+		type: 'platform',
 		kind: { en: 'Production planning optimiser', pt: 'Otimizador de planejamento de produção' },
 		summary: {
 			en: 'Allocates orders to production days with a MILP solver, respecting capacity and seller quotas.',
@@ -346,16 +344,17 @@ export const work: Work[] = [
 		mock: 'table',
 	},
 	{
-		slug: 'mt2-allocation',
-		name: { en: 'MT2 Allocation', pt: 'MT2 Allocation' },
+		slug: 'dynamication',
+		name: { en: 'Dynamication', pt: 'Dynamication' },
 		credit: 'mt2',
+		type: 'platform',
 		kind: { en: 'Team allocation hub', pt: 'Central de alocação de equipe' },
 		summary: {
 			en: 'Who is on which project, at what capacity, with every project’s resources in one place.',
 			pt: 'Quem está em qual projeto, com qual dedicação, e os recursos de cada projeto num só lugar.',
 		},
 		problem: {
-			en: 'Allocation across billable and demo projects lived in chats and memory.',
+			en: 'Allocation across billable projects and demos lived in chats and people’s memory.',
 			pt: 'A alocação entre projetos faturáveis e demonstrações vivia em conversas e na memória.',
 		},
 		built: {
@@ -367,30 +366,10 @@ export const work: Work[] = [
 		mock: 'dashboard',
 	},
 	{
-		slug: 'mt2-datalake-gateway',
-		name: { en: 'MT2 Datalake Gateway', pt: 'MT2 Datalake Gateway' },
-		credit: 'mt2',
-		kind: { en: 'Datalake access gateway', pt: 'Gateway de acesso ao datalake' },
-		summary: {
-			en: 'Clients reach exactly the datasets their API key allows, by API or through visual apps.',
-			pt: 'Cada cliente acessa exatamente os conjuntos de dados que sua chave permite, por API ou por apps visuais.',
-		},
-		problem: {
-			en: 'Sharing datalake extracts by hand was slow and hard to audit.',
-			pt: 'Compartilhar extrações do datalake à mão era lento e difícil de auditar.',
-		},
-		built: {
-			en: 'An API Worker with index-file access control, an admin for keys and permissions, and client-specific forecast apps.',
-			pt: 'Uma API em Worker com controle de acesso por arquivo de índice, um painel de chaves e permissões, e apps de previsão por cliente.',
-		},
-		stack: ['Cloudflare Workers', 'TypeScript', 'React'],
-		services: ['data'],
-		mock: 'table',
-	},
-	{
 		slug: 'avilink',
 		name: { en: 'Avilink', pt: 'Avilink' },
 		credit: 'sennatech',
+		type: 'saas',
 		kind: { en: 'Farm management, mobile + web', pt: 'Gestão de granjas, mobile + web' },
 		summary: {
 			en: 'Field teams log flocks, vaccines and medication on their phones, online or off.',
@@ -406,12 +385,14 @@ export const work: Work[] = [
 		},
 		stack: ['Flutter', 'BLoC', 'Cloudflare', 'Codemagic'],
 		services: ['crm', 'data'],
-		mock: 'mobile',
+		url: 'https://app.avilink.com.br',
+		image: 'avilink',
 	},
 	{
 		slug: 'bccc',
 		name: { en: 'BCCC', pt: 'BCCC' },
 		credit: 'sennatech',
+		type: 'site',
 		kind: { en: 'Brazil-Canada Chamber of Commerce', pt: 'Câmara de Comércio Brasil-Canadá' },
 		summary: {
 			en: 'Events, membership, news and resources for the Brazil-Canada Chamber of Commerce, in English, Portuguese and French.',
@@ -422,17 +403,20 @@ export const work: Work[] = [
 			pt: 'Um site antigo em um só idioma não atendia associados de dois países.',
 		},
 		built: {
-			en: 'A static Astro site on a Worker with three languages, event and news sections migrated from the old site, and structured data.',
-			pt: 'Um site estático em Astro num Worker com três idiomas, eventos e notícias migrados do site antigo e dados estruturados.',
+			en: 'A static Astro site on a Worker with three languages, events, news and resources managed by the team in Sanity CMS, content migrated from the old site, and structured data.',
+			pt: 'Um site estático em Astro num Worker com três idiomas, eventos, notícias e materiais geridos pela equipe no Sanity CMS, conteúdo migrado do site antigo e dados estruturados.',
 		},
-		stack: ['Astro', 'Cloudflare Workers'],
+		stack: ['Astro', 'Sanity CMS', 'Cloudflare Workers'],
 		services: ['seo', 'publishing'],
-		mock: 'site',
+		url: 'https://bccc.rubrion.ai',
+		image: 'bccc',
+		hero: 10,
 	},
 	{
 		slug: 'mvm-war-room',
 		name: { en: 'MVM War Room', pt: 'MVM War Room' },
 		credit: 'sennatech',
+		type: 'saas',
 		kind: { en: 'TikTok Shop KPI war room', pt: 'Sala de guerra de KPIs do TikTok Shop' },
 		summary: {
 			en: 'Sales, orders and performance from TikTok Shop, synced and shown live for the team.',
@@ -451,6 +435,81 @@ export const work: Work[] = [
 		url: 'https://mvmwarroom.io',
 		image: 'mvm-war-room',
 	},
+	{
+		slug: 'bioexame',
+		name: { en: 'Bioexame', pt: 'Bioexame' },
+		credit: 'rubrion',
+		type: 'site',
+		kind: { en: 'Clinical laboratory, São João del-Rei', pt: 'Laboratório clínico, São João del-Rei' },
+		summary: {
+			en: 'Site and patient portal for a clinical lab: guided onboarding and secure online results.',
+			pt: 'Site e portal do paciente de um laboratório clínico: cadastro guiado e resultados on-line com segurança.',
+		},
+		problem: {
+			en: 'Patients had to collect their results in person, and the lab’s site said little about its services.',
+			pt: 'Os pacientes precisavam buscar os resultados no balcão, e o site do laboratório dizia pouco sobre os serviços.',
+		},
+		built: {
+			en: 'A clean homepage for the brand, services and contacts; guided onboarding so patients register and start using the portal; and a results area where they view and download their lab results securely.',
+			pt: 'Uma página inicial clara com marca, serviços e contatos; um cadastro guiado para o paciente começar a usar o portal; e uma área de resultados onde ele vê e baixa os exames com segurança.',
+		},
+		stack: ['Web portal', 'Patient onboarding', 'Secure results'],
+		services: ['crm', 'seo'],
+		url: 'https://exame.bio',
+		image: 'bioexame',
+	},
+	{
+		slug: 'lms',
+		name: { en: 'LMS', pt: 'LMS' },
+		credit: 'rubrion',
+		type: 'platform',
+		kind: { en: 'LGPD training for a clinical lab', pt: 'Treinamento em LGPD para laboratório clínico' },
+		summary: {
+			en: 'A training platform that takes a lab’s staff through data protection practice, step by step.',
+			pt: 'Uma plataforma de treinamento que conduz a equipe de um laboratório pelas práticas de proteção de dados, passo a passo.',
+		},
+		problem: {
+			en: 'Complying with Brazil’s data protection law (LGPD) meant every employee had to be trained, and the lab had to show it.',
+			pt: 'Cumprir a LGPD exigia treinar todos os funcionários, e o laboratório precisava comprovar isso.',
+		},
+		built: {
+			en: 'A customised learning platform with structured internal courses on the lab’s own data handling, progress per employee and a record of completion for compliance.',
+			pt: 'Uma plataforma de aprendizagem sob medida, com cursos internos estruturados sobre o tratamento de dados do próprio laboratório, progresso por funcionário e registro de conclusão para a conformidade.',
+		},
+		stack: ['LMS', 'Course builder', 'Progress tracking', 'LGPD'],
+		services: ['crm'],
+		mock: 'dashboard',
+	},
+	{
+		slug: 'acme-business-template',
+		name: { en: 'Business site template', pt: 'Template de site empresarial' },
+		credit: 'rubrion',
+		type: 'platform',
+		kind: { en: 'Consultancy website template', pt: 'Template de site para consultorias' },
+		summary: {
+			en: 'A bilingual one-page business site with a product page, shown as the fictional Acme Advisory.',
+			pt: 'Um site empresarial bilíngue de uma página com página de produto, apresentado como a fictícia Acme Advisory.',
+		},
+		problem: {
+			en: 'Consultancies need a credible, fast site with lead capture, without starting from a blank page each time.',
+			pt: 'Consultorias precisam de um site rápido e confiável que capte contatos, sem começar do zero a cada vez.',
+		},
+		built: {
+			en: 'An Astro site on a Cloudflare Worker in English and Portuguese, with a wave page transition, a HubSpot-ready lead form with Turnstile, a newsletter signup and generated placeholder art, so every string, colour and image can be swapped per client.',
+			pt: 'Um site em Astro num Worker da Cloudflare, em português e inglês, com transição de página em onda, formulário de contato pronto para HubSpot com Turnstile, newsletter e arte gerada, para trocar textos, cores e imagens por cliente.',
+		},
+		stack: ['Astro', 'Cloudflare Workers', 'HubSpot', 'Turnstile'],
+		services: ['seo'],
+		url: 'https://acme.rubrion.ai',
+		image: 'acme',
+	},
 ];
+
+export const kinds: Record<Kind, L> = {
+	saas: { en: 'SaaS', pt: 'SaaS' },
+	platform: { en: 'White-label & tools', pt: 'White-label e ferramentas' },
+	site: { en: 'Websites & portals', pt: 'Sites e portais' },
+	library: { en: 'Libraries', pt: 'Bibliotecas' },
+};
 
 export const heroWork = work.filter((w) => w.hero && w.image).sort((a, b) => a.hero! - b.hero!);

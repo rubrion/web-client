@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { SITE_URL, SUPPORT_EMAIL, l } from '../data/locale';
 import { DEFAULT_DESCRIPTION } from '../data/seo';
 import { c } from '../data/site';
-import { credits, work } from '../data/work';
+import { credits, kinds, work } from '../data/work';
 
 // llms.txt for AI crawlers, generated from the same data as the pages so it
 // can't drift (the hand-written one listed products that went offline).
@@ -10,7 +10,7 @@ export const prerender = true;
 
 export const GET: APIRoute = () => {
 	const services = Object.values(c.services.items).map(([name, text]) => `- **${name}**: ${text}`);
-	const cases = work.map((w) => `- [${l(w.name)}](${SITE_URL}/work/${w.slug}): ${l(w.kind)}. ${l(w.summary)} (${credits[w.credit].name}${w.url ? `, live: ${w.url}` : ''})`);
+	const cases = work.map((w) => `- [${l(w.name)}](${SITE_URL}/work/${w.slug}): ${l(kinds[w.type])}, ${l(w.kind)}. ${l(w.summary)} (${credits[w.credit].name}${w.url ? `, live: ${w.url}` : ''})`);
 	const faq = c.faq.items.map(([q, a]) => `- **${q}** ${a}`);
 	const body = `# Rubrion
 

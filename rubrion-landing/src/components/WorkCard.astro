@@ -4,7 +4,7 @@
 import Mockup from './Mockup.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
-import { credits, type Work } from '../data/work';
+import { credits, kinds, type Work } from '../data/work';
 
 interface Props {
 	work: Work;
@@ -30,11 +30,12 @@ const { work: w, index = 0, large = false } = Astro.props;
 			<Mockup kind={w.mock ?? 'site'} seed={index + 1} />
 		)}
 	</div>
-	<p class="meta mt-5">{credits[w.credit].name} · {l(w.kind)}</p>
+	<p class="meta mt-5">{l(kinds[w.type])} · {credits[w.credit].name}</p>
 	<h3 class:list={['display mt-2 flex items-baseline justify-between gap-4', large ? 'text-[1.75rem]' : 'text-[1.4rem]']}>
 		<span>{l(w.name)}</span>
 		<span class="text-base text-ink-faint transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand-500" aria-hidden="true">↗</span>
 	</h3>
+	<p class="mt-1 text-[0.85rem] font-bold text-ink-soft">{l(w.kind)}</p>
 	<p class="mt-2 line-clamp-2 max-w-lg text-[0.92rem]/6 text-ink-soft">{l(w.summary)}</p>
 	<p class="mt-3 text-[0.78rem] text-ink-faint">{w.services.map((s) => c.services.items[s][0]).join(' · ')}</p>
 </a>
