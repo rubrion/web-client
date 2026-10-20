@@ -645,19 +645,19 @@ html.dg-arriving body::after {
   }
 }
 
-/* Ambient canvas before (or without) WebGL: the same triangular lattice,
- * drawn with three families of hairlines, faded toward the left. */
+/* Ambient canvas before (or without) WebGL: the same field of rubies as a
+ * repeating hairline tile, faded toward the left. */
 canvas[data-ambient] {
-  --lat: color-mix(in srgb, var(--ink) 9%, transparent);
   background:
     radial-gradient(60% 70% at 92% 0%, rgba(224, 71, 63, 0.09), transparent 70%),
-    repeating-linear-gradient(0deg, transparent 0 63px, var(--lat) 63px 64px),
-    repeating-linear-gradient(60deg, transparent 0 63px, var(--lat) 63px 64px),
-    repeating-linear-gradient(-60deg, transparent 0 63px, var(--lat) 63px 64px);
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='124' viewBox='0 0 100 124'%3E%3Cg fill='none' stroke='rgba%2820%2C20%2C19%2C0.1%29' stroke-width='1'%3E%3Cpath d='M23 10h54l17 26-44 54-44-54z'/%3E%3Cpath d='M-27 72h54l17 26-44 54-44-54z'/%3E%3Cpath d='M73 72h54l17 26-44 54-44-54z'/%3E%3Cpath d='M-27 -52h54l17 26-44 54-44-54z'/%3E%3Cpath d='M73 -52h54l17 26-44 54-44-54z'/%3E%3Cpath opacity='.5' d='M10 36h80M-40 98h80M60 98h80M-40 -26h80M60 -26h80'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 100px 124px;
   mask: linear-gradient(90deg, rgba(0, 0, 0, 0.35), #000 75%);
 }
+.dark canvas[data-ambient],
 canvas[data-ambient="slab"] {
-  --lat: rgba(243, 242, 238, 0.06);
+  background:
+    radial-gradient(60% 70% at 92% 0%, rgba(224, 71, 63, 0.12), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='124' viewBox='0 0 100 124'%3E%3Cg fill='none' stroke='rgba%28243%2C242%2C238%2C0.07%29' stroke-width='1'%3E%3Cpath d='M23 10h54l17 26-44 54-44-54z'/%3E%3Cpath d='M-27 72h54l17 26-44 54-44-54z'/%3E%3Cpath d='M73 72h54l17 26-44 54-44-54z'/%3E%3Cpath d='M-27 -52h54l17 26-44 54-44-54z'/%3E%3Cpath d='M73 -52h54l17 26-44 54-44-54z'/%3E%3Cpath opacity='.5' d='M10 36h80M-40 98h80M60 98h80M-40 -26h80M60 -26h80'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 100px 124px;
 }
 canvas[data-ambient].is-live {
   background: none;
