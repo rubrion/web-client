@@ -33,3 +33,4 @@ pnpm-debug.log*
 
 # Local toolchain pin for mise; CI reads .node-version instead
 .tool-versions
+dist-pt/

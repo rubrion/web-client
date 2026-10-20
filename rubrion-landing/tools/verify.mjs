@@ -118,10 +118,10 @@ async function load(path, width) {
 }
 
 // Every built page (dist/client/**/*.html), as clean URLs.
-const root = new URL("../dist/client/", import.meta.url).pathname;
+const root = new URL("../dist/", import.meta.url).pathname;
 const walk = (dir) => readdirSync(dir).flatMap((f) => (statSync(join(dir, f)).isDirectory() ? walk(join(dir, f)) : [join(dir, f)]));
 const pages = walk(root)
-	.filter((f) => f.endsWith(".html") && !f.endsWith("404.html"))
+	.filter((f) => f.endsWith(".html") && !f.endsWith("404.html") && !f.includes("/__pt/"))
 	.map((f) => "/" + relative(root, f).replace(/(index)?\.html$/, "").replace(/\/$/, ""))
 	.sort();
 pages.push("/does-not-exist");

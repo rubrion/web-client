@@ -1,11 +1,14 @@
 ---
 // Services as an editorial index, not a card grid: the heading holds still on
-// the left while the seven services run down the right, each a numbered row
-// on a hairline. Hovering a row draws its rule in red.
+// the left while the five services run down the right, each a numbered row on
+// a hairline with the cases that prove it. Hovering a row draws its rule in red.
 import SectionHead from './SectionHead.astro';
 import ServiceIcon from './ServiceIcon.astro';
 import { c } from '../data/site';
-import type { Service } from '../data/work';
+import { l } from '../data/locale';
+import { serviceCases, work, type Service } from '../data/work';
+
+const bySlug = new Map(work.map((w) => [w.slug, w]));
 
 const items = Object.entries(c.services.items) as [Service, [string, string]][];
 ---
@@ -23,6 +26,13 @@ const items = Object.entries(c.services.items) as [Service, [string, string]][];
 					<div>
 						<h3 class="display text-2xl md:text-[1.9rem]">{name}</h3>
 						<p class="mt-2 max-w-md text-[0.95rem]/7 text-ink-soft">{text}</p>
+						<p class="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[0.85rem]">
+							<span class="meta">{c.services.examples}</span>
+							{serviceCases[key].map((slug) => {
+								const w = bySlug.get(slug)!;
+								return <a href={`/work/${slug}`} class="font-bold text-ink underline decoration-hair underline-offset-4 transition hover:decoration-brand-500">{l(w.name)}</a>;
+							})}
+						</p>
 					</div>
 					<ServiceIcon name={key} class="svc__icon h-6 w-6" />
 				</li>

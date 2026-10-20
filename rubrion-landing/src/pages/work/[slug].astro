@@ -33,7 +33,7 @@ const ld = {
 <Layout title={l(w.name)} description={l(w.summary)} ogImage={w.image ? new URL(`/work/${w.image}-1600.webp`, Astro.site).href : undefined}>
 	<PageHero kicker={`${l(kinds[w.type])} · ${l(w.kind)}`} title={l(w.name)} lead={l(w.summary)} crumbs={[{ label: c.nav.work, href: '/work' }, { label: l(w.name) }]}>
 		<div class="mt-8 flex flex-wrap items-center gap-3" data-reveal>
-			{w.url && <a href={w.url} target="_blank" rel="noopener" class="btn btn--ink">{c.work.visit} ↗</a>}
+			{w.url && <a href={w.url} target="_blank" rel="noopener" class="btn btn--ink btn--out">{c.work.visit}</a>}
 			<span class="text-[0.82rem] text-ink-faint">{l(credit.note)}</span>
 		</div>
 	</PageHero>

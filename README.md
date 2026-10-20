@@ -11,9 +11,9 @@ handles IoT for energy systems.
 |--------|-------|---------|
 | `rubrion-landing/` | Astro 7 static + Tailwind v4 + GSAP/Lenis (monochrome + red "spark" brand) | **rubrion.ai** (EN) and **rubrion.com.br** (PT) |
 
-One codebase, two builds: `npm run build:en` and `npm run build:pt` produce the
-English and Portuguese sites, each deployed to its own Worker
-(`rubrion-landing`, `rubrion-landing-pt`). All copy lives in
+One codebase, one Worker (`rubrion-landing`): `npm run build` produces the
+English site and the Portuguese one, and the Worker serves rubrion.ai in
+English and rubrion.com.br in Portuguese. All copy lives in
 `rubrion-landing/src/data/site.ts` as `{ en, pt }`, so a change is made once.
 The contact form posts to the support-email-worker (`../support-email-worker/`),
 the newsletter subscribes through [EdgeLetter](https://edgeletter.rubrion.ai)
@@ -26,7 +26,7 @@ the newsletter subscribes through [EdgeLetter](https://edgeletter.rubrion.ai)
 cd rubrion-landing && npm install
 npm run dev          # English  (:4321)
 npm run dev:pt       # Portuguese
-npm run deploy       # build + deploy rubrion.ai, then rubrion.com.br
+npm run deploy       # build + deploy both domains (one Worker)
 ```
 
 Non-secret build-time vars (`VITE_SUPPORT_WORKER_URL`, Turnstile site key — the
