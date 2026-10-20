@@ -19,9 +19,9 @@ const facts = [
 <section id="build" class="overflow-hidden bg-paper px-5 py-28 md:px-8 md:py-40">
 	<div class="mx-auto max-w-7xl">
 		<SectionHead kicker={c.build.kicker} title={c.build.title} />
-		<div class="mt-16 grid grid-cols-1 gap-4 md:auto-rows-[26rem] md:grid-cols-5">
+		<div class="mt-16 grid grid-cols-1 gap-4 md:auto-rows-[minmax(26rem,auto)] md:grid-cols-5">
 				<div id="agents" class="feature-card group md:col-span-3" data-reveal data-idle>
-			<div class="relative h-full w-full overflow-hidden">
+			<div class="relative min-h-56 w-full flex-1 overflow-hidden">
 				<div class="relative flex h-full w-full items-center justify-center">
 					<svg width="128" height="69" viewBox="0 0 128 69" fill="none" class="absolute -top-6 left-1/2 -translate-x-[90%] text-hair">
 						<path d="M1 0.5L1 29.586C1 36.214 6.373 41.586 13 41.586H115C121.627 41.586 127 46.959 127 53.586L127 75" stroke="currentColor" stroke-width="1"></path>
@@ -69,18 +69,18 @@ const facts = [
 					</div>
 				</div>
 			</div>
-			<div class="p-6 md:h-40">
+			<div class="p-6">
 				<h3 class="display text-[1.35rem]">{c.build.agentTitle}</h3>
 				<p class="mt-3 max-w-sm text-[0.95rem]/7 text-ink-soft">{c.build.agentText}</p>
 			</div>
 		</div>
 
 			<div class="feature-card group md:col-span-2" data-reveal>
-				<div class="p-6 md:h-40">
+				<div class="p-6">
 					<h3 class="display text-[1.35rem]">{c.build.hostTitle}</h3>
 					<p class="mt-3 max-w-xs text-[0.95rem]/7 text-ink-soft">{c.build.hostText}</p>
 				</div>
-				<div class="relative h-full w-full overflow-hidden">
+				<div class="relative min-h-64 w-full flex-1 overflow-hidden">
 					<div class="relative h-64 w-full md:h-full">
 						<canvas id="edge-globe" class="globe-canvas absolute -right-12 -bottom-40 md:-right-20 md:-bottom-40" aria-hidden="true"></canvas>
 					</div>

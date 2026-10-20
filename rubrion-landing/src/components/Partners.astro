@@ -1,0 +1,52 @@
+---
+// "Built with and for": a quiet logo row under the hero. Logos rest in grey
+// and take their own colour on hover; the partner without an SVG logo yet
+// (Sennatech) is set as a wordmark in the display face.
+import { c } from '../data/site';
+
+const partners = [
+	{ name: 'MT2 Data', href: 'https://mt2data.cloud', logo: '/logos/partners/mt2data.svg', w: 132, h: 18 },
+	{ name: 'Sennatech', href: 'https://www.sennatechnology.com' },
+	{ name: 'Cerne', href: 'https://cerne.arq.br', logo: '/logos/partners/cerne.svg', w: 26, h: 26, label: true },
+	{ name: 'BCCC', href: 'https://bccc.rubrion.ai' },
+	{ name: 'Bioexame', href: 'https://exame.bio' },
+];
+---
+
+<section class="border-b border-hair bg-paper px-5 py-9 md:px-8" aria-label={c.work.with}>
+	<div class="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:gap-14">
+		<p class="eyebrow shrink-0">{c.work.with}</p>
+		<ul class="flex flex-wrap items-center gap-x-12 gap-y-5">
+			{partners.map((p) => (
+				<li>
+					<a href={p.href} target="_blank" rel="noopener" class="partner flex items-center gap-2.5" aria-label={p.name}>
+						{p.logo && <img src={p.logo} alt="" width={p.w} height={p.h} loading="lazy" style={`height:${p.h}px;width:auto`} />}
+						{(!p.logo || p.label) && <span class="display text-[1.3rem]">{p.name}</span>}
+					</a>
+				</li>
+			))}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.partner {
+		color: var(--ink-faint);
+		opacity: 0.85;
+		transition:
+			color 0.3s ease,
+			opacity 0.3s ease,
+			filter 0.3s ease;
+		filter: grayscale(1);
+	}
+
+	.partner:hover {
+		color: var(--ink);
+		opacity: 1;
+		filter: none;
+	}
+
+	:global(.dark) .partner img {
+		filter: invert(1) hue-rotate(180deg);
+	}
+</style>

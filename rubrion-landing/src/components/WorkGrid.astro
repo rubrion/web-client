@@ -1,11 +1,13 @@
 ---
-// Work list with credit filters (scripts/filters.ts): all, Rubrion, MT2 Data,
-// Sennatech. `limit` shows the first n, two to a row and larger (home); the
-// full list on /work runs three to a row with filters.
+// Work list with filters (scripts/filters.ts): by type (SaaS, white-label &
+// tools, websites & portals, libraries) or by partner (MT2 Data, Sennatech).
+// `limit` shows the first n, two to a row and larger (home); the full list on
+// /work runs three to a row with filters.
 import WorkCard from './WorkCard.astro';
 import WorkFilters from './WorkFilters.astro';
 import { c } from '../data/site';
-import { credits, work, type Credit } from '../data/work';
+import { l } from '../data/locale';
+import { credits, kinds, work, type Credit, type Kind } from '../data/work';
 
 interface Props {
 	limit?: number;
@@ -13,20 +15,25 @@ interface Props {
 }
 const { limit, filters = true } = Astro.props;
 const list = limit ? work.slice(0, limit) : work;
-const used = (Object.keys(credits) as Credit[]).filter((k) => list.some((w) => w.credit === k));
+const types = (Object.keys(kinds) as Kind[]).filter((k) => list.some((w) => w.type === k));
+const partners = (Object.keys(credits) as Credit[]).filter((k) => k !== 'rubrion' && list.some((w) => w.credit === k));
 ---
 
 {filters && (
 	<div class="mt-12 flex flex-wrap gap-x-7 gap-y-2 border-b border-hair" role="group" data-reveal>
 		<button type="button" data-filter="all" aria-pressed="true" class="filter-pill">{c.work.all}<span>{list.length}</span></button>
-		{used.map((k) => (
+		{types.map((k) => (
+			<button type="button" data-filter={k} aria-pressed="false" class="filter-pill">{l(kinds[k])}<span>{list.filter((w) => w.type === k).length}</span></button>
+		))}
+		<span class="mx-1 self-center h-4 w-px bg-hair" aria-hidden="true"></span>
+		{partners.map((k) => (
 			<button type="button" data-filter={k} aria-pressed="false" class="filter-pill">{credits[k].name}<span>{list.filter((w) => w.credit === k).length}</span></button>
 		))}
 	</div>
 )}
 <ul class:list={['mt-12 grid grid-cols-1 gap-x-8 gap-y-16', limit ? 'md:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']} data-filter-list>
 	{list.map((w, i) => (
-		<li data-cat={w.credit} data-reveal>
+		<li data-cat={`${w.type} ${w.credit}`} data-reveal>
 			<WorkCard work={w} index={i} large={!!limit} />
 		</li>
 	))}

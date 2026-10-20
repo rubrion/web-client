@@ -9,8 +9,8 @@ export const SITE_NAME = 'Rubrion';
 export const SITE_TAGLINE = c.tagline;
 
 export const DEFAULT_DESCRIPTION = l({
-  en: 'Rubrion is a software studio for small and mid-sized businesses: CRMs, light AI agents, data mining, SEO, chatbots, newsletters and marketplaces. High quality on lean infrastructure, at a fair price, and the code is yours.',
-  pt: 'A Rubrion é um estúdio de software para pequenas e médias empresas: CRMs, agentes de IA leves, mineração de dados, SEO, chatbots, newsletters e marketplaces. Alta qualidade em infraestrutura enxuta, por um preço justo, e o código é seu.',
+  en: 'Rubrion is a software studio for small and mid-sized businesses: CRMs, light AI agents, data mining and data platforms, SEO, chatbots, newsletters and marketplaces. High quality on lean infrastructure, at a fair price, and the code is yours.',
+  pt: 'A Rubrion é um estúdio de software para pequenas e médias empresas: CRMs, agentes de IA leves, mineração e plataformas de dados, SEO, chatbots, newsletters e marketplaces. Alta qualidade em infraestrutura enxuta, por um preço justo, e o código é seu.',
 });
 
 export const OG_IMAGE_PATH = LANG === 'pt' ? '/images/og-pt.png' : '/images/og.png';

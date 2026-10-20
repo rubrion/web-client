@@ -8,7 +8,7 @@ import WorkCard from '../../components/WorkCard.astro';
 import ServiceIcon from '../../components/ServiceIcon.astro';
 import { l } from '../../data/locale';
 import { c } from '../../data/site';
-import { credits, work, type Work } from '../../data/work';
+import { credits, kinds, work, type Work } from '../../data/work';
 
 export function getStaticPaths() {
 	return work.map((w) => ({ params: { slug: w.slug }, props: { w } }));
@@ -31,7 +31,7 @@ const ld = {
 ---
 
 <Layout title={l(w.name)} description={l(w.summary)} ogImage={w.image ? new URL(`/work/${w.image}-1600.webp`, Astro.site).href : undefined}>
-	<PageHero kicker={`${credit.name} · ${l(w.kind)}`} title={l(w.name)} lead={l(w.summary)} crumbs={[{ label: c.nav.work, href: '/work' }, { label: l(w.name) }]}>
+	<PageHero kicker={`${l(kinds[w.type])} · ${l(w.kind)}`} title={l(w.name)} lead={l(w.summary)} crumbs={[{ label: c.nav.work, href: '/work' }, { label: l(w.name) }]}>
 		<div class="mt-8 flex flex-wrap items-center gap-3" data-reveal>
 			{w.url && <a href={w.url} target="_blank" rel="noopener" class="btn btn--ink">{c.work.visit} ↗</a>}
 			<span class="text-[0.82rem] text-ink-faint">{l(credit.note)}</span>

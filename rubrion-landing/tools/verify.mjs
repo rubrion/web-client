@@ -206,7 +206,11 @@ const total = await js(`document.querySelectorAll("[data-filter-list] > li").len
 await js(`document.querySelector('[data-filter="mt2"]').click()`);
 await sleep(900);
 const shown = await js(`[...document.querySelectorAll("[data-filter-list] > li")].filter((li) => !li.classList.contains("is-filtered")).length`);
-check(shown > 0 && shown < total, "credit filter narrows the list", `${shown}/${total}`);
+check(shown > 0 && shown < total, "partner filter narrows the list", `${shown}/${total}`);
+await js(`document.querySelector('[data-filter="saas"]').click()`);
+await sleep(900);
+const saas = await js(`[...document.querySelectorAll("[data-filter-list] > li")].filter((li) => !li.classList.contains("is-filtered")).length`);
+check(saas > 0 && saas < total, "type filter narrows the list", `${saas}/${total}`);
 
 console.log("\nchat");
 await load("/faq", 1440);
