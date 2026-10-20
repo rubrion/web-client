@@ -60,7 +60,7 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 					</div>
 
 					<!-- mini chart -->
-					<div class="flex h-12 items-end gap-1 rounded-lg border border-hair p-2" role="img" aria-label={d.chart}>
+					<div class="flex min-h-12 flex-1 items-end gap-1 rounded-lg border border-hair p-2" role="img" aria-label={d.chart}>
 						{chart.map((h) => (
 							<span class="flex-1 rounded-sm bg-surface-2" style={`height:${h}%`}></span>
 						))}
@@ -77,6 +77,27 @@ const chart = [40, 65, 50, 80, 60, 90, 70];
 <script>
 	// one build morphs desktop <-> mobile on a loop
 	const morph = document.querySelector<HTMLElement>('[data-morph]');
+
+	// Both states get the taller state's height, so toggling never changes
+	// the card's height or pushes the page below it.
+	const fix = () => {
+		if (!morph || !morph.offsetParent) return;
+		const was = morph.classList.contains('is-mobile');
+		morph.classList.add('dm-measure');
+		morph.style.minHeight = '';
+		const h = [false, true].map((m) => {
+			morph.classList.toggle('is-mobile', m);
+			return morph.offsetHeight;
+		});
+		morph.classList.toggle('is-mobile', was);
+		morph.style.minHeight = `${Math.max(...h)}px`;
+		morph.offsetHeight;
+		morph.classList.remove('dm-measure');
+	};
+	fix();
+	document.fonts?.ready.then(fix);
+	document.fonts?.addEventListener('loadingdone', fix);
+	window.addEventListener('resize', fix, { passive: true });
 	if (morph && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 		let mobile = false;
 		let timer = 0;

@@ -329,6 +329,10 @@ body {
 
 /* ---- commission card: one build that morphs desktop <-> mobile ---- */
 .device-morph {
+  /* Both states share one height (set from the mobile state in
+     CustomBuildDevice.astro), so the morph never moves the card. */
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 100%;
   /* right-anchored: full width on desktop, collapses toward the right corner on mobile */
@@ -341,6 +345,7 @@ body {
   box-shadow: var(--shadow-soft);
   transition: max-width 1.8s cubic-bezier(0.65, 0, 0.35, 1), border-radius 1.8s cubic-bezier(0.65, 0, 0.35, 1);
 }
+.dm-measure, .dm-measure * { transition: none !important; }
 .dark .device-morph { border-color: var(--hair); background: var(--color-neutral-900); }
 .device-morph.is-mobile { max-width: 15rem; border-radius: 1.75rem; }
 
@@ -377,7 +382,7 @@ body {
 .dark .dm-notch { background: var(--color-neutral-600); }
 .device-morph.is-mobile .dm-notch { display: block; }
 
-.dm-body { display: flex; gap: 0.75rem; padding: 0.75rem; }
+.dm-body { flex: 1 1 auto; display: flex; gap: 0.75rem; padding: 0.75rem; }
 .dm-rail {
   flex: 0 0 26%;
   display: flex;
@@ -388,9 +393,15 @@ body {
 }
 .device-morph.is-mobile .dm-rail { flex-basis: 0; opacity: 0; margin-right: -0.75rem; }
 .dm-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0.625rem; }
-.dm-cards { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.dm-cards { display: flex; flex-wrap: nowrap; gap: 0.5rem; }
+/* Wrap only in the phone state: while widening back, the cards stay on one
+   row instead of passing through a taller two-row layout. */
+.device-morph.is-mobile .dm-cards { flex-wrap: wrap; }
 .dm-card {
   flex: 1 1 30%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;

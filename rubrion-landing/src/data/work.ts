@@ -350,8 +350,8 @@ export const work: Work[] = [
 		mock: 'table',
 	},
 	{
-		slug: 'dynamication',
-		name: { en: 'Dynamication', pt: 'Dynamication' },
+		slug: 'mt2-allocation',
+		name: { en: 'MT2 Allocation', pt: 'MT2 Allocation' },
 		credit: 'mt2',
 		type: 'platform',
 		kind: { en: 'Team allocation hub', pt: 'Central de alocação de equipe' },
@@ -545,7 +545,7 @@ export const kinds: Record<Kind, L> = {
 export const serviceCases: Record<Service, string[]> = {
 	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
 	agents: ['brad', 'colmeia', 'curriclean'],
-	data: ['dexplan', 'equanime', 'dynamication'],
+	data: ['dexplan', 'equanime', 'mt2-allocation'],
 	sites: ['bccc', 'advogue', 'animally'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };

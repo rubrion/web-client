@@ -76,7 +76,7 @@ const en = {
 		hostTitle: 'Managed hosting, your region',
 		hostText: 'We host, operate and secure it for you in Brazil, Europe-West and US-East. Fixed fee, no lock-in.',
 		customTitle: 'Commission a custom build',
-		customText: 'Fullstack web and mobile on a fixed fee and timeline: a video-studio site, a farm app that works offline, a marketplace. Source delivered, it’s yours.',
+		customText: 'Fullstack web and mobile on a fixed fee and timeline: a lab’s patient portal, a farm app that works offline, a marketplace. Source delivered, it’s yours.',
 		device: {
 			label: 'One build, reflowing from desktop to mobile',
 			nav: ['Overview', 'Projects', 'Reports', 'Settings'],
@@ -301,7 +301,7 @@ const pt: typeof en = {
 		hostTitle: 'Hospedagem gerenciada, na sua região',
 		hostText: 'Hospedamos, operamos e protegemos no Brasil, Europa-Oeste e EUA-Leste. Preço fixo, sem aprisionamento.',
 		customTitle: 'Encomende um projeto sob medida',
-		customText: 'Web e mobile fullstack com preço e prazo fixos: site de produtora de vídeo, app de granja que funciona offline, marketplace. Código entregue, é seu.',
+		customText: 'Web e mobile fullstack com preço e prazo fixos: portal de paciente de laboratório, app de granja que funciona offline, marketplace. Código entregue, é seu.',
 		device: {
 			label: 'Um projeto, se ajustando do desktop ao celular',
 			nav: ['Visão geral', 'Projetos', 'Relatórios', 'Ajustes'],

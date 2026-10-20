@@ -1,20 +1,22 @@
 ---
-// Our story: a short founder bio and a horizontal roadmap from the founding
-// (10 Oct 2024) to today, then two goals 3 and 5 years out. Past points are
+// Our story: a short founder bio and a horizontal roadmap from Samuel's
+// developer years (2021) through the founding (10 Oct 2024) to today, then two goals 3 and 5 years out. Past points are
 // solid and joined by a red line; future ones are hollow on a dashed line.
 // Stacks vertically on phones.
 import { l } from '../data/locale';
 
 const steps = l({
 	en: [
-		{ when: '10 Oct 2024', title: 'Founded', text: 'Samuel starts Rubrion on his own, as a freelance professional registered as an MEI.' },
+		{ when: '2021', title: 'Software developer', text: 'Samuel starts working as a software developer, and later takes freelance projects on the side to complement his income.' },
+		{ when: '10 Oct 2024', title: 'Founded', text: 'The freelance work becomes Rubrion, registered as an MEI.' },
 		{ when: 'Consulting', title: 'Bigger projects', text: 'Consulting work through MT2 Data and Sennatech brings larger systems and a steady pipeline.' },
 		{ when: 'Today', title: 'Teams and many projects', text: 'We work in teams and run several client projects and our own products side by side.' },
 		{ when: '2029 · in 3 years', title: 'An in-house team', text: 'Grow the team and hire our own professionals to staff consulting projects.', next: true },
 		{ when: '2031 · in 5 years', title: 'Our own products, at scale', text: 'Invest in innovative products of our own, built to sell at scale.', next: true },
 	],
 	pt: [
-		{ when: '10 out. 2024', title: 'Fundação', text: 'Samuel abre a Rubrion sozinho, como profissional freelancer registrado como MEI.' },
+		{ when: '2021', title: 'Desenvolvedor de software', text: 'Samuel começa a trabalhar como desenvolvedor de software e, depois, passa a pegar projetos freelance em paralelo para complementar a renda.' },
+		{ when: '10 out. 2024', title: 'Fundação', text: 'O trabalho freelance vira a Rubrion, registrada como MEI.' },
 		{ when: 'Consultoria', title: 'Projetos maiores', text: 'Consultorias com a MT2 Data e a Sennatech trazem sistemas maiores e demanda constante.' },
 		{ when: 'Hoje', title: 'Equipes e vários projetos', text: 'Trabalhamos em equipes e tocamos vários projetos de clientes e produtos próprios ao mesmo tempo.' },
 		{ when: '2029 · em 3 anos', title: 'Equipe própria', text: 'Crescer o time e contratar profissionais próprios para os projetos de consultoria.', next: true },
@@ -25,12 +27,12 @@ const t = l({
 	en: {
 		kicker: 'Our story',
 		role: 'Founder',
-		bio: 'Rubrion began on 10 October 2024 as one person, Samuel, taking freelance work as an MEI (Brazil’s micro-entrepreneur registration). Consulting projects grew it into a studio that now works in teams across several projects at once.',
+		bio: 'Samuel has worked as a software developer since 2021 and began freelancing alongside his job to complement his income. On 10 October 2024 that work became Rubrion, registered as an MEI (Brazil’s micro-entrepreneur status). Consulting projects grew it into a studio that now works in teams across several projects at once.',
 	},
 	pt: {
 		kicker: 'Nossa história',
 		role: 'Fundador',
-		bio: 'A Rubrion começou em 10 de outubro de 2024 com uma pessoa só, o Samuel, atendendo como freelancer registrado como MEI. Os projetos de consultoria a transformaram num estúdio que hoje trabalha em equipes, em vários projetos ao mesmo tempo.',
+		bio: 'Samuel trabalha como desenvolvedor de software desde 2021 e começou a fazer freelas em paralelo ao emprego para complementar a renda. Em 10 de outubro de 2024 esse trabalho virou a Rubrion, registrada como MEI. Os projetos de consultoria a transformaram num estúdio que hoje trabalha em equipes, em vários projetos ao mesmo tempo.',
 	},
 });
 ---
@@ -108,8 +110,8 @@ const t = l({
 
 	@media (min-width: 768px) {
 		.roadmap {
-			grid-template-columns: repeat(5, minmax(0, 1fr));
-			gap: 2rem;
+			grid-template-columns: repeat(6, minmax(0, 1fr));
+			gap: 1.5rem;
 		}
 
 		.roadmap__step {
@@ -119,7 +121,7 @@ const t = l({
 
 		.roadmap__step::before {
 			left: 0.5rem;
-			right: -2rem;
+			right: -1.5rem;
 			top: 0.36rem;
 			bottom: auto;
 			border-left: 0;
