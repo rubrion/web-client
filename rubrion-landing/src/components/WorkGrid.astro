@@ -1,6 +1,7 @@
 ---
 // Work list with filters (scripts/filters.ts): by type (SaaS, white-label &
-// tools, websites & portals, libraries) or by partner (MT2 Data, Sennatech).
+// tools, websites & portals, libraries) or by who it was built by (Rubrion, MT2
+// Data, Sennatech).
 // `limit` shows the first n, two to a row and larger (home); the full list on
 // /work runs three to a row with filters.
 import WorkCard from './WorkCard.astro';
@@ -16,7 +17,7 @@ interface Props {
 const { limit, filters = true } = Astro.props;
 const list = limit ? work.slice(0, limit) : work;
 const types = (Object.keys(kinds) as Kind[]).filter((k) => list.some((w) => w.type === k));
-const partners = (Object.keys(credits) as Credit[]).filter((k) => k !== 'rubrion' && list.some((w) => w.credit === k));
+const partners = (Object.keys(credits) as Credit[]).filter((k) => list.some((w) => w.credit === k));
 ---
 
 {filters && (

@@ -3,18 +3,24 @@
 	"compatibility_date": "2026-06-21",
 	"compatibility_flags": ["global_fetch_strictly_public"],
 	"name": "rubrion-landing",
-	"main": "@astrojs/cloudflare/entrypoints/server",
+	// One Worker, both sites: English at the root of ./dist, Portuguese under
+	// ./dist/__pt (npm run build). worker/index.ts picks the language by host.
+	"main": "worker/index.ts",
+	// Keep workers.dev and per-version preview URLs for reviewing uploads.
+	"workers_dev": true,
+	"preview_urls": true,
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS",
-		// Unknown paths get the branded 404 page (with a real 404 status).
+		"run_worker_first": true,
+		// Unknown English paths get the branded 404 page (with a real 404).
 		"not_found_handling": "404-page"
 	},
-	// Astro sessions KV binding injected by @astrojs/cloudflare. Bound to the
-	// existing namespace by id so wrangler does not try to auto-provision it on
-	// deploy (which fails with code 10014 once the namespace already exists).
-	"kv_namespaces": [
-		{ "binding": "SESSION", "id": "90cfe8f19b5f4ce3832edf39320a8164" }
+	"routes": [
+		{ "pattern": "rubrion.ai", "custom_domain": true },
+		{ "pattern": "www.rubrion.ai", "custom_domain": true },
+		{ "pattern": "rubrion.com.br", "custom_domain": true },
+		{ "pattern": "www.rubrion.com.br", "custom_domain": true }
 	],
 	"observability": {
 		"enabled": true

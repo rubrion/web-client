@@ -1,85 +1,85 @@
 ---
-// Live products only. Rubrion Store is offline, so it appears as work (a
-// case page), with a note here for anyone looking for a marketplace.
+// Products: everything in the portfolio that isn't a client website, grouped
+// by type (SaaS, white-label & tools, libraries), straight from work.ts so the
+// two pages never disagree. The Rubot agent platform closes the SaaS group.
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
+import Mockup from '../components/Mockup.astro';
+import { l } from '../data/locale';
 import { c } from '../data/site';
+import { credits, kinds, work, type Kind } from '../data/work';
 
 const p = c.products;
-const groups = [
-	{
-		label: p.saas,
-		items: [{ name: 'CurriClean', logo: '/logos/curriclean.webp', desc: p.curriclean, chips: p.curricleanChips, href: 'https://curriclean.rubrion.ai', link: 'curriclean.rubrion.ai', shot: '/work/curriclean-900.webp' }],
-	},
-	{
-		label: p.whitelabel,
-		items: [{ name: 'EdgeLetter', logo: '/logos/edgeletter.webp', desc: p.edgeletter, chips: p.edgeletterChips, href: 'https://edgeletter.rubrion.ai', link: 'edgeletter.rubrion.ai', shot: '/work/edgeletter-900.webp' }],
-	},
-];
+const groups = (['saas', 'platform', 'library'] as Kind[])
+	.map((k) => ({ k, label: l(kinds[k]), items: work.filter((w) => w.type === k) }))
+	.filter((g) => g.items.length);
 ---
 
 <Layout title={c.nav.products} description={p.lead}>
 	<PageHero kicker={p.kicker} title={p.title} lead={p.lead} crumbs={[{ label: c.nav.products }]} />
 
 	<section class="bg-paper px-5 pb-28 md:px-8 md:pb-40">
-		<div class="mx-auto max-w-7xl space-y-14">
+		<div class="mx-auto max-w-7xl space-y-24">
 			{groups.map((g) => (
 				<div>
-					<h2 class="eyebrow" data-reveal>{g.label}</h2>
-					{g.items.map((it) => (
-						<article class="feature-card mt-8 grid overflow-hidden md:grid-cols-[1fr_1.1fr]" data-reveal>
-							<div class="flex flex-col justify-between p-7 md:p-10">
-								<div>
-									<div class="flex items-center gap-3">
-										<span class="product-mark"><img src={it.logo} alt="" width="28" height="28" loading="lazy" class="h-7 w-7 object-contain" /></span>
-										<h3 class="display text-[1.9rem]">{it.name}</h3>
+					<div class="flex items-baseline justify-between gap-6 border-b border-hair pb-4" data-reveal>
+						<h2 class="display text-[1.9rem] md:text-[2.4rem]">{g.label}</h2>
+						<span class="meta">{String(g.items.length).padStart(2, '0')}</span>
+					</div>
+					<ul class="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+						{g.items.map((w) => (
+							<li data-reveal class="flex flex-col">
+								<a href={`/work/${w.slug}`} class="group block overflow-hidden rounded-md bg-surface-2">
+									<div class="aspect-[16/10]">
+										{w.image ? (
+											<img src={`/work/${w.image}-900.webp`} alt={l(w.name)} width="900" height="563" loading="lazy" decoding="async" class="h-full w-full object-cover object-top transition duration-[900ms] group-hover:scale-[1.03]" />
+										) : (
+											<Mockup kind={w.mock ?? 'dashboard'} seed={work.indexOf(w) + 1} />
+										)}
 									</div>
-									<p class="lead mt-4 max-w-md">{it.desc}</p>
-									<div class="mt-5 flex flex-wrap gap-2">{it.chips.map((ch) => <span class="tag-pill">{ch}</span>)}</div>
+								</a>
+								<p class="meta mt-5">{credits[w.credit].name}</p>
+								<h3 class="display mt-2 text-[1.45rem]">{l(w.name)}</h3>
+								<p class="mt-1 text-[0.85rem] font-bold text-ink-soft">{l(w.kind)}</p>
+								<p class="mt-2 text-[0.92rem]/6 text-ink-soft">{l(w.summary)}</p>
+								<div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-5">
+									{w.url && <a href={w.url} target="_blank" rel="noopener" class="link-arrow">{p.visit} {new URL(w.url).host}</a>}
+									<a href={`/work/${w.slug}`} class="link-arrow link-arrow--in">{p.case}</a>
 								</div>
-								<a href={it.href} target="_blank" rel="noopener" class="link-arrow mt-8 self-start">{it.link}</a>
+							</li>
+						))}
+					</ul>
+
+					{g.k === 'saas' && (
+						<div class="card mt-14 p-7 md:p-10" id="agents" data-reveal>
+							<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+								<div class="max-w-md">
+									<div class="flex items-center gap-3">
+										<span class="product-mark"><img src="/logos/rubot.webp" alt="" width="32" height="32" loading="lazy" class="h-8 w-8 object-contain" /></span>
+										<div>
+											<h3 class="display text-[1.9rem]">Rubot</h3>
+											<p class="meta">{p.platform}</p>
+										</div>
+									</div>
+									<p class="lead mt-4">{p.rubotText}</p>
+									<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="link-arrow mt-6">chat.rubrion.ai</a>
+								</div>
+								<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
+									<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-md border border-hair p-5 transition hover:border-ink">
+										<div class="flex items-center gap-2">
+											<img src="/logos/brad.svg" alt="" width="24" height="24" class="h-6 w-6" />
+											<span class="display text-lg">Brad</span>
+										</div>
+										<p class="mt-2 text-[0.85rem]/6 text-ink-soft">{p.bradText}</p>
+										<span class="link-arrow mt-4">brad.rubrion.ai</span>
+									</a>
+									<div class="flex items-center justify-center rounded-md border border-dashed border-hair p-5 text-center text-[0.85rem] text-ink-faint">{p.moreAgents}</div>
+								</div>
 							</div>
-							<div class="relative min-h-60 overflow-hidden bg-surface-2">
-								<img src={it.shot} alt="" width="900" height="563" loading="lazy" class="absolute inset-0 h-full w-full object-cover object-top" />
-							</div>
-						</article>
-					))}
+						</div>
+					)}
 				</div>
 			))}
-
-			<div id="agents">
-				<h2 class="eyebrow" data-reveal>{p.agents}</h2>
-				<div class="feature-card mt-6 p-7 md:p-10" data-reveal>
-					<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-						<div class="max-w-md">
-							<div class="flex items-center gap-3">
-								<span class="product-mark"><img src="/logos/rubot.webp" alt="" width="32" height="32" loading="lazy" class="rubot-img h-8 w-8 object-contain" /></span>
-								<div>
-									<h3 class="display text-[1.9rem]">Rubot</h3>
-									<p class="meta">{p.platform}</p>
-								</div>
-							</div>
-							<p class="lead mt-4">{p.rubotText}</p>
-							<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="link-arrow mt-6">chat.rubrion.ai</a>
-						</div>
-						<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
-							<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-md border border-hair p-5 transition hover:border-ink">
-								<div class="flex items-center gap-2">
-									<img src="/logos/brad.svg" alt="" width="24" height="24" class="h-6 w-6" />
-									<span class="display text-lg">Brad</span>
-								</div>
-								<p class="mt-2 text-[0.85rem]/6 text-ink-soft">{p.bradText}</p>
-								<span class="link-arrow mt-4">brad.rubrion.ai</span>
-							</a>
-							<div class="flex items-center justify-center rounded-md border border-dashed border-hair p-5 text-center text-[0.85rem] text-ink-faint">{p.moreAgents}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<p class="border-t border-hair pt-8 text-[0.95rem] text-ink-soft" data-reveal>
-				{p.marketplaceNote} <a href="/work/rubrion-store" class="link-arrow link-arrow--in ml-2">{p.seeCase}</a>
-			</p>
 		</div>
 	</section>
 </Layout>

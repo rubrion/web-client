@@ -1,16 +1,20 @@
 # rubrion-landing
 
-Rubrion's marketing site. One codebase builds two sites:
+Rubrion's marketing site. One codebase, one Worker (`rubrion-landing`), two
+sites:
 
-| Build | Language | Domain | Worker |
-| :-- | :-- | :-- | :-- |
-| `npm run build:en` | English | rubrion.ai | `rubrion-landing` (`wrangler.jsonc`) |
-| `npm run build:pt` | Portuguese | rubrion.com.br | `rubrion-landing-pt` (`wrangler.pt.jsonc`) |
+| Domain | Language | Served from |
+| :-- | :-- | :-- |
+| rubrion.ai, www.rubrion.ai | English | `dist/` |
+| rubrion.com.br, www.rubrion.com.br | Portuguese | `dist/__pt/` |
 
-`SITE_LOCALE` (set by those scripts) picks the language, the `site` URL and the
-Worker config. Each output is a complete static site in one language with
-canonical + hreflang pointing at its twin, so search engines index each domain
-on its own.
+`npm run build` builds English (`SITE_LOCALE=en`), then Portuguese
+(`SITE_LOCALE=pt`, into `dist-pt/`), and `tools/merge-pt.mjs` folds the
+Portuguese pages under `dist/__pt/` (bundles and images are shared).
+`worker/index.ts` answers rubrion.com.br from `/__pt` and everything else from
+the root; `/__pt` itself is never reachable. Each domain is a complete site in
+one language with canonical + hreflang pointing at its twin, so search engines
+index them separately.
 
 ## Where things live
 
@@ -50,10 +54,10 @@ Node 24 (`.tool-versions`).
 | :-- | :-- |
 | `npm run dev` / `npm run dev:pt` | Dev server in English / Portuguese |
 | `npm run check` | Type-check |
-| `npm run build:en` / `build:pt` | Build one site into `dist/` |
-| `npm run preview` | Serve the last build |
+| `npm run build` | Both languages, merged into `dist/` |
+| `npm run preview` | `wrangler dev` on the merged build (add `--host rubrion.com.br` for Portuguese) |
 | `node tools/verify.mjs <origin> [--reduced]` | Every page at 1440/390 + flows |
-| `npm run deploy:en` / `deploy:pt` / `deploy` | Build and deploy one or both |
+| `npm run deploy` | Build and deploy both domains |
 
-Both builds write to `dist/`, so build and deploy one language at a time (the
-deploy scripts do).
+Node: `.node-version` (24) for CI; locally mise reads an untracked
+`.tool-versions`.

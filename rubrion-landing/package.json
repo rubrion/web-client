@@ -8,18 +8,15 @@
 	"scripts": {
 		"dev": "astro dev",
 		"dev:pt": "SITE_LOCALE=pt astro dev",
-		"build": "npm run build:en",
+		"build": "npm run build:en && npm run build:pt && node tools/merge-pt.mjs",
 		"build:en": "SITE_LOCALE=en astro build",
-		"build:pt": "SITE_LOCALE=pt astro build",
-		"preview": "astro preview",
+		"build:pt": "SITE_LOCALE=pt astro build --outDir dist-pt",
+		"preview": "wrangler dev",
 		"check": "astro check",
-		"deploy:en": "npm run build:en && wrangler deploy",
-		"deploy:pt": "npm run build:pt && wrangler deploy",
-		"deploy": "npm run deploy:en && npm run deploy:pt",
+		"deploy": "npm run build && wrangler deploy",
 		"cf-typegen": "wrangler types"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^14.4.0",
 		"@astrojs/sitemap": "^3.7.3",
 		"@fontsource/lato": "^5.3.0",
 		"@fontsource/plus-jakarta-sans": "^5.2.8",

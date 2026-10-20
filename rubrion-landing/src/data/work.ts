@@ -9,7 +9,7 @@
 import type { L } from './locale';
 
 export type Credit = 'rubrion' | 'mt2' | 'sennatech';
-export type Service = 'crm' | 'agents' | 'data' | 'platforms' | 'seo' | 'chatbots' | 'publishing' | 'marketplace';
+export type Service = 'platforms' | 'agents' | 'data' | 'sites' | 'products';
 /** What the work is, for grouping and filtering. */
 export type Kind = 'saas' | 'platform' | 'site' | 'library';
 export type Mock = 'dashboard' | 'chat' | 'site' | 'mobile' | 'table' | 'report';
@@ -35,7 +35,7 @@ export interface Work {
 export const credits: Record<Credit, { name: string; url?: string; note: L }> = {
 	rubrion: { name: 'Rubrion', note: { en: 'Built by Rubrion', pt: 'Feito pela Rubrion' } },
 	mt2: { name: 'MT2 Data', url: 'https://mt2data.cloud', note: { en: 'Consulting via MT2 Data', pt: 'Consultoria via MT2 Data' } },
-	sennatech: { name: 'Sennatech', url: 'https://www.sennatechnology.com', note: { en: 'Delivered with Sennatech', pt: 'Entregue com a Sennatech' } },
+	sennatech: { name: 'Sennatech', url: 'https://www.linkedin.com/company/sennatechnology', note: { en: 'Delivered with Sennatech', pt: 'Entregue com a Sennatech' } },
 };
 
 export const work: Work[] = [
@@ -58,7 +58,7 @@ export const work: Work[] = [
 			pt: 'Páginas estáticas em Astro num Worker da Cloudflare, em português e inglês com detecção do idioma do dispositivo, formulários protegidos por Turnstile e um chat em árvore de decisão que passa dúvidas de preço para o WhatsApp.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'GSAP', 'Turnstile'],
-		services: ['seo', 'chatbots'],
+		services: ['sites'],
 		url: 'https://law.rubrion.ai',
 		image: 'law-demo',
 		hero: 1,
@@ -82,7 +82,7 @@ export const work: Work[] = [
 			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP. A mesma base roda como site completo de clínica, com equipe, faixa 24h, loja e guia de estilo.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
-		services: ['seo', 'chatbots'],
+		services: ['sites'],
 		url: 'https://vet.rubrion.ai',
 		image: 'vet-demo',
 		hero: 2,
@@ -106,7 +106,7 @@ export const work: Work[] = [
 			pt: 'Um site em Astro num Worker da Cloudflare, quase todo pré-renderizado, com páginas de artigos renderizadas no servidor e um painel apoiado em D1.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'D1'],
-		services: ['seo', 'publishing'],
+		services: ['sites'],
 		url: 'https://mt2data.cloud',
 		image: 'mt2data',
 		hero: 3,
@@ -130,7 +130,7 @@ export const work: Work[] = [
 			pt: 'Agentes especialistas (briefing, banner, post, insights) atrás de um gateway compatível com a API da OpenAI, com kit de marca por cliente e um painel para ligar e desligar agentes.',
 		},
 		stack: ['TypeScript', 'OpenRouter', 'WhatsApp', 'Cloudflare'],
-		services: ['agents', 'chatbots'],
+		services: ['agents'],
 		url: 'https://brad.rubrion.ai',
 		image: 'brad',
 		hero: 4,
@@ -154,7 +154,7 @@ export const work: Work[] = [
 			pt: 'Um serviço em FastAPI com saída de LLM validada por schema e guardada em JSONB, um painel em Next.js para acompanhar candidaturas, e o texto do currículo nunca é armazenado.',
 		},
 		stack: ['FastAPI', 'Next.js', 'PostgreSQL', 'instructor'],
-		services: ['agents', 'data'],
+		services: ['agents', 'platforms'],
 		url: 'https://curriclean.rubrion.ai',
 		image: 'curriclean',
 		hero: 5,
@@ -178,7 +178,7 @@ export const work: Work[] = [
 			pt: 'Astro SSR com D1 e R2: blog público, editor, envio de mídia e newsletter com confirmação dupla, uma implantação por cliente white-label.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'D1', 'R2'],
-		services: ['publishing', 'seo'],
+		services: ['products', 'sites'],
 		url: 'https://edgeletter.rubrion.ai',
 		image: 'edgeletter',
 		hero: 6,
@@ -202,7 +202,7 @@ export const work: Work[] = [
 			pt: 'Um marketplace Mercur (Medusa) em Turborepo: vitrine, painel do vendedor e API, em contêineres, com identidade de marca definida por implantação.',
 		},
 		stack: ['Medusa', 'Mercur', 'Next.js', 'Docker'],
-		services: ['marketplace'],
+		services: ['products'],
 		image: 'rubrion-store',
 		hero: 7,
 	},
@@ -225,7 +225,7 @@ export const work: Work[] = [
 			pt: 'Um site estático em Astro na Cloudflare, cada página montada como uma ilha, bilíngue.',
 		},
 		stack: ['Astro', 'Cloudflare'],
-		services: ['seo'],
+		services: ['sites'],
 		url: 'https://mondesa.com.br',
 		image: 'mondesa',
 		hero: 8,
@@ -249,7 +249,7 @@ export const work: Work[] = [
 			pt: 'Uma API em Hono nos Workers com D1 e migrações Drizzle, um host em Astro para a interface existente, uma ferramenta de importação dos dados antigos e testes ponta a ponta com Playwright.',
 		},
 		stack: ['Hono', 'D1', 'Drizzle', 'Astro', 'Playwright'],
-		services: ['crm', 'data'],
+		services: ['platforms', 'data'],
 		url: 'https://cerne.arq.br',
 		image: 'cerne',
 		hero: 9,
@@ -295,7 +295,7 @@ export const work: Work[] = [
 			pt: 'Mastra montado em Hono, memória consistente no D1, uma ferramenta de exemplo e um roteador de modelos que aceita qualquer endpoint compatível com a OpenAI.',
 		},
 		stack: ['Mastra', 'Hono', 'D1', 'Cloudflare Workers'],
-		services: ['agents', 'chatbots'],
+		services: ['agents'],
 		mock: 'chat',
 	},
 	{
@@ -317,7 +317,7 @@ export const work: Work[] = [
 			pt: 'Um agente por domínio de decisão atrás de um disparador de WhatsApp, com guardrails, memória compartilhada e monitoramento no Grafana.',
 		},
 		stack: ['Python', 'LLM agents', 'WhatsApp', 'Grafana'],
-		services: ['agents', 'chatbots', 'data'],
+		services: ['agents', 'data'],
 		url: 'https://colmeia.agr.br',
 		image: 'colmeia',
 	},
@@ -340,7 +340,7 @@ export const work: Work[] = [
 			pt: 'Um serviço de otimização com pedidos fracionados e cotas flexíveis ou rígidas, mais uma interface web para os planejadores revisarem e acompanharem o plano.',
 		},
 		stack: ['Python', 'MILP', 'React', 'pnpm monorepo'],
-		services: ['data'],
+		services: ['data', 'platforms'],
 		mock: 'table',
 	},
 	{
@@ -362,7 +362,7 @@ export const work: Work[] = [
 			pt: 'Um app em Astro num Worker atrás do Cloudflare Access, com pessoas, dedicação e links de cada projeto.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'Cloudflare Access'],
-		services: ['crm'],
+		services: ['platforms', 'data'],
 		mock: 'dashboard',
 	},
 	{
@@ -384,7 +384,7 @@ export const work: Work[] = [
 			pt: 'Um app Flutter com cache offline reativo, catálogo curado de vacinas e medicamentos, backend e painel web na Cloudflare.',
 		},
 		stack: ['Flutter', 'BLoC', 'Cloudflare', 'Codemagic'],
-		services: ['crm', 'data'],
+		services: ['platforms'],
 		url: 'https://app.avilink.com.br',
 		image: 'avilink',
 	},
@@ -407,7 +407,7 @@ export const work: Work[] = [
 			pt: 'Um site estático em Astro num Worker com três idiomas, eventos, notícias e materiais geridos pela equipe no Sanity CMS, conteúdo migrado do site antigo e dados estruturados.',
 		},
 		stack: ['Astro', 'Sanity CMS', 'Cloudflare Workers'],
-		services: ['seo', 'publishing'],
+		services: ['sites'],
 		url: 'https://bccc.rubrion.ai',
 		image: 'bccc',
 		hero: 10,
@@ -431,7 +431,7 @@ export const work: Work[] = [
 			pt: 'Rotinas de sincronização da API da loja para o Supabase, um serviço FastAPI e um painel com chat da equipe ao lado.',
 		},
 		stack: ['Supabase', 'FastAPI', 'React', 'pnpm'],
-		services: ['data'],
+		services: ['platforms', 'data'],
 		url: 'https://mvmwarroom.io',
 		image: 'mvm-war-room',
 	},
@@ -454,7 +454,7 @@ export const work: Work[] = [
 			pt: 'Uma página inicial clara com marca, serviços e contatos; um cadastro guiado para o paciente começar a usar o portal; e uma área de resultados onde ele vê e baixa os exames com segurança.',
 		},
 		stack: ['Web portal', 'Patient onboarding', 'Secure results'],
-		services: ['crm', 'seo'],
+		services: ['platforms', 'sites'],
 		url: 'https://exame.bio',
 		image: 'bioexame',
 	},
@@ -477,7 +477,7 @@ export const work: Work[] = [
 			pt: 'Uma plataforma de aprendizagem sob medida, com cursos internos estruturados sobre o tratamento de dados do próprio laboratório, progresso por funcionário e registro de conclusão para a conformidade.',
 		},
 		stack: ['LMS', 'Course builder', 'Progress tracking', 'LGPD'],
-		services: ['crm'],
+		services: ['products', 'platforms'],
 		mock: 'dashboard',
 	},
 	{
@@ -499,7 +499,7 @@ export const work: Work[] = [
 			pt: 'Um site em Astro num Worker da Cloudflare, em português e inglês, com transição de página em onda, formulário de contato pronto para HubSpot com Turnstile, newsletter e arte gerada, para trocar textos, cores e imagens por cliente.',
 		},
 		stack: ['Astro', 'Cloudflare Workers', 'HubSpot', 'Turnstile'],
-		services: ['seo'],
+		services: ['sites'],
 		url: 'https://acme.rubrion.ai',
 		image: 'acme',
 	},
@@ -510,6 +510,15 @@ export const kinds: Record<Kind, L> = {
 	platform: { en: 'White-label & tools', pt: 'White-label e ferramentas' },
 	site: { en: 'Websites & portals', pt: 'Sites e portais' },
 	library: { en: 'Libraries', pt: 'Bibliotecas' },
+};
+
+/** Cases shown under each service, in this order. */
+export const serviceCases: Record<Service, string[]> = {
+	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
+	agents: ['brad', 'colmeia', 'curriclean'],
+	data: ['dexplan', 'equanime', 'dynamication'],
+	sites: ['bccc', 'advogue', 'animally'],
+	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
 export const heroWork = work.filter((w) => w.hero && w.image).sort((a, b) => a.hero! - b.hero!);

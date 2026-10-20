@@ -157,6 +157,13 @@ body {
 .btn:hover::after {
   transform: translateX(3px);
 }
+/* Leaves the site: one diagonal arrow instead of the forward one. */
+.btn--out::after {
+  content: "↗";
+}
+.btn--out:hover::after {
+  transform: translate(2px, -2px);
+}
 .btn--ink {
   background: var(--ink);
   color: var(--paper);
