@@ -6,6 +6,7 @@ import SectionHead from './SectionHead.astro';
 import CustomBuildDevice from './CustomBuildDevice.astro';
 import Roller from './Roller.astro';
 import Roadmap from './Roadmap.astro';
+import Rubry from './Rubry.astro';
 import { c } from '../data/site';
 import { credits, work } from '../data/work';
 
@@ -60,8 +61,8 @@ const facts = [
 							<p class="text-[9px] tracking-wide text-ink-faint">{c.build.infra}</p>
 						</div>
 						<div class="card-nod relative flex h-14 w-full flex-col items-center justify-center gap-2 rounded-lg border border-hair bg-paper p-2 shadow-soft md:h-40">
-							<img src="/logos/rubot.webp" alt="Rubot" width="80" height="80" loading="lazy" class="rubot-img h-8 w-8 object-contain md:h-20 md:w-20" />
-							<p class="text-[9px] tracking-wide text-ink-faint">Rubot</p>
+							<Rubry class="h-8 w-8 md:h-20 md:w-20" title="Rubry" />
+							<p class="text-[9px] tracking-wide text-ink-faint">Rubry</p>
 						</div>
 						<div class="card-nod relative flex h-14 w-full flex-col items-center justify-center gap-2 rounded-lg border border-hair bg-paper p-2 shadow-soft md:h-40">
 							<svg viewBox="0 0 24 24" class="h-8 w-8 text-brand-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"></path></svg>

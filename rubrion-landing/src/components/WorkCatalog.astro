@@ -1,10 +1,11 @@
 ---
 // The work catalogue: every case grouped by type (SaaS, white-label & tools,
 // websites & portals, libraries), each with who built it, what it is, a link
-// to the live product and to its case page. The Rubot agent platform closes
+// to the live product and to its case page. The Rubry agent platform closes
 // the SaaS group. Pills on top narrow every group to who it was built with
 // (Rubrion, MT2 Data, Sennatech); `?by=mt2` opens it filtered. Used by /work.
 import Mockup from './Mockup.astro';
+import Rubry from './Rubry.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
 import { credits, kinds, work, type Credit, type Kind } from '../data/work';
@@ -63,15 +64,15 @@ const groups = (Object.keys(kinds) as Kind[])
 							<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
 								<div class="max-w-md">
 									<div class="flex items-center gap-3">
-										<span class="product-mark"><img src="/logos/rubot.webp" alt="" width="32" height="32" loading="lazy" class="h-8 w-8 object-contain" /></span>
+										<span class="product-mark"><Rubry class="h-9 w-9" float /></span>
 										<div>
-											<h3 class="display text-[1.9rem]">Rubot</h3>
+											<h3 class="display text-[1.9rem]">Rubry</h3>
 											<p class="meta">{p.platform}</p>
 										</div>
 									</div>
 									<p class="lead mt-4">{p.rubotText}</p>
 									<div class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-										<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="link-arrow">chat.rubrion.ai</a>
+										<a href="https://rubry.ai" target="_blank" rel="noopener" class="link-arrow">rubry.ai</a>
 										<a href="https://github.com/rubrion/rubot" target="_blank" rel="noopener" class="link-arrow">GitHub</a>
 									</div>
 								</div>

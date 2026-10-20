@@ -11,6 +11,7 @@
  * dark mode is a palette swap, not a second set of classes.
  */
 :root {
+  --ruby-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 22'%3E%3Cpath fill-rule='evenodd' d='M4.67 0.92Q5.28 0.00 6.38 0.00L17.62 0.00Q18.72 0.00 19.33 0.92L23.45 7.09Q24.00 7.92 23.35 8.68L12.78 21.09Q12.00 22.00 11.22 21.09L0.65 8.68Q0.00 7.92 0.55 7.09ZM1.6 7.92h20.8v1.3H1.6z'/%3E%3C/svg%3E") center / contain no-repeat;
   --paper: #f3f2ee;
   --surface: #ffffff;
   --surface-2: #e9e7e1;
@@ -109,13 +110,16 @@ body {
   text-transform: uppercase;
   color: var(--ink-soft);
 }
+/* The section marker: a small ruby, Rubrion's and Rubry's shape. */
+.ruby-mark,
 .eyebrow::before {
   content: "";
-  width: 0.38rem;
-  height: 0.38rem;
+  width: 0.66rem;
+  height: 0.6rem;
   flex: none;
   background: var(--color-brand-500);
-  transform: rotate(45deg);
+  -webkit-mask: var(--ruby-mask);
+  mask: var(--ruby-mask);
 }
 .eyebrow--plain::before {
   display: none;
@@ -334,10 +338,6 @@ body {
   12.5% { transform: rotateX(10deg); }
   25% { transform: rotateX(0deg); }
   100% { transform: rotateX(0deg); }
-}
-
-.rubot-img {
-  filter: grayscale(0.4) contrast(1.05);
 }
 
 /* ---- commission card: one build that morphs desktop <-> mobile ---- */
@@ -596,12 +596,13 @@ html.dg-arriving body::after {
 .prose-r ul li::before {
   content: "";
   position: absolute;
-  left: 0.15em;
-  top: 0.72em;
-  width: 0.36rem;
-  height: 0.36rem;
+  left: 0.1em;
+  top: 0.62em;
+  width: 0.55rem;
+  height: 0.49rem;
   background: var(--color-brand-500);
-  transform: rotate(45deg);
+  -webkit-mask: var(--ruby-mask);
+  mask: var(--ruby-mask);
 }
 .prose-r ol { list-style: decimal; }
 .prose-r ol li::marker { color: var(--ink-faint); }
