@@ -32,6 +32,10 @@ export interface Work {
 	repo?: string;
 	/** Shown in the home hero slider (needs `image`), in this order. */
 	hero?: number;
+	/** In the hero, takes the whole screen alone instead of half a pair. */
+	single?: boolean;
+	/** A different picture for the hero (public/work/<heroImage>-{1600,900}.webp). */
+	heroImage?: string;
 }
 
 export const credits: Record<Credit, { name: string; url?: string; note: L }> = {
@@ -41,6 +45,33 @@ export const credits: Record<Credit, { name: string; url?: string; note: L }> = 
 };
 
 export const work: Work[] = [
+	{
+		slug: 'rubry',
+		name: { en: 'Rubry', pt: 'Rubry' },
+		credit: 'rubrion',
+		type: 'platform',
+		kind: { en: 'Our AI agent platform', pt: 'Nossa plataforma de agentes de IA' },
+		summary: {
+			en: 'An AI agent that knows your business: it answers on the chat apps your team uses and routes each question to the right specialist agent.',
+			pt: 'Um agente de IA que conhece o seu negócio: responde nos apps de conversa da sua equipe e envia cada pergunta ao agente especialista certo.',
+		},
+		problem: {
+			en: 'Companies want answers from their own systems in a chat, without handing an AI their passwords or mixing one client’s data with another’s.',
+			pt: 'Empresas querem respostas dos próprios sistemas num chat, sem entregar senhas a uma IA nem misturar os dados de um cliente com os de outro.',
+		},
+		built: {
+			en: 'A gateway and middleware on Cloudflare Workers, a planner that picks specialist agents in Python, short-lived signed keys between them, one trace id across every hop, and a template for new agents. The scaffold is open source; Brad runs on it.',
+			pt: 'Gateway e middleware nos Workers da Cloudflare, um planejador que escolhe agentes especialistas em Python, chaves assinadas de curta duração entre eles, um id de rastreio em todos os serviços e um modelo para novos agentes. A base é de código aberto; o Brad roda nela.',
+		},
+		stack: ['Cloudflare Workers', 'Hono', 'FastAPI', 'pydantic-ai', 'D1'],
+		services: ['agents', 'products'],
+		url: 'https://rubry.ai',
+		image: 'rubry',
+		repo: 'https://github.com/rubrion/rubot',
+		heroImage: 'rubry-hero',
+		hero: 0,
+		single: true,
+	},
 	{
 		slug: 'advogue',
 		name: { en: 'Advogue', pt: 'Advogue' },
@@ -544,10 +575,10 @@ export const kinds: Record<Kind, L> = {
 /** Cases shown under each service, in this order. */
 export const serviceCases: Record<Service, string[]> = {
 	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
-	agents: ['brad', 'colmeia', 'curriclean'],
+	agents: ['rubry', 'brad', 'colmeia'],
 	data: ['dexplan', 'equanime', 'mt2-allocation'],
 	sites: ['bccc', 'advogue', 'animally'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
-export const heroWork = work.filter((w) => w.hero && w.image).sort((a, b) => a.hero! - b.hero!);
+export const heroWork = work.filter((w) => w.hero !== undefined && w.image).sort((a, b) => a.hero! - b.hero!);
