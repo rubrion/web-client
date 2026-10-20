@@ -9,7 +9,8 @@
  *   - exactly one <h1>; canonical + hreflang alternates (1440 only)
  * Flows: hero slider turns and pauses off-screen, the diagonal transition
  * runs on main links only, the header hides on the way down and returns on
- * the way up, work filters, and both forms refuse to send without a captcha.
+ * the way up, the work catalogue is grouped, and the contact form refuses to
+ * send without a captcha.
  * `--reduced` runs everything with prefers-reduced-motion.
  */
 import { spawn } from "node:child_process";
@@ -200,17 +201,11 @@ check((await js("location.pathname")).replace(/\.html$/, "") === "/faq", "lands 
 await sleep(900);
 check(!(await js(`!!document.querySelector(".dg") || document.documentElement.classList.contains("dg-arriving")`)), "cover clears on arrival");
 
-console.log("\nwork filters");
+console.log("\nwork catalogue");
 await load("/work", 1440);
-const total = await js(`document.querySelectorAll("[data-filter-list] > li").length`);
-await js(`document.querySelector('[data-filter="mt2"]').click()`);
-await sleep(900);
-const shown = await js(`[...document.querySelectorAll("[data-filter-list] > li")].filter((li) => !li.classList.contains("is-filtered")).length`);
-check(shown > 0 && shown < total, "partner filter narrows the list", `${shown}/${total}`);
-await js(`document.querySelector('[data-filter="saas"]').click()`);
-await sleep(900);
-const saas = await js(`[...document.querySelectorAll("[data-filter-list] > li")].filter((li) => !li.classList.contains("is-filtered")).length`);
-check(saas > 0 && saas < total, "type filter narrows the list", `${saas}/${total}`);
+const groups = await js(`[...document.querySelectorAll("[id='saas'],[id='platform'],[id='site'],[id='library']")].map((g) => g.id)`);
+check(groups.length === 4, "grouped by type", groups.join(", "));
+check(await js(`!!document.querySelector("#agents")`), "Rubot platform shown");
 
 console.log("\nchat");
 await load("/faq", 1440);

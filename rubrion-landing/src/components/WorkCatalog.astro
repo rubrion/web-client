@@ -1,27 +1,26 @@
 ---
-// Products: everything in the portfolio that isn't a client website, grouped
-// by type (SaaS, white-label & tools, libraries), straight from work.ts so the
-// two pages never disagree. The Rubot agent platform closes the SaaS group.
-import Layout from '../layouts/Layout.astro';
-import PageHero from '../components/PageHero.astro';
-import Mockup from '../components/Mockup.astro';
+// The work catalogue: every case grouped by type (SaaS, white-label & tools,
+// websites & portals, libraries), each with who built it, what it is, a link
+// to the live product and to its case page. The Rubot agent platform closes
+// the SaaS group. Used by /work.
+import Mockup from './Mockup.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
 import { credits, kinds, work, type Kind } from '../data/work';
 
 const p = c.products;
-const groups = (['saas', 'platform', 'library'] as Kind[])
+const groups = (Object.keys(kinds) as Kind[])
 	.map((k) => ({ k, label: l(kinds[k]), items: work.filter((w) => w.type === k) }))
 	.filter((g) => g.items.length);
 ---
 
-<Layout title={c.nav.products} description={p.lead}>
-	<PageHero kicker={p.kicker} title={p.title} lead={p.lead} crumbs={[{ label: c.nav.products }]} />
-
+<nav class="mx-auto mb-16 flex max-w-7xl flex-wrap gap-x-7 gap-y-2 border-b border-hair px-5 md:px-8" aria-label={c.work.kicker}>
+	{groups.map((g) => <a href={`#${g.k}`} class="filter-pill">{g.label}<span>{g.items.length}</span></a>)}
+</nav>
 	<section class="bg-paper px-5 pb-28 md:px-8 md:pb-40">
 		<div class="mx-auto max-w-7xl space-y-24">
 			{groups.map((g) => (
-				<div>
+				<div id={g.k} class="scroll-mt-28">
 					<div class="flex items-baseline justify-between gap-6 border-b border-hair pb-4" data-reveal>
 						<h2 class="display text-[1.9rem] md:text-[2.4rem]">{g.label}</h2>
 						<span class="meta">{String(g.items.length).padStart(2, '0')}</span>
@@ -82,4 +81,3 @@ const groups = (['saas', 'platform', 'library'] as Kind[])
 			))}
 		</div>
 	</section>
-</Layout>

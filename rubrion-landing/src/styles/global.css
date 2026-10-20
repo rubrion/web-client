@@ -409,8 +409,7 @@ body {
 .faq-plus { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
 .faq-item[open] .faq-plus { transform: rotate(45deg); }
 
-/* ---- filters (scripts/filters.ts) ---- */
-[data-filter-list] > .is-filtered { display: none; }
+/* ---- tab-style links (work catalogue jump nav) ---- */
 .filter-pill {
   position: relative;
   padding: 0.35rem 0;
