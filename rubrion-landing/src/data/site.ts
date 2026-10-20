@@ -461,7 +461,6 @@ export const whatsapp = 'https://wa.me/5511992562478';
 export const pages = [
 	{ key: 'work', href: '/work' },
 	{ key: 'services', href: '/#services' },
-	{ key: 'products', href: '/products' },
 	{ key: 'blog', href: '/blog' },
 	{ key: 'faq', href: '/faq' },
 ] as const;
