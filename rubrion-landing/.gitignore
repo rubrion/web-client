@@ -30,3 +30,6 @@ pnpm-debug.log*
 .dev.vars*
 !.dev.vars.example
 !.env.example
+
+# Local toolchain pin for mise; CI reads .node-version instead
+.tool-versions
