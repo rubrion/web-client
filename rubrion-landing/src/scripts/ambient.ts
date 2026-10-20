@@ -1,8 +1,9 @@
 /**
- * Ambient background for `canvas[data-ambient]`: a low-poly triangular
- * lattice with hairline edges, each facet slowly changing tone, and a faint
- * red light in one corner. It arrives pulled apart by a strong distortion
- * that settles into the grid (the "fade in by distortion").
+ * Ambient background for `canvas[data-ambient]`: a staggered field of cut
+ * rubies (Rubrion's and Rubry's shape) with hairline outlines and facet
+ * lines, each gem slowly changing tone, and a faint red light in one corner.
+ * It arrives pulled apart by a strong distortion that settles into place
+ * (the "fade in by distortion").
  *
  * `data-ambient="paper"` follows the theme (paper light, graphite dark);
  * `data-ambient="slab"` is always dark (contact, footer). Rendered at a
@@ -15,38 +16,68 @@ const FRAG = `
 uniform vec2 uRes; uniform float uTime; uniform float uIntro;
 uniform vec3 uA; uniform vec3 uB; uniform vec3 uC; uniform vec3 uGlow; uniform vec3 uLine;
 ${NOISE}
-// Distance to the nearest edge of the triangle containing f (unit cell split
-// along its diagonal), in cell units.
-float edgeDist(vec2 f, bool upper){
-  float d = upper ? min(f.y, 1.0 - f.x) : min(f.x, 1.0 - f.y);
-  return min(d, abs(f.x - f.y) * 0.7071);
+// Signed distance to the ruby outline (convex pentagon, flat table on top,
+// point at the bottom), in cell units. Negative inside.
+float plane(vec2 p, vec2 a, vec2 b){
+  vec2 e = normalize(b - a);
+  // Vertices run clockwise, so inside is where every edge gives a negative.
+  return (p - a).y * e.x - (p - a).x * e.y;
+}
+float ruby(vec2 p){
+  vec2 v0 = vec2(-0.27, 0.36), v1 = vec2(0.27, 0.36), v2 = vec2(0.44, 0.1), v3 = vec2(0.0, -0.44), v4 = vec2(-0.44, 0.1);
+  float d = plane(p, v0, v1);
+  d = max(d, plane(p, v1, v2));
+  d = max(d, plane(p, v2, v3));
+  d = max(d, plane(p, v3, v4));
+  d = max(d, plane(p, v4, v0));
+  return d + 0.025;
+}
+// Facet lines inside a gem: the girdle, crown and pavilion cuts.
+float seg(vec2 p, vec2 a, vec2 b){
+  vec2 pa = p - a, ba = b - a;
+  return length(pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0));
+}
+float facets(vec2 p){
+  float d = seg(p, vec2(-0.4, 0.1), vec2(0.4, 0.1));
+  d = min(d, seg(p, vec2(-0.13, 0.33), vec2(-0.2, 0.1)));
+  d = min(d, seg(p, vec2(0.13, 0.33), vec2(0.2, 0.1)));
+  d = min(d, seg(p, vec2(-0.2, 0.1), vec2(0.0, -0.41)));
+  d = min(d, seg(p, vec2(0.2, 0.1), vec2(0.0, -0.41)));
+  return d;
 }
 void main(){
   vec2 uv = gl_FragCoord.xy / uRes;
   float asp = uRes.x / uRes.y;
   float t = uTime * 0.05;
-  // Lattice space: about eight cells across, skewed so facets read as
-  // triangles rather than squares.
-  vec2 p = vec2(uv.x * asp, uv.y) * 4.2;
-  p = vec2(p.x + p.y * 0.5, p.y * 0.866);
-  // Arriving, the lattice is pulled apart by a strong distortion that settles.
+  // Gem space: about three rows per screen height, odd rows offset by half
+  // a gem so they interlock.
+  vec2 p = vec2(uv.x * asp, uv.y) * 3.4;
+  // Arriving, the field is pulled apart by a strong distortion that settles.
   float amp = (1.0 - uIntro) * 1.6;
   p += (vec2(fbm(p * 0.6 + 3.1), fbm(p * 0.6 + 7.7)) - 0.5) * amp;
-  vec2 id = floor(p);
-  vec2 f = fract(p);
-  bool upper = f.x > f.y;
-  float tri = upper ? 1.0 : 0.0;
-  // Each facet carries its own slowly changing tone.
-  float k = noise(id * 1.37 + tri * 4.1 + vec2(t, -t * 0.7));
+  const float H = 0.62;
+  float d = 1e3; vec2 id = vec2(0.0); vec2 lp = vec2(0.0);
+  float row = floor(p.y / H);
+  for (int k = -1; k <= 1; k++) {
+    float r = row + float(k);
+    float off = mod(r, 2.0) * 0.5;
+    float c = floor(p.x - off + 0.5);
+    vec2 q = p - vec2(c + off, r * H + H * 0.5);
+    float dk = ruby(q);
+    if (dk < d) { d = dk; id = vec2(c, r); lp = q; }
+  }
+  // Each gem carries its own slowly changing tone.
+  float k = noise(id * 1.37 + vec2(t, -t * 0.7));
   k = smoothstep(0.2, 0.95, k);
   // Calmer on the left, where page titles sit.
   float calm = mix(0.35, 1.0, smoothstep(0.15, 0.85, uv.x));
-  vec3 col = mix(uA, mix(uB, uC, k), k * calm);
-  // Hairline edges.
-  float e = edgeDist(f, upper);
-  float px = 4.2 / uRes.y;
-  float line = 1.0 - smoothstep(px * 0.6, px * 1.6, e);
-  col = mix(col, uLine, line * 0.55 * calm);
+  float inside = 1.0 - smoothstep(-0.004, 0.004, d);
+  vec3 col = mix(uA, mix(uB, uC, k), k * calm * inside);
+  // Hairline outlines, fainter facet cuts inside.
+  float px = 3.4 / uRes.y;
+  float line = 1.0 - smoothstep(px * 0.6, px * 1.6, abs(d));
+  float cut = (1.0 - smoothstep(px * 0.5, px * 1.4, facets(lp))) * inside;
+  col = mix(col, uLine, (line * 0.6 + cut * 0.3) * calm);
   // A faint red light in the upper right.
   float g = exp(-3.0 * length((uv - vec2(0.9, 1.0)) * vec2(1.0, 1.5)));
   col = mix(col, uGlow, g * 0.2);
