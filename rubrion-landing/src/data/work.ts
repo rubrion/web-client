@@ -28,6 +28,8 @@ export interface Work {
 	url?: string;
 	image?: string;
 	mock?: Mock;
+	/** Public source code, for open-source work. */
+	repo?: string;
 	/** Shown in the home hero slider (needs `image`), in this order. */
 	hero?: number;
 }
@@ -64,24 +66,24 @@ export const work: Work[] = [
 		hero: 1,
 	},
 	{
-		slug: 'animally',
-		name: { en: 'Animally', pt: 'Animally' },
+		slug: 'vet-clinic-template',
+		name: { en: 'Vet clinic template', pt: 'Template de clínica veterinária' },
 		credit: 'rubrion',
-		type: 'site',
-		kind: { en: 'Home vet care, São Carlos', pt: 'Veterinária a domicílio, São Carlos' },
+		type: 'platform',
+		kind: { en: 'Veterinary clinic website template', pt: 'Template de site para clínica veterinária' },
 		summary: {
-			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home, also running as a ready-made clinic site.',
-			pt: 'Site, agendamento e e-mails para uma veterinária que atende pets exóticos e domésticos em casa, também disponível como site pronto para clínicas.',
+			en: 'A full bilingual clinic site with a vet team, a 24/7 strip, booking, a shop and a style guide, shown as a fictional clinic.',
+			pt: 'Um site bilíngue completo de clínica, com equipe de veterinários, faixa 24h, agendamento, loja e guia de estilo, apresentado como uma clínica fictícia.',
 		},
 		problem: {
-			en: 'A new practice with no clinic yet needed bookings, honest positioning and a way to answer “how much?” without a full-time assistant.',
-			pt: 'Uma prática nova, ainda sem clínica, precisava de agendamentos, um posicionamento honesto e um jeito de responder “quanto custa?” sem uma assistente em tempo integral.',
+			en: 'Clinics need a warm, trustworthy site that books visits and answers common questions, without paying for a custom build from scratch.',
+			pt: 'Clínicas precisam de um site acolhedor e confiável que agende consultas e responda dúvidas comuns, sem pagar por um projeto do zero.',
 		},
 		built: {
-			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP. The same build runs as a full clinic site, with a team, a 24/7 strip, a shop and a style guide.',
-			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP. A mesma base roda como site completo de clínica, com equipe, faixa 24h, loja e guia de estilo.',
+			en: 'Static Astro pages on a Cloudflare Worker in English and Portuguese, a booking wizard with confirmation emails, a scripted chat with WhatsApp handoff, hand-drawn pets animated with GSAP, and every text, colour and photo swappable per clinic.',
+			pt: 'Páginas estáticas em Astro num Worker da Cloudflare, em português e inglês, agendamento em etapas com e-mails de confirmação, chat roteirizado com passagem para o WhatsApp, pets desenhados à mão animados com GSAP, e todos os textos, cores e fotos trocáveis por clínica.',
 		},
-		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
+		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'GSAP'],
 		services: ['sites'],
 		url: 'https://vet.rubrion.ai',
 		image: 'vet-demo',
@@ -158,6 +160,7 @@ export const work: Work[] = [
 		url: 'https://curriclean.rubrion.ai',
 		image: 'curriclean',
 		hero: 5,
+		repo: 'https://github.com/rubrion/curriclean',
 	},
 	{
 		slug: 'edgeletter',
@@ -182,6 +185,7 @@ export const work: Work[] = [
 		url: 'https://edgeletter.rubrion.ai',
 		image: 'edgeletter',
 		hero: 6,
+		repo: 'https://github.com/rubrion/edgeletter',
 	},
 	{
 		slug: 'rubrion-store',
@@ -229,6 +233,7 @@ export const work: Work[] = [
 		url: 'https://mondesa.com.br',
 		image: 'mondesa',
 		hero: 8,
+		repo: 'https://github.com/MonDesa/mondesa-web-client',
 	},
 	{
 		slug: 'cerne',
@@ -275,6 +280,7 @@ export const work: Work[] = [
 		stack: ['Cloudflare Workflows', 'D1', 'R2', 'OpenWebUI'],
 		services: ['data', 'agents'],
 		mock: 'report',
+		repo: 'https://github.com/rubenszinho/equanime',
 	},
 	{
 		slug: 'mastra-cloudflare',
@@ -457,6 +463,29 @@ export const work: Work[] = [
 		services: ['platforms', 'sites'],
 		url: 'https://exame.bio',
 		image: 'bioexame',
+	},
+	{
+		slug: 'animally',
+		name: { en: 'Animally', pt: 'Animally' },
+		credit: 'rubrion',
+		type: 'site',
+		kind: { en: 'Home vet care, São Carlos', pt: 'Veterinária a domicílio, São Carlos' },
+		summary: {
+			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home.',
+			pt: 'Site, agendamento e e-mails para uma veterinária que atende pets exóticos e domésticos em casa.',
+		},
+		problem: {
+			en: 'A new practice with no clinic yet needed bookings, honest positioning and a way to answer “how much?” without a full-time assistant.',
+			pt: 'Uma prática nova, ainda sem clínica, precisava de agendamentos, um posicionamento honesto e um jeito de responder “quanto custa?” sem uma assistente em tempo integral.',
+		},
+		built: {
+			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP.',
+			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP.',
+		},
+		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
+		services: ['sites'],
+		url: 'https://animally.pet',
+		image: 'animally',
 	},
 	{
 		slug: 'lms',

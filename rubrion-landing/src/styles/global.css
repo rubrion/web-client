@@ -443,6 +443,9 @@ body {
 .filter-pill[aria-pressed="true"]::after {
   transform: scaleX(1);
 }
+.is-filtered {
+  display: none !important;
+}
 
 /* ---- motion start states (only once motion.ts is allowed to run) ---- */
 .has-motion [data-reveal]:not(.is-revealed) {

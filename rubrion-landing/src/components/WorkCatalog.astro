@@ -2,32 +2,40 @@
 // The work catalogue: every case grouped by type (SaaS, white-label & tools,
 // websites & portals, libraries), each with who built it, what it is, a link
 // to the live product and to its case page. The Rubot agent platform closes
-// the SaaS group. Used by /work.
+// the SaaS group. Pills on top narrow every group to who it was built with
+// (Rubrion, MT2 Data, Sennatech); `?by=mt2` opens it filtered. Used by /work.
 import Mockup from './Mockup.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
-import { credits, kinds, work, type Kind } from '../data/work';
+import { credits, kinds, work, type Credit, type Kind } from '../data/work';
 
 const p = c.products;
+const by = (Object.keys(credits) as Credit[]).map((k) => ({ k, name: credits[k].name, n: work.filter((w) => w.credit === k).length }));
 const groups = (Object.keys(kinds) as Kind[])
 	.map((k) => ({ k, label: l(kinds[k]), items: work.filter((w) => w.type === k) }))
 	.filter((g) => g.items.length);
 ---
 
-<nav class="mx-auto mb-16 flex max-w-7xl flex-wrap gap-x-7 gap-y-2 border-b border-hair px-5 md:px-8" aria-label={c.work.kicker}>
-	{groups.map((g) => <a href={`#${g.k}`} class="filter-pill">{g.label}<span>{g.items.length}</span></a>)}
-</nav>
+<div class="mx-auto mb-16 max-w-7xl px-5 md:px-8" data-catalog-bar>
+	<div class="flex flex-wrap gap-x-7 gap-y-2 border-b border-hair" role="group" aria-label={c.work.with}>
+		<button type="button" class="filter-pill" data-by="all" aria-pressed="true">{c.work.all}<span>{work.length}</span></button>
+		{by.map((b) => <button type="button" class="filter-pill" data-by={b.k} aria-pressed="false">{b.name}<span>{b.n}</span></button>)}
+	</div>
+	<nav class="mt-4 flex flex-wrap gap-x-5 gap-y-1" aria-label={c.work.kicker}>
+		{groups.map((g) => <a href={`#${g.k}`} class="meta transition hover:text-ink" data-jump={g.k}>{g.label} <span data-count>{g.items.length}</span></a>)}
+	</nav>
+</div>
 	<section class="bg-paper px-5 pb-28 md:px-8 md:pb-40">
 		<div class="mx-auto max-w-7xl space-y-24">
 			{groups.map((g) => (
-				<div id={g.k} class="scroll-mt-28">
+				<div id={g.k} class="scroll-mt-28" data-group={g.k}>
 					<div class="flex items-baseline justify-between gap-6 border-b border-hair pb-4" data-reveal>
 						<h2 class="display text-[1.9rem] md:text-[2.4rem]">{g.label}</h2>
-						<span class="meta">{String(g.items.length).padStart(2, '0')}</span>
+						<span class="meta" data-count>{String(g.items.length).padStart(2, '0')}</span>
 					</div>
 					<ul class="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
 						{g.items.map((w) => (
-							<li data-reveal class="flex flex-col">
+							<li data-reveal data-by={w.credit} class="flex flex-col">
 								<a href={`/work/${w.slug}`} class="group block overflow-hidden rounded-md bg-surface-2">
 									<div class="aspect-[16/10]">
 										{w.image ? (
@@ -43,6 +51,7 @@ const groups = (Object.keys(kinds) as Kind[])
 								<p class="mt-2 text-[0.92rem]/6 text-ink-soft">{l(w.summary)}</p>
 								<div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-5">
 									{w.url && <a href={w.url} target="_blank" rel="noopener" class="link-arrow">{p.visit} {new URL(w.url).host}</a>}
+									{w.repo && <a href={w.repo} target="_blank" rel="noopener" class="link-arrow">GitHub</a>}
 									<a href={`/work/${w.slug}`} class="link-arrow link-arrow--in">{p.case}</a>
 								</div>
 							</li>
@@ -50,7 +59,7 @@ const groups = (Object.keys(kinds) as Kind[])
 					</ul>
 
 					{g.k === 'saas' && (
-						<div class="card mt-14 p-7 md:p-10" id="agents" data-reveal>
+						<div class="card mt-14 p-7 md:p-10" id="agents" data-reveal data-by="rubrion">
 							<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
 								<div class="max-w-md">
 									<div class="flex items-center gap-3">
@@ -61,7 +70,10 @@ const groups = (Object.keys(kinds) as Kind[])
 										</div>
 									</div>
 									<p class="lead mt-4">{p.rubotText}</p>
-									<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="link-arrow mt-6">chat.rubrion.ai</a>
+									<div class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+										<a href="https://chat.rubrion.ai" target="_blank" rel="noopener" class="link-arrow">chat.rubrion.ai</a>
+										<a href="https://github.com/rubrion/rubot" target="_blank" rel="noopener" class="link-arrow">GitHub</a>
+									</div>
 								</div>
 								<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
 									<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-md border border-hair p-5 transition hover:border-ink">
@@ -81,3 +93,47 @@ const groups = (Object.keys(kinds) as Kind[])
 			))}
 		</div>
 	</section>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	// Credit pills: hide cases built with someone else, drop groups left empty
+	// and keep every count in step. Cards that stay fade back in.
+	const bar = document.querySelector<HTMLElement>('[data-catalog-bar]');
+	const pills = bar ? [...bar.querySelectorAll<HTMLButtonElement>('button[data-by]')] : [];
+	const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
+	const apply = (key: string, animate: boolean) => {
+		pills.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.by === key)));
+		const shown: HTMLElement[] = [];
+		groups.forEach((g) => {
+			const items = [...g.querySelectorAll<HTMLElement>('[data-by]')];
+			items.forEach((el) => {
+				const on = key === 'all' || el.dataset.by === key;
+				el.classList.toggle('is-filtered', !on);
+				if (on) shown.push(el);
+			});
+			const n = g.querySelectorAll('li[data-by]:not(.is-filtered)').length;
+			g.classList.toggle('is-filtered', !n);
+			g.querySelector('[data-count]')!.textContent = String(n).padStart(2, '0');
+			const jump = bar?.querySelector<HTMLElement>(`[data-jump="${g.id}"]`);
+			if (jump) {
+				jump.classList.toggle('is-filtered', !n);
+				jump.querySelector('[data-count]')!.textContent = String(n);
+			}
+		});
+		// Everything left is in view now or soon: show it rather than wait for
+		// scroll reveals measured against the old layout.
+		shown.forEach((el) => el.classList.add('is-revealed'));
+		ScrollTrigger.refresh();
+		if (animate && document.documentElement.classList.contains('has-motion'))
+			gsap.fromTo(shown, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.03, ease: 'power3.out', clearProps: 'opacity,transform' });
+		const url = new URL(location.href);
+		if (key === 'all') url.searchParams.delete('by');
+		else url.searchParams.set('by', key);
+		history.replaceState(history.state, '', url);
+	};
+	pills.forEach((b) => b.addEventListener('click', () => apply(b.dataset.by!, true)));
+	const start = new URLSearchParams(location.search).get('by');
+	if (start && pills.some((b) => b.dataset.by === start)) apply(start, false);
+</script>

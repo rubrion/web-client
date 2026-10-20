@@ -1,10 +1,11 @@
 ---
 // How we build: the bento. An AI agent pipeline, managed hosting (red globe,
 // loaded only when it scrolls near), a custom build that reflows desktop ↔
-// mobile, and the numbers. Every looping animation here pauses off-screen.
+// mobile, and the numbers; then our story and roadmap. Every looping animation here pauses off-screen.
 import SectionHead from './SectionHead.astro';
 import CustomBuildDevice from './CustomBuildDevice.astro';
 import Roller from './Roller.astro';
+import Roadmap from './Roadmap.astro';
 import { c } from '../data/site';
 import { credits, work } from '../data/work';
 
@@ -107,6 +108,7 @@ const facts = [
 				
 			</div>
 		</div>
+		<Roadmap />
 	</div>
 </section>
 
