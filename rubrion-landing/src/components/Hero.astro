@@ -571,6 +571,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
 			bottom: 5rem;
 		}
 
+		/* No seam over a single frame (outranks the phone seam rule above). */
+		.dhero.is-single .dhero__seam--narrow {
+			display: none;
+		}
+
 		.dhero.is-single .dhero__img {
 			object-position: 66% top;
 		}
