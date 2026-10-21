@@ -82,10 +82,9 @@ void main(){
   float fullAsp = uRes.x / uRes.y;
   vec2 full = vec2(x, v);
   float softPair = top ? mix(1.0, 0.25, smoothstep(0.35, 0.85, x)) : 0.0;
-  // Phones: soften only behind the copy at the top, not the whole half.
-  softPair = mix(softPair, 0.6 * (1.0 - smoothstep(0.3, 0.5, v)), uNarrow);
+  // Phones: no blur at all; the top gradient alone keeps the copy legible.
+  softPair *= 1.0 - uNarrow;
   float softOne = (1.0 - smoothstep(0.3, 0.8, x)) * (1.0 - smoothstep(0.55, 0.85, v)) * 0.6 * (1.0 - uNarrow);
-  softOne = max(softOne, uNarrow * 0.6 * (1.0 - smoothstep(0.3, 0.5, v)));
   // Phones: one vertical gradient, darkest at the top (under the navbar and
   // the copy, so a screenshot's own navbar never competes with ours), clear
   // through the middle, a little darker at the bottom for the captions. No
@@ -178,7 +177,8 @@ export function createHeroGL(canvas: HTMLCanvasElement, narrow: () => boolean) {
 	const seam = () => (narrow() ? [0.72, 0.56] : [0.78, 0.38]);
 
 	const draw = (time: number) => {
-		const [w, h] = fit(canvas, gl, 0.75);
+		// Full resolution on phones (small canvas, and an upscale shows there).
+		const [w, h] = fit(canvas, gl, narrow() ? 1 : 0.75);
 		const [a, b] = seam();
 		gl.uniform2f(u('uRes'), w, h);
 		gl.uniform1f(u('uTime'), time);
