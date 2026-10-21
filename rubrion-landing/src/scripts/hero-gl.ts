@@ -89,7 +89,9 @@ void main(){
   // the copy, so a screenshot's own navbar never competes with ours), clear
   // through the middle, a little darker at the bottom for the captions. No
   // side shading: the slice is narrow enough already.
-  float shadePhone = mix(0.2, 1.0, smoothstep(0.06, 0.6, v)) * mix(1.0, 0.62, smoothstep(0.8, 1.0, v));
+  // Dimmed evenly behind the copy (top ~45%), clear below it, and dimmed
+  // again behind the captions at the bottom.
+  float shadePhone = mix(0.15, 1.0, smoothstep(0.44, 0.6, v)) * mix(1.0, 0.42, smoothstep(0.72, 0.95, v));
   float shadePair = mix(
     top
       ? mix(0.13, 0.72, smoothstep(0.05, 0.85, x)) * mix(0.35, 1.0, smoothstep(0.0, 0.18, v))
