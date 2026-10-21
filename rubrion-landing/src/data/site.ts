@@ -117,7 +117,7 @@ const en = {
 		already: 'You’re already subscribed.',
 		done: 'Subscribed',
 		network: 'Network error. Try again.',
-		error: 'Error.',
+		error: 'Couldn’t subscribe. Check the address and try again.',
 	},
 	contact: {
 		kicker: 'Contact',
@@ -344,7 +344,7 @@ const pt: typeof en = {
 		already: 'Você já está inscrito.',
 		done: 'Inscrito',
 		network: 'Erro de rede. Tente de novo.',
-		error: 'Erro.',
+		error: 'Não foi possível assinar. Confira o endereço e tente de novo.',
 	},
 	contact: {
 		kicker: 'Contato',

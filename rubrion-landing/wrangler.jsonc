@@ -22,6 +22,10 @@
 		{ "pattern": "rubrion.com.br", "custom_domain": true },
 		{ "pattern": "www.rubrion.com.br", "custom_domain": true }
 	],
+	// The newsletter backend (EdgeLetter): POST /api/subscribe forwards here.
+	"services": [{ "binding": "EDGELETTER", "service": "web-rubrion-edgeletter" }],
+	// Secrets: NEWSLETTER_TURNSTILE_SECRET (the "edgepress" widget, same as
+	// EdgeLetter's) and SUBSCRIBE_API_KEY (shared with EdgeLetter).
 	"observability": {
 		"enabled": true
 	}

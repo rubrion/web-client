@@ -1,9 +1,13 @@
 ---
-// Newsletter row. Subscriptions still go to EdgeLetter (double opt-in).
+// Newsletter row. Posts to this site's /api/subscribe (worker/index.ts),
+// which checks Turnstile and hands the address to EdgeLetter, where posts are
+// written and sent (double opt-in).
 import { c } from '../data/site';
 
 const n = c.newsletter;
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+// The "edgepress" Turnstile widget (rubrion.ai, rubrion.com.br), whose secret
+// the Worker holds.
+const TURNSTILE_SITE_KEY = '0x4AAAAAADMKgjDCOeL0zVJj';
 ---
 
 <div id="newsletter" class="relative mx-auto max-w-7xl border-t border-hair pt-14">
@@ -85,7 +89,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 			if (t) body.turnstile = t;
 			say('');
 			busy(true);
-			fetch('https://edgeletter.rubrion.ai/api/subscribe', {
+			fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(body),
@@ -98,16 +102,18 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 				.then(function (o) {
 					busy(false);
 					if (!o.ok) {
-						say((o.j && o.j.error) || n.error, 'error');
+						say(n.error, 'error');
 						return;
 					}
 					btn.classList.add('is-done');
 					label.textContent = n.done;
 					say(o.j.alreadyActive ? n.already : n.confirm, 'ok');
 					if (!o.j.alreadyActive) f.reset();
-					if (window.turnstile) {
+					// Reset this form's widget, not the contact form's.
+					var w = f.querySelector('.cf-turnstile');
+					if (window.turnstile && w) {
 						try {
-							window.turnstile.reset();
+							window.turnstile.reset(w);
 						} catch (_) {}
 					}
 				})
