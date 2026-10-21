@@ -560,12 +560,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
 			display: block;
 		}
 
-		.dhero__slot--top .dhero__shade {
-			background: rgba(0, 0, 0, 0.6);
-		}
-
+		/* Phones: darkest at the top (navbar and copy), clear in the middle,
+		   a little darker at the bottom; the same in both halves, no sides. */
+		.dhero__slot .dhero__shade,
 		.dhero.is-single .dhero__slot .dhero__shade {
-			background: linear-gradient(180deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.6) 55%, rgba(0, 0, 0, 0.3) 75%, rgba(0, 0, 0, 0.6));
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6) 35%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.38));
 		}
 
 		.dhero.is-single .dhero__cap--top {
@@ -588,15 +587,6 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 		.dhero__img {
 			object-position: center;
-		}
-
-		/* The edges of the slice, darker. */
-		.dhero__slot::after {
-			content: '';
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.55));
-			pointer-events: none;
 		}
 
 		.dhero__cap--top {

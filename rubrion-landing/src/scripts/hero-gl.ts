@@ -82,14 +82,23 @@ void main(){
   float fullAsp = uRes.x / uRes.y;
   vec2 full = vec2(x, v);
   float softPair = top ? mix(1.0, 0.25, smoothstep(0.35, 0.85, x)) : 0.0;
-  softPair = max(softPair, uNarrow * (top ? 1.0 : 0.0));
+  // Phones: soften only behind the copy at the top, not the whole half.
+  softPair = mix(softPair, 0.6 * (1.0 - smoothstep(0.3, 0.5, v)), uNarrow);
   float softOne = (1.0 - smoothstep(0.3, 0.8, x)) * (1.0 - smoothstep(0.55, 0.85, v)) * 0.6 * (1.0 - uNarrow);
-  softOne = max(softOne, uNarrow * 0.25 * (1.0 - smoothstep(0.35, 0.55, v)));
-  float shadePair = top
-    ? mix(mix(0.13, 0.72, smoothstep(0.05, 0.85, x)), 0.24, uNarrow) * mix(0.35, 1.0, smoothstep(0.0, 0.18, v))
-    : mix(0.8, 0.3, smoothstep(0.5, 1.0, v));
-  float shadeOne = mix(mix(0.16, 0.8, smoothstep(0.05, 0.8, x)), mix(0.28, 0.75, smoothstep(0.55, 0.85, v)), uNarrow)
-    * mix(0.4, 1.0, smoothstep(0.0, 0.18, v)) * mix(1.0, 0.45, smoothstep(0.65, 1.0, v));
+  softOne = max(softOne, uNarrow * 0.6 * (1.0 - smoothstep(0.3, 0.5, v)));
+  // Phones: one vertical gradient, darkest at the top (under the navbar and
+  // the copy, so a screenshot's own navbar never competes with ours), clear
+  // through the middle, a little darker at the bottom for the captions. No
+  // side shading: the slice is narrow enough already.
+  float shadePhone = mix(0.2, 1.0, smoothstep(0.06, 0.6, v)) * mix(1.0, 0.62, smoothstep(0.8, 1.0, v));
+  float shadePair = mix(
+    top
+      ? mix(0.13, 0.72, smoothstep(0.05, 0.85, x)) * mix(0.35, 1.0, smoothstep(0.0, 0.18, v))
+      : mix(0.8, 0.3, smoothstep(0.5, 1.0, v)),
+    shadePhone, uNarrow);
+  float shadeOne = mix(
+    mix(0.16, 0.8, smoothstep(0.05, 0.8, x)) * mix(0.4, 1.0, smoothstep(0.0, 0.18, v)) * mix(1.0, 0.45, smoothstep(0.65, 1.0, v)),
+    shadePhone, uNarrow);
   vec2 px0 = vec2(5.0 / uRes.x, 5.0 / uRes.y) * mix(1.0, 0.4, uNarrow);
 
   bool oneC = uSingleCur > 0.5;
@@ -103,8 +112,6 @@ void main(){
   vec3 nxt = sampleHalf(tN, false, uvNext, px0 * (oneN ? softOne : softPair)) * (oneN ? shadeOne : shadePair);
 
   vec3 col = mix(cur, nxt, m);
-  // Phones: darker left and right edges frame the narrow slice.
-  col *= mix(1.0, mix(0.2, 1.0, smoothstep(0.0, 0.32, min(x, 1.0 - x))), uNarrow);
 
   // The seam: a hairline with a soft red glow, drawn in left to right.
   float W = uRes.x, H = uRes.y;
