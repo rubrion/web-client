@@ -338,6 +338,30 @@ export const work: Work[] = [
 		mock: 'chat',
 	},
 	{
+		slug: 'rubry-template',
+		name: { en: 'Rubry template', pt: 'Template Rubry' },
+		credit: 'rubrion',
+		type: 'library',
+		kind: { en: 'Open-source multi-agent template', pt: 'Template multiagente de código aberto' },
+		summary: {
+			en: 'Your own multi-agent assistant on Workers and Mastra: write agents and tools in TypeScript and get an OpenAI-compatible endpoint for rubry.ai, Open WebUI or your app.',
+			pt: 'Seu próprio assistente multiagente nos Workers e no Mastra: escreva agentes e ferramentas em TypeScript e tenha um endpoint compatível com a OpenAI para o rubry.ai, o Open WebUI ou o seu app.',
+		},
+		problem: {
+			en: 'An agent product needs API keys, provider settings, routing and memory before it gives its first useful answer.',
+			pt: 'Um produto de agentes precisa de chaves de API, configuração de provedor, roteamento e memória antes de dar a primeira resposta útil.',
+		},
+		built: {
+			en: 'Two Workers: a dependency-free middleware (API keys, the provider with its key encrypted, agents on or off, a settings page) and Mastra agents on @rubrion/mastra-cloudflare, with "auto" routing across up to three agents and memory in D1. Runs on Workers AI with no model keys, or any OpenAI-compatible provider. A public example runs at example.rubry.ai. GPL-3.0.',
+			pt: 'Dois Workers: um middleware sem dependências (chaves de API, o provedor com a chave criptografada, agentes ligados ou desligados, uma página de configurações) e agentes Mastra sobre @rubrion/mastra-cloudflare, com roteamento "auto" entre até três agentes e memória no D1. Roda no Workers AI sem chaves de modelo, ou em qualquer provedor compatível com a OpenAI. Um exemplo público roda em example.rubry.ai. GPL-3.0.',
+		},
+		stack: ['Mastra', 'Cloudflare Workers', 'Workers AI', 'D1', 'TypeScript'],
+		services: ['agents'],
+		url: 'https://docs.rubry.ai',
+		repo: 'https://github.com/rubrion/rubry',
+		image: 'rubry-template',
+	},
+	{
 		slug: 'colmeia',
 		name: { en: 'Colmeia', pt: 'Colmeia' },
 		credit: 'mt2',
@@ -381,28 +405,6 @@ export const work: Work[] = [
 		stack: ['Python', 'MILP', 'React', 'pnpm monorepo'],
 		services: ['data', 'platforms'],
 		mock: 'table',
-	},
-	{
-		slug: 'mt2-allocation',
-		name: { en: 'MT2 Allocation', pt: 'MT2 Allocation' },
-		credit: 'mt2',
-		type: 'platform',
-		kind: { en: 'Team allocation hub', pt: 'Central de alocação de equipe' },
-		summary: {
-			en: 'Who is on which project, at what capacity, with every project’s resources in one place.',
-			pt: 'Quem está em qual projeto, com qual dedicação, e os recursos de cada projeto num só lugar.',
-		},
-		problem: {
-			en: 'Allocation across billable projects and demos lived in chats and people’s memory.',
-			pt: 'A alocação entre projetos faturáveis e demonstrações vivia em conversas e na memória.',
-		},
-		built: {
-			en: 'An Astro app on a Worker behind Cloudflare Access, tracking people, capacity and project links.',
-			pt: 'Um app em Astro num Worker atrás do Cloudflare Access, com pessoas, dedicação e links de cada projeto.',
-		},
-		stack: ['Astro', 'Cloudflare Workers', 'Cloudflare Access'],
-		services: ['platforms', 'data'],
-		mock: 'dashboard',
 	},
 	{
 		slug: 'avilink',
@@ -578,7 +580,7 @@ export const kinds: Record<Kind, L> = {
 export const serviceCases: Record<Service, string[]> = {
 	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
 	agents: ['rubry', 'brad', 'colmeia'],
-	data: ['dexplan', 'equanime', 'mt2-allocation'],
+	data: ['dexplan', 'equanime'],
 	sites: ['bccc', 'advogue', 'animally'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
