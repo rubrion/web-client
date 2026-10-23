@@ -59,8 +59,8 @@ export default {
 		if (pathname === '/api/subscribe') return req.method === 'POST' ? subscribe(req, env) : new Response(null, { status: 405, headers: { allow: 'POST' } });
 		// /products merged into /work.
 		if (pathname === '/products' || pathname === '/products.html') return Response.redirect(new URL('/work', req.url).href, 301);
-		// Case renamed back to its real name.
-		if (pathname === '/work/dynamication' || pathname === '/work/dynamication.html') return Response.redirect(new URL('/work/mt2-allocation', req.url).href, 301);
+		// MT2 Allocation (once Dynamication) is no longer a case.
+		if (/^\/work\/(dynamication|mt2-allocation)(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work', req.url).href, 301);
 		if (pathname === PREFIX || pathname.startsWith(`${PREFIX}/`)) return new Response('Not found', { status: 404 });
 		if (!PT_HOST.test(hostname)) return env.ASSETS.fetch(req);
 
