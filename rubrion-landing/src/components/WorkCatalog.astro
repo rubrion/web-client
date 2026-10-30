@@ -1,8 +1,8 @@
 ---
 // The work catalogue: every case grouped by type (SaaS, white-label & tools,
 // websites & portals, libraries), each with who built it, what it is, a link
-// to the live product and to its case page. The Rubry agent platform closes
-// the SaaS group. Pills on top narrow every group to who it was built with
+// to the live product and to its case page. The Rubry agent platform opens
+// the page, above every group. Pills on top narrow every group to who it was built with
 // (Rubrion, MT2 Data, Sennatech); `?by=mt2` opens it filtered. Used by /work.
 import Mockup from './Mockup.astro';
 import Rubry from './Rubry.astro';
@@ -12,8 +12,15 @@ import { credits, kinds, work, type Credit, type Kind } from '../data/work';
 
 const p = c.products;
 const by = (Object.keys(credits) as Credit[]).map((k) => ({ k, name: credits[k].name, n: work.filter((w) => w.credit === k).length }));
+// The platform's open-source pieces, and the agents Rubrion runs on it.
+const repos = ['rubry', 'mastra-cloudflare', 'agent-kit'];
+const agents = [
+	{ name: 'Brad', logo: '/logos/brad.svg', url: 'https://brad.rubrion.ai', text: p.bradText },
+	{ name: 'Equânime', logo: '/logos/equanime.svg', url: 'https://equanime.rubrion.ai', text: p.equanimeText },
+];
 const groups = (Object.keys(kinds) as Kind[])
-	.map((k) => ({ k, label: l(kinds[k]), items: work.filter((w) => w.type === k) }))
+	// Rubry is the card above the groups, not a case inside one.
+	.map((k) => ({ k, label: l(kinds[k]), items: work.filter((w) => w.type === k && w.slug !== 'rubry') }))
 	.filter((g) => g.items.length);
 ---
 
@@ -28,6 +35,44 @@ const groups = (Object.keys(kinds) as Kind[])
 </div>
 	<section class="bg-paper px-5 pb-28 md:px-8 md:pb-40">
 		<div class="mx-auto max-w-7xl space-y-24">
+			<div class="card p-7 md:p-10" id="agents" data-reveal data-by="rubrion" data-solo>
+				<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+					<div class="max-w-md">
+						<div class="flex items-center gap-3">
+							<span class="product-mark"><Rubry class="h-9 w-9" float /></span>
+							<div>
+								<h2 class="display text-[1.9rem]">Rubry</h2>
+								<p class="meta">{p.platform}</p>
+							</div>
+						</div>
+						<p class="lead mt-4">{p.rubotText}</p>
+						<div class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+							<a href="https://rubry.ai" target="_blank" rel="noopener" class="link-arrow">rubry.ai</a>
+							<a href="https://rubry.ai/agents" target="_blank" rel="noopener" class="link-arrow">Agent Hub</a>
+							<a href="https://docs.rubry.ai" target="_blank" rel="noopener" class="link-arrow">docs.rubry.ai</a>
+							<a href="/work/rubry" class="link-arrow link-arrow--in">{p.case}</a>
+						</div>
+						<p class="meta mt-6">{p.code}</p>
+						<div class="mt-2 flex flex-wrap gap-x-6 gap-y-2">
+							{repos.map((r) => <a href={`https://github.com/rubrion/${r}`} target="_blank" rel="noopener" class="link-arrow">{r}</a>)}
+						</div>
+					</div>
+					<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
+						{agents.map((a) => (
+							<a href={a.url} target="_blank" rel="noopener" class="group rounded-md border border-hair p-5 transition hover:border-ink">
+								<div class="flex items-center gap-2">
+									<img src={a.logo} alt="" width="24" height="24" class="h-6 w-6" />
+									<span class="display text-lg">{a.name}</span>
+								</div>
+								<p class="mt-2 text-[0.85rem]/6 text-ink-soft">{a.text}</p>
+								<span class="link-arrow mt-4">{new URL(a.url).host}</span>
+							</a>
+						))}
+						<a href="https://rubry.ai/agents" target="_blank" rel="noopener" class="flex items-center justify-center rounded-md border border-dashed border-hair p-5 text-center text-[0.85rem] text-ink-faint transition hover:border-ink hover:text-ink sm:col-span-2">{p.moreAgents}</a>
+					</div>
+				</div>
+			</div>
+
 			{groups.map((g) => (
 				<div id={g.k} class="scroll-mt-28" data-group={g.k}>
 					<div class="flex items-baseline justify-between gap-6 border-b border-hair pb-4" data-reveal>
@@ -52,6 +97,7 @@ const groups = (Object.keys(kinds) as Kind[])
 								<p class="mt-2 text-[0.92rem]/6 text-ink-soft">{l(w.summary)}</p>
 								<div class="mt-auto flex flex-wrap gap-x-6 gap-y-2 pt-5">
 									{w.url && <a href={w.url} target="_blank" rel="noopener" class="link-arrow">{p.visit} {new URL(w.url).host}</a>}
+									{w.demo && <a href={w.demo} target="_blank" rel="noopener" class="link-arrow">{c.work.demo}</a>}
 									{w.repo && <a href={w.repo} target="_blank" rel="noopener" class="link-arrow">GitHub</a>}
 									<a href={`/work/${w.slug}`} class="link-arrow link-arrow--in">{p.case}</a>
 								</div>
@@ -59,38 +105,6 @@ const groups = (Object.keys(kinds) as Kind[])
 						))}
 					</ul>
 
-					{g.k === 'saas' && (
-						<div class="card mt-14 p-7 md:p-10" id="agents" data-reveal data-by="rubrion">
-							<div class="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-								<div class="max-w-md">
-									<div class="flex items-center gap-3">
-										<span class="product-mark"><Rubry class="h-9 w-9" float /></span>
-										<div>
-											<h3 class="display text-[1.9rem]">Rubry</h3>
-											<p class="meta">{p.platform}</p>
-										</div>
-									</div>
-									<p class="lead mt-4">{p.rubotText}</p>
-									<div class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-										<a href="https://rubry.ai" target="_blank" rel="noopener" class="link-arrow">rubry.ai</a>
-										<a href="https://docs.rubry.ai" target="_blank" rel="noopener" class="link-arrow">docs.rubry.ai</a>
-										<a href="https://github.com/rubrion/rubry" target="_blank" rel="noopener" class="link-arrow">GitHub</a>
-									</div>
-								</div>
-								<div class="grid w-full max-w-md grid-cols-1 gap-3 sm:grid-cols-2">
-									<a href="https://brad.rubrion.ai" target="_blank" rel="noopener" class="group rounded-md border border-hair p-5 transition hover:border-ink">
-										<div class="flex items-center gap-2">
-											<img src="/logos/brad.svg" alt="" width="24" height="24" class="h-6 w-6" />
-											<span class="display text-lg">Brad</span>
-										</div>
-										<p class="mt-2 text-[0.85rem]/6 text-ink-soft">{p.bradText}</p>
-										<span class="link-arrow mt-4">brad.rubrion.ai</span>
-									</a>
-									<div class="flex items-center justify-center rounded-md border border-dashed border-hair p-5 text-center text-[0.85rem] text-ink-faint">{p.moreAgents}</div>
-								</div>
-							</div>
-						</div>
-					)}
 				</div>
 			))}
 		</div>
@@ -105,9 +119,15 @@ const groups = (Object.keys(kinds) as Kind[])
 	const bar = document.querySelector<HTMLElement>('[data-catalog-bar]');
 	const pills = bar ? [...bar.querySelectorAll<HTMLButtonElement>('button[data-by]')] : [];
 	const groups = [...document.querySelectorAll<HTMLElement>('[data-group]')];
+	const solo = [...document.querySelectorAll<HTMLElement>('[data-solo]')];
 	const apply = (key: string, animate: boolean) => {
 		pills.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.by === key)));
 		const shown: HTMLElement[] = [];
+		solo.forEach((el) => {
+			const on = key === 'all' || el.dataset.by === key;
+			el.classList.toggle('is-filtered', !on);
+			if (on) shown.push(el);
+		});
 		groups.forEach((g) => {
 			const items = [...g.querySelectorAll<HTMLElement>('[data-by]')];
 			items.forEach((el) => {

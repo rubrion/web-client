@@ -26,6 +26,8 @@ export interface Work {
 	stack: string[];
 	services: Service[];
 	url?: string;
+	/** For a client build of one of our templates: the template's own demo. */
+	demo?: string;
 	image?: string;
 	mock?: Mock;
 	/** Public source code, for open-source work. */
@@ -60,8 +62,8 @@ export const work: Work[] = [
 			pt: 'Equipes querem agentes que conheçam o negócio delas, sem manter servidores, e querem testá-los num chat de verdade antes de investir num projeto.',
 		},
 		built: {
-			en: 'The chat (rubry.ai) with streaming, tools, voice and per-agent sessions, guarded by Turnstile and a daily budget; and the rubry template: a middleware Worker (API keys, provider, settings page) and Mastra agents on Workers with automatic routing, on our open-source library. Docs at docs.rubry.ai; Brad runs on the same stack.',
-			pt: 'O chat (rubry.ai), com streaming, ferramentas, voz e sessões por agente, protegido por Turnstile e orçamento diário; e o template rubry: um Worker de middleware (chaves de API, provedor, página de configurações) e agentes Mastra nos Workers com roteamento automático, sobre nossa biblioteca de código aberto. Documentação em docs.rubry.ai; o Brad roda na mesma base.',
+			en: 'The chat (rubry.ai) with streaming, tools, voice and per-agent sessions, guarded by Turnstile and a daily budget; the Agent Hub (rubry.ai/agents), where the community lists the agents it builds; and the rubry template: a middleware Worker (API keys, provider, settings page) and Mastra agents on Workers with automatic routing, on our open-source library @rubrion/mastra-cloudflare. Docs at docs.rubry.ai. Brad and Equânime run on their own stacks and answer in the same chat.',
+			pt: 'O chat (rubry.ai), com streaming, ferramentas, voz e sessões por agente, protegido por Turnstile e orçamento diário; o Agent Hub (rubry.ai/agents), onde a comunidade lista os agentes que cria; e o template rubry: um Worker de middleware (chaves de API, provedor, página de configurações) e agentes Mastra nos Workers com roteamento automático, sobre nossa biblioteca de código aberto @rubrion/mastra-cloudflare. Documentação em docs.rubry.ai. O Brad e o Equânime rodam nas próprias bases e respondem no mesmo chat.',
 		},
 		stack: ['Cloudflare Workers', 'Mastra', 'Workers AI', 'D1', 'Astro'],
 		services: ['agents', 'products'],
@@ -76,7 +78,7 @@ export const work: Work[] = [
 		slug: 'advogue',
 		name: { en: 'Advogue', pt: 'Advogue' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'site',
 		kind: { en: 'Law firm website template', pt: 'Template de site para advocacia' },
 		summary: {
 			en: 'A 17-page bilingual law-firm site with digit-roller counters, a page wipe and a scripted intake chat.',
@@ -98,26 +100,27 @@ export const work: Work[] = [
 	},
 	{
 		slug: 'vet-clinic-template',
-		name: { en: 'Vet clinic template', pt: 'Template de clínica veterinária' },
+		name: { en: 'Animally', pt: 'Animally' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'site',
 		kind: { en: 'Veterinary clinic website template', pt: 'Template de site para clínica veterinária' },
 		summary: {
-			en: 'A full bilingual clinic site with a vet team, a 24/7 strip, booking, a shop and a style guide, shown as a fictional clinic.',
-			pt: 'Um site bilíngue completo de clínica, com equipe de veterinários, faixa 24h, agendamento, loja e guia de estilo, apresentado como uma clínica fictícia.',
+			en: 'Our vet clinic template, live for Animally: a vet in São Carlos who visits exotic and household pets at home, with booking, emails and a chat.',
+			pt: 'Nosso template de clínica veterinária, no ar para a Animally: uma veterinária de São Carlos que atende pets exóticos e domésticos em casa, com agendamento, e-mails e chat.',
 		},
 		problem: {
-			en: 'Clinics need a warm, trustworthy site that books visits and answers common questions, without paying for a custom build from scratch.',
-			pt: 'Clínicas precisam de um site acolhedor e confiável que agende consultas e responda dúvidas comuns, sem pagar por um projeto do zero.',
+			en: 'Clinics need a warm, trustworthy site that books visits and answers “how much?”, without paying for a build from scratch. Animally, a new practice with no clinic yet, also needed honest positioning and no full-time assistant.',
+			pt: 'Clínicas precisam de um site acolhedor e confiável que agende consultas e responda “quanto custa?”, sem pagar por um projeto do zero. A Animally, uma prática nova ainda sem clínica, também precisava de um posicionamento honesto e de dispensar uma assistente em tempo integral.',
 		},
 		built: {
-			en: 'Static Astro pages on a Cloudflare Worker in English and Portuguese, a booking wizard with confirmation emails, a scripted chat with WhatsApp handoff, hand-drawn pets animated with GSAP, and every text, colour and photo swappable per clinic.',
-			pt: 'Páginas estáticas em Astro num Worker da Cloudflare, em português e inglês, agendamento em etapas com e-mails de confirmação, chat roteirizado com passagem para o WhatsApp, pets desenhados à mão animados com GSAP, e todos os textos, cores e fotos trocáveis por clínica.',
+			en: 'The template: static Astro pages on a Cloudflare Worker in English and Portuguese, a booking wizard with confirmation emails, a scripted chat with WhatsApp handoff, hand-drawn pets animated with GSAP, and every text, colour and photo swappable per clinic (demo at vet.rubrion.ai, as a fictional clinic). For Animally: its brand and copy, a booking wizard that checks the service area, and emails to the team and the client through Resend and Email Routing.',
+			pt: 'O template: páginas estáticas em Astro num Worker da Cloudflare, em português e inglês, agendamento em etapas com e-mails de confirmação, chat roteirizado com passagem para o WhatsApp, pets desenhados à mão animados com GSAP, e todos os textos, cores e fotos trocáveis por clínica (demo em vet.rubrion.ai, como uma clínica fictícia). Para a Animally: marca e textos próprios, agendamento que confere a área atendida, e e-mails para a equipe e para o cliente pelo Resend e Email Routing.',
 		},
-		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'GSAP'],
+		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
 		services: ['sites'],
-		url: 'https://vet.rubrion.ai',
-		image: 'vet-demo',
+		url: 'https://animally.pet',
+		demo: 'https://vet.rubrion.ai',
+		image: 'animally',
 		hero: 2,
 	},
 	{
@@ -305,11 +308,12 @@ export const work: Work[] = [
 			pt: 'Conferir cada par de avaliadores em busca de coautoria e vínculos em comum eram horas de leitura cruzada manual.',
 		},
 		built: {
-			en: 'A Worker API driving a durable Workflow: a private collector, deterministic rules, reports in R2, Access-protected, with an assistant in OpenWebUI that calls the API.',
-			pt: 'Uma API em Worker que dispara um Workflow durável: coletor privado, regras determinísticas, relatórios no R2, protegida por Access, com um assistente no OpenWebUI que chama a API.',
+			en: 'A Worker API driving a durable Workflow: Lattes XML uploads or a private collector, deterministic rules and PDF reports in R2; a web app with Google sign-in; and the Análise de Banca agent, built on our agent-kit and mastra-cloudflare libraries, which runs an analysis from a chat on rubry.ai or OpenWebUI and keeps each person’s analyses apart.',
+			pt: 'Uma API em Worker que dispara um Workflow durável: envio do XML do Lattes ou um coletor privado, regras determinísticas e relatórios em PDF no R2; um app web com login Google; e o agente Análise de Banca, feito com nossas bibliotecas agent-kit e mastra-cloudflare, que roda uma análise a partir de um chat no rubry.ai ou no OpenWebUI e mantém as análises de cada pessoa separadas.',
 		},
-		stack: ['Cloudflare Workflows', 'D1', 'R2', 'OpenWebUI'],
+		stack: ['Cloudflare Workflows', 'D1', 'R2', 'agent-kit', 'Mastra'],
 		services: ['data', 'agents'],
+		url: 'https://equanime.rubrion.ai',
 		mock: 'report',
 		repo: 'https://github.com/rubenszinho/equanime',
 	},
@@ -318,30 +322,54 @@ export const work: Work[] = [
 		name: { en: 'Mastra on Cloudflare', pt: 'Mastra na Cloudflare' },
 		credit: 'rubrion',
 		type: 'library',
-		kind: { en: 'Open-source agent toolkit (npm)', pt: 'Kit de agentes de código aberto (npm)' },
+		kind: { en: 'Open-source agent library, on npm', pt: 'Biblioteca de agentes de código aberto, no npm' },
 		summary: {
-			en: 'Mastra agents on Cloudflare Workers without the boilerplate: an OpenAI-compatible agent server with routing, memory in D1 and model helpers. It powers rubry.ai and the rubry template.',
-			pt: 'Agentes Mastra nos Workers da Cloudflare sem código repetitivo: um servidor de agentes compatível com a OpenAI, com roteamento, memória no D1 e utilitários de modelo. É a base do rubry.ai e do template rubry.',
+			en: 'Mastra agents on Cloudflare Workers without the boilerplate: an OpenAI-compatible agent server with routing, memory in D1 and model helpers. npm install @rubrion/mastra-cloudflare; it powers rubry.ai and the rubry template.',
+			pt: 'Agentes Mastra nos Workers da Cloudflare sem código repetitivo: um servidor de agentes compatível com a OpenAI, com roteamento, memória no D1 e utilitários de modelo. npm install @rubrion/mastra-cloudflare; é a base do rubry.ai e do template rubry.',
 		},
 		problem: {
 			en: 'Most agent stacks assume a server running all day, and every project rewrites the same API, routing and memory glue.',
 			pt: 'A maioria das stacks de agentes pressupõe um servidor ligado o dia todo, e cada projeto reescreve a mesma cola de API, roteamento e memória.',
 		},
 		built: {
-			en: 'One package: agents as config, an OpenAI-compatible server with real streaming and a planner that splits a request across agents, Mastra memory on D1, and Workers AI or any OpenAI-compatible model. GPL-3.0, published as @rubrion/mastra-cloudflare.',
-			pt: 'Um pacote: agentes como configuração, um servidor compatível com a OpenAI com streaming de verdade e um planejador que divide um pedido entre agentes, memória Mastra no D1, e Workers AI ou qualquer modelo compatível com a OpenAI. GPL-3.0, publicado como @rubrion/mastra-cloudflare.',
+			en: 'One package: agents as config, an OpenAI-compatible server with real streaming and a planner that splits a request across agents, Mastra memory on D1, and Workers AI or any OpenAI-compatible model, with extra headers for remote agents. Since 0.2, how many agents a request may use and how many tool rounds a reply may take are set per environment, and every reply carries its token usage. GPL-3.0, published on npm as @rubrion/mastra-cloudflare; reference at docs.rubry.ai/library.',
+			pt: 'Um pacote: agentes como configuração, um servidor compatível com a OpenAI com streaming de verdade e um planejador que divide um pedido entre agentes, memória Mastra no D1, e Workers AI ou qualquer modelo compatível com a OpenAI, com cabeçalhos extras para agentes remotos. Desde a 0.2, quantos agentes um pedido pode usar e quantas rodadas de ferramentas uma resposta pode fazer são definidos por ambiente, e toda resposta traz o uso de tokens. GPL-3.0, publicado no npm como @rubrion/mastra-cloudflare; referência em docs.rubry.ai/library.',
 		},
 		stack: ['Mastra', 'Cloudflare Workers', 'Workers AI', 'D1', 'TypeScript'],
 		services: ['agents'],
-		url: 'https://docs.rubry.ai/library/',
+		url: 'https://www.npmjs.com/package/@rubrion/mastra-cloudflare',
 		repo: 'https://github.com/rubrion/mastra-cloudflare',
+		mock: 'chat',
+	},
+	{
+		slug: 'agent-kit',
+		name: { en: 'agent-kit', pt: 'agent-kit' },
+		credit: 'rubrion',
+		type: 'library',
+		kind: { en: 'Open-source in-app assistant, on npm', pt: 'Assistente para dentro do app, de código aberto, no npm' },
+		summary: {
+			en: 'An AI assistant you can drop into any Cloudflare app: an agent Worker, a gateway for your API and a React chat that streams the agent’s thinking, tool calls and answer.',
+			pt: 'Um assistente de IA para colocar em qualquer app na Cloudflare: um Worker de agentes, um gateway para a sua API e um chat em React que mostra o raciocínio, as chamadas de ferramenta e a resposta do agente em tempo real.',
+		},
+		problem: {
+			en: 'Putting an assistant inside a product means identity, tenants, budgets and a chat UI, and every app was rebuilding them around its agents.',
+			pt: 'Colocar um assistente dentro de um produto envolve identidade, clientes, orçamento e uma interface de chat, e cada app reconstruía tudo isso em volta dos seus agentes.',
+		},
+		built: {
+			en: 'Extracted from the Cerne assistant into two npm packages: @rubrion/agent-kit-server (createAgentWorker: Mastra agents with D1 memory, per-tenant context and token cost; createAgentGateway: Hono routes that decide who may ask, with budgets, plans and bring-your-own-key) and @rubrion/agent-kit-react (a floating ChatBox and a full AssistantScreen), plus a deployable template behind Cloudflare Access. MIT.',
+			pt: 'Extraído do assistente do Cerne em dois pacotes no npm: @rubrion/agent-kit-server (createAgentWorker: agentes Mastra com memória no D1, contexto por cliente e custo em tokens; createAgentGateway: rotas Hono que decidem quem pode perguntar, com orçamento, planos e chave própria) e @rubrion/agent-kit-react (um ChatBox flutuante e uma AssistantScreen de página inteira), mais um template pronto para publicar atrás do Cloudflare Access. MIT.',
+		},
+		stack: ['Mastra', 'Cloudflare Workers', 'D1', 'Hono', 'React'],
+		services: ['agents'],
+		url: 'https://www.npmjs.com/package/@rubrion/agent-kit-server',
+		repo: 'https://github.com/rubrion/agent-kit',
 		mock: 'chat',
 	},
 	{
 		slug: 'rubry-template',
 		name: { en: 'Rubry template', pt: 'Template Rubry' },
 		credit: 'rubrion',
-		type: 'library',
+		type: 'platform',
 		kind: { en: 'Open-source multi-agent template', pt: 'Template multiagente de código aberto' },
 		summary: {
 			en: 'Your own multi-agent assistant on Workers and Mastra: write agents and tools in TypeScript and get an OpenAI-compatible endpoint for rubry.ai, Open WebUI or your app.',
@@ -500,29 +528,6 @@ export const work: Work[] = [
 		image: 'bioexame',
 	},
 	{
-		slug: 'animally',
-		name: { en: 'Animally', pt: 'Animally' },
-		credit: 'rubrion',
-		type: 'site',
-		kind: { en: 'Home vet care, São Carlos', pt: 'Veterinária a domicílio, São Carlos' },
-		summary: {
-			en: 'Site, booking and email flow for a vet who visits exotic and household pets at home.',
-			pt: 'Site, agendamento e e-mails para uma veterinária que atende pets exóticos e domésticos em casa.',
-		},
-		problem: {
-			en: 'A new practice with no clinic yet needed bookings, honest positioning and a way to answer “how much?” without a full-time assistant.',
-			pt: 'Uma prática nova, ainda sem clínica, precisava de agendamentos, um posicionamento honesto e um jeito de responder “quanto custa?” sem uma assistente em tempo integral.',
-		},
-		built: {
-			en: 'A bilingual static site with a booking wizard that checks the service area, sends the team and the client confirmation emails, a scripted chat with WhatsApp handoff, and hand-drawn pets animated with GSAP.',
-			pt: 'Um site estático bilíngue com agendamento em etapas que confere a área atendida, envia e-mails de confirmação para a equipe e para o cliente, um chat roteirizado com passagem para o WhatsApp e pets desenhados à mão animados com GSAP.',
-		},
-		stack: ['Astro', 'Cloudflare Workers', 'Resend', 'Email Routing', 'GSAP'],
-		services: ['sites'],
-		url: 'https://animally.pet',
-		image: 'animally',
-	},
-	{
 		slug: 'lms',
 		name: { en: 'LMS', pt: 'LMS' },
 		credit: 'rubrion',
@@ -546,9 +551,9 @@ export const work: Work[] = [
 	},
 	{
 		slug: 'acme-business-template',
-		name: { en: 'Business site template', pt: 'Template de site empresarial' },
+		name: { en: 'Acme Advisory', pt: 'Acme Advisory' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'site',
 		kind: { en: 'Consultancy website template', pt: 'Template de site para consultorias' },
 		summary: {
 			en: 'A bilingual one-page business site with a product page, shown as the fictional Acme Advisory.',
@@ -581,7 +586,7 @@ export const serviceCases: Record<Service, string[]> = {
 	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
 	agents: ['rubry', 'brad', 'colmeia'],
 	data: ['dexplan', 'equanime'],
-	sites: ['bccc', 'advogue', 'animally'],
+	sites: ['bccc', 'advogue', 'vet-clinic-template'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
