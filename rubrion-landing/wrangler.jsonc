@@ -25,7 +25,9 @@
 	// The newsletter backend (EdgeLetter): POST /api/subscribe forwards here.
 	"services": [{ "binding": "EDGELETTER", "service": "web-rubrion-edgeletter" }],
 	// Secrets: NEWSLETTER_TURNSTILE_SECRET (the "edgepress" widget, same as
-	// EdgeLetter's) and SUBSCRIBE_API_KEY (shared with EdgeLetter).
+	// EdgeLetter's; /book uses the same widget) and SUBSCRIBE_API_KEY (shared
+	// with EdgeLetter). Booking (worker/booking.ts): GOOGLE_CLIENT_ID,
+	// GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, set by tools/google-auth.mjs.
 	"observability": {
 		"enabled": true
 	}

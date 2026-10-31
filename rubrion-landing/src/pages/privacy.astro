@@ -3,7 +3,8 @@
 // LGPD and the EU/UK GDPR. Facts here must match the code: the contact form
 // (Contact.astro → support-email-worker: forwarded to our Gmail inboxes, an
 // automatic reply sent by Resend), the newsletter (worker/index.ts →
-// EdgeLetter, double opt-in, sent by Resend), Turnstile on both forms, the
+// EdgeLetter, double opt-in, sent by Resend), booking a call (worker/booking.ts →
+// an event on our Google Calendar), Turnstile on the forms, the
 // theme in localStorage, and no analytics. Rubry has its own policy.
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
@@ -17,17 +18,18 @@ const t = l({
 	en: {
 		kicker: 'Updated October 31, 2026',
 		title: 'Privacy policy',
-		lead: 'What this site collects when you write to us or subscribe, why, for how long, and your rights under Brazil’s LGPD and the EU’s and UK’s GDPR.',
+		lead: 'What this site collects when you write to us, book a call or subscribe, why, for how long, and your rights under Brazil’s LGPD and the EU’s and UK’s GDPR.',
 		sections: [
 			['Who is responsible', [`The controller of your data is ${COMPANY}, ${ADDRESS}, Brazil. Our contact for anything about your data (the data protection officer’s channel under the LGPD) is ${email}.`]],
 			['What we collect, and why', [
 				'The contact form: your name, email, company (optional) and message. We use them to answer you and to discuss the project you describe (steps before a contract, at your request: GDPR Art. 6(1)(b); LGPD Art. 7, V). The message is forwarded to our inboxes by email, and you get an automatic confirmation. We keep it while we talk and, if we work together, for as long as the contract and accounting law require; otherwise for up to 2 years, unless you ask us to delete it sooner.',
 				'The newsletter: your email, which you confirm by clicking a link we send (consent: GDPR Art. 6(1)(a); LGPD Art. 7, I). We use it only to send our posts. Every email has a link to unsubscribe, and withdrawing consent is as easy as giving it.',
-				'Both forms use Cloudflare Turnstile to tell people from bots (our legitimate interest in stopping spam: GDPR Art. 6(1)(f); LGPD Art. 7, IX). Like any website, our servers see your network address with each request; Cloudflare keeps technical logs for a few days.',
+				'Booking a call: your name, email, company (optional), what you’d like to talk about and the time you pick. They become an event on our Google Calendar with a Google Meet link, and Google emails the invite to you and to us (steps before a contract, at your request: GDPR Art. 6(1)(b); LGPD Art. 7, V). The booking page shows only when we are free, never what is on our calendar. We keep the event like a contact message: up to 2 years unless we work together or you ask us to delete it sooner.',
+				'These forms use Cloudflare Turnstile to tell people from bots (our legitimate interest in stopping spam: GDPR Art. 6(1)(f); LGPD Art. 7, IX). Like any website, our servers see your network address with each request; Cloudflare keeps technical logs for a few days.',
 				'In your browser we store only your theme choice (light or dark). We use no analytics, advertising or tracking cookies.',
 			]],
 			['Who else processes it', [
-				'Cloudflare hosts this site, runs the human check and forwards the contact form by email; Google (Gmail) holds our inbox; Resend sends the automatic reply and the newsletter. They act on our instructions. Our newsletter list is kept in EdgeLetter, our own system on Cloudflare.',
+				'Cloudflare hosts this site, runs the human check and forwards the contact form by email; Google holds our inbox (Gmail) and calendar (Google Calendar and Meet); Resend sends the automatic reply and the newsletter. They act on our instructions. Our newsletter list is kept in EdgeLetter, our own system on Cloudflare.',
 				'We do not sell your data or share it for advertising.',
 			]],
 			['Where your data goes', ['Rubrion is in Brazil, and these providers work in several countries, including the United States. We use providers that offer the European Commission’s standard contractual clauses or an equivalent safeguard for transfers out of the EU.']],
@@ -42,17 +44,18 @@ const t = l({
 	pt: {
 		kicker: 'Atualizada em 31 de outubro de 2026',
 		title: 'Política de privacidade',
-		lead: 'O que este site coleta quando você escreve para nós ou assina a newsletter, por quê, por quanto tempo, e seus direitos pela LGPD e pelo GDPR da União Europeia e do Reino Unido.',
+		lead: 'O que este site coleta quando você escreve para nós, agenda uma conversa ou assina a newsletter, por quê, por quanto tempo, e seus direitos pela LGPD e pelo GDPR da União Europeia e do Reino Unido.',
 		sections: [
 			['Quem é o responsável', [`A controladora dos seus dados é a ${COMPANY}, ${ADDRESS}, Brasil. O canal do encarregado pelo tratamento de dados (LGPD) é ${email}.`]],
 			['O que coletamos, e por quê', [
 				'O formulário de contato: seu nome, e-mail, empresa (opcional) e mensagem. Usamos para responder e conversar sobre o projeto que você descreve (procedimentos preliminares a um contrato, a seu pedido: LGPD art. 7º, V; GDPR art. 6(1)(b)). A mensagem é encaminhada às nossas caixas de e-mail, e você recebe uma confirmação automática. Guardamos enquanto conversamos e, se trabalharmos juntos, pelo tempo que o contrato e a lei contábil exigirem; caso contrário, por até 2 anos, a menos que você peça para apagar antes.',
 				'A newsletter: seu e-mail, que você confirma clicando num link que enviamos (consentimento: LGPD art. 7º, I; GDPR art. 6(1)(a)). Usamos só para enviar nossos posts. Todo e-mail tem um link para cancelar, e revogar o consentimento é tão fácil quanto dá-lo.',
-				'Os dois formulários usam o Cloudflare Turnstile para distinguir pessoas de robôs (nosso legítimo interesse em evitar spam: LGPD art. 7º, IX; GDPR art. 6(1)(f)). Como em qualquer site, nossos servidores veem seu endereço de rede a cada requisição; a Cloudflare guarda registros técnicos por alguns dias.',
+				'Agendar uma conversa: seu nome, e-mail, empresa (opcional), o assunto e o horário que você escolhe. Eles viram um evento na nossa Google Agenda com um link do Google Meet, e o Google envia o convite a você e a nós (procedimentos preliminares a um contrato, a seu pedido: LGPD art. 7º, V; GDPR art. 6(1)(b)). A página de agendamento mostra só quando estamos livres, nunca o que está na agenda. Guardamos o evento como uma mensagem de contato: até 2 anos, a menos que trabalhemos juntos ou você peça para apagar antes.',
+				'Esses formulários usam o Cloudflare Turnstile para distinguir pessoas de robôs (nosso legítimo interesse em evitar spam: LGPD art. 7º, IX; GDPR art. 6(1)(f)). Como em qualquer site, nossos servidores veem seu endereço de rede a cada requisição; a Cloudflare guarda registros técnicos por alguns dias.',
 				'No seu navegador guardamos só a escolha de tema (claro ou escuro). Não usamos cookies de análise, publicidade ou rastreamento.',
 			]],
 			['Quem mais trata seus dados', [
-				'A Cloudflare hospeda este site, faz a verificação humana e encaminha o formulário de contato por e-mail; o Google (Gmail) guarda nossa caixa de entrada; a Resend envia a resposta automática e a newsletter. Elas agem segundo nossas instruções. Nossa lista da newsletter fica no EdgeLetter, nosso próprio sistema na Cloudflare.',
+				'A Cloudflare hospeda este site, faz a verificação humana e encaminha o formulário de contato por e-mail; o Google guarda nossa caixa de entrada (Gmail) e agenda (Google Agenda e Meet); a Resend envia a resposta automática e a newsletter. Elas agem segundo nossas instruções. Nossa lista da newsletter fica no EdgeLetter, nosso próprio sistema na Cloudflare.',
 				'Não vendemos seus dados nem os compartilhamos para publicidade.',
 			]],
 			['Para onde seus dados vão', ['A Rubrion fica no Brasil, e esses prestadores atuam em vários países, incluindo os Estados Unidos. Usamos prestadores que oferecem as cláusulas contratuais padrão da Comissão Europeia ou garantia equivalente para transferências para fora da UE.']],

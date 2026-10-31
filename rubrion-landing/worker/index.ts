@@ -10,11 +10,14 @@
  * the address goes to EdgeLetter (the blog and newsletter backend, where posts
  * are written and sent) over a service binding, as a trusted subscribe. The
  * list, double opt-in and dispatch all stay in EdgeLetter.
+ *
+ * /api/book/* books a call on Samuel's Google Calendar (worker/booking.ts).
  */
-interface Env {
+import { booking, type BookingEnv } from './booking';
+
+interface Env extends BookingEnv {
 	ASSETS: Fetcher;
 	EDGELETTER: Fetcher;
-	NEWSLETTER_TURNSTILE_SECRET: string;
 	SUBSCRIBE_API_KEY: string;
 }
 
@@ -54,8 +57,9 @@ const at = (req: Request, path: string) => {
 };
 
 export default {
-	async fetch(req: Request, env: Env): Promise<Response> {
+	async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const { hostname, pathname } = new URL(req.url);
+		if (pathname.startsWith('/api/book')) return booking(req, env, ctx, pathname);
 		if (pathname === '/api/subscribe') return req.method === 'POST' ? subscribe(req, env) : new Response(null, { status: 405, headers: { allow: 'POST' } });
 		// /products merged into /work.
 		if (pathname === '/products' || pathname === '/products.html') return Response.redirect(new URL('/work', req.url).href, 301);

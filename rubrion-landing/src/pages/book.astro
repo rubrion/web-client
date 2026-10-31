@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Booking from '../components/Booking.astro';
+import { l } from '../data/locale';
+
+const t = l({
+	en: {
+		kicker: 'Book a call',
+		title: 'Talk to Rubrion',
+		lead: 'Thirty minutes on a video call with Samuel, the founder: the agent or system you have in mind, where it should run and how we would build it. Pick a time below; you only see when we’re free, never what’s on the calendar.',
+	},
+	pt: {
+		kicker: 'Agendar uma conversa',
+		title: 'Fale com a Rubrion',
+		lead: 'Trinta minutos de videochamada com o Samuel, o fundador: o agente ou sistema que você tem em mente, onde ele deve rodar e como a gente construiria. Escolha um horário abaixo; você vê só quando estamos livres, nunca o que está na agenda.',
+	},
+});
+---
+
+<Layout title={t.kicker} description={t.lead}>
+	<PageHero kicker={t.kicker} title={t.title} lead={t.lead} crumbs={[{ label: t.kicker }]} />
+	<Booking />
+</Layout>

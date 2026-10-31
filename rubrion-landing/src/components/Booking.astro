@@ -1,0 +1,295 @@
+---
+// Book a call: open slots from Samuel's Google Calendar (worker/booking.ts),
+// shown in the visitor's own time zone, then a short form. The booking creates
+// the event with a Google Meet link and Google emails the invite. `?source=`
+// (rubry, demo:<label>…) travels into the event so we know where it came from.
+import { l } from '../data/locale';
+
+// The newsletter's Turnstile widget: its secret is the Worker's NEWSLETTER_TURNSTILE_SECRET.
+const SITE_KEY = '0x4AAAAAADMKgjDCOeL0zVJj';
+
+const t = l({
+	en: {
+		lang: 'en',
+		pick: 'Pick a time',
+		zone: 'Times in your time zone',
+		loading: 'Loading open times…',
+		none: 'No open times in the next two weeks. Write to us instead.',
+		failed: 'Couldn’t load the calendar. Try again in a minute, or write to us.',
+		details: 'Your details',
+		change: 'Change time',
+		name: 'Name',
+		email: 'Work email',
+		company: 'Company',
+		note: 'What would you like to talk about?',
+		book: 'Book the call',
+		booking: 'Booking…',
+		doneTitle: 'You’re booked',
+		doneText: 'The invite with the Google Meet link is on its way to {email}.',
+		join: 'Open the Meet link',
+		taken: 'That time was just taken. Pick another.',
+		error: 'Something went wrong. Try again, or write to us.',
+		minutes: '30-minute video call',
+	},
+	pt: {
+		lang: 'pt',
+		pick: 'Escolha um horário',
+		zone: 'Horários no seu fuso',
+		loading: 'Carregando horários livres…',
+		none: 'Sem horários livres nas próximas duas semanas. Escreva para nós.',
+		failed: 'Não deu para carregar a agenda. Tente de novo em um minuto, ou escreva para nós.',
+		details: 'Seus dados',
+		change: 'Trocar horário',
+		name: 'Nome',
+		email: 'E-mail de trabalho',
+		company: 'Empresa',
+		note: 'Sobre o que você quer conversar?',
+		book: 'Agendar a conversa',
+		booking: 'Agendando…',
+		doneTitle: 'Agendado',
+		doneText: 'O convite com o link do Google Meet está a caminho de {email}.',
+		join: 'Abrir o link do Meet',
+		taken: 'Esse horário acabou de ser ocupado. Escolha outro.',
+		error: 'Algo deu errado. Tente de novo, ou escreva para nós.',
+		minutes: 'Videochamada de 30 minutos',
+	},
+});
+const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft';
+---
+
+<section class="bg-paper px-5 pb-24 md:px-8" data-book data-strings={JSON.stringify(t)} data-sitekey={SITE_KEY}>
+	<div class="mx-auto max-w-3xl">
+		<div data-step="pick">
+			<div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-hair pb-4">
+				<h2 class="display text-[1.4rem]">{t.pick}</h2>
+				<p class="meta">{t.minutes} · <span data-zone>{t.zone}</span></p>
+			</div>
+			<p class="mt-8 text-ink-soft" data-status role="status" aria-live="polite">{t.loading}</p>
+			<div class="book-days mt-8" data-days hidden></div>
+			<div class="book-times mt-6" data-times></div>
+		</div>
+
+		<form class="space-y-7" data-step="form" hidden>
+			<div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-hair pb-4">
+				<h2 class="display text-[1.4rem]">{t.details}</h2>
+				<p class="meta"><span data-when></span> · <button type="button" class="underline underline-offset-4 hover:text-ink" data-back>{t.change}</button></p>
+			</div>
+			<div class="grid gap-7 sm:grid-cols-2">
+				<div><label for="book-name" class={label}>{t.name} *</label><input id="book-name" name="name" required autocomplete="name" maxlength="100" class="input" /></div>
+				<div><label for="book-email" class={label}>{t.email} *</label><input id="book-email" name="email" type="email" required autocomplete="email" class="input" /></div>
+			</div>
+			<div><label for="book-company" class={label}>{t.company}</label><input id="book-company" name="company" autocomplete="organization" maxlength="100" class="input" /></div>
+			<div><label for="book-note" class={label}>{t.note}</label><textarea id="book-note" name="note" rows="3" maxlength="1000" class="input resize-none"></textarea></div>
+			<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="!absolute !-left-[9999px] !h-px !w-px !opacity-0" />
+			<div data-turnstile></div>
+			<p class="hidden border-l border-brand-500 pl-3 text-sm text-brand-600" data-error></p>
+			<button type="submit" class="btn btn--ink disabled:cursor-not-allowed disabled:opacity-50" disabled><span class="form-spinner" aria-hidden="true"></span><span data-label>{t.book}</span></button>
+		</form>
+
+		<div data-step="done" hidden role="status" aria-live="polite">
+			<p class="eyebrow">{t.minutes}</p>
+			<h2 class="display mt-3 text-[2rem]">{t.doneTitle}</h2>
+			<p class="mt-2 text-[1.05rem]" data-done-when></p>
+			<p class="mt-3 text-ink-soft" data-done-text></p>
+			<a class="btn btn--line btn--out mt-8" target="_blank" rel="noopener" data-meet hidden>{t.join}</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.book-days {
+		display: flex;
+		gap: 0.5rem;
+		overflow-x: auto;
+		padding-bottom: 0.25rem;
+		scrollbar-width: thin;
+	}
+	.book-times {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+		gap: 0.5rem;
+	}
+	.book-days :global(button),
+	.book-times :global(button) {
+		border: 1px solid var(--hair);
+		border-radius: 0.25rem;
+		padding: 0.65rem 0.8rem;
+		font-size: 0.88rem;
+		font-weight: 700;
+		white-space: nowrap;
+		transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+	}
+	.book-days :global(button) {
+		flex: none;
+		text-align: left;
+		line-height: 1.25;
+	}
+	.book-days :global(button small) {
+		display: block;
+		font-weight: 400;
+		color: var(--ink-soft);
+	}
+	.book-days :global(button:hover),
+	.book-times :global(button:hover) {
+		border-color: var(--ink);
+	}
+	.book-days :global(button[aria-pressed='true']) {
+		background: var(--ink);
+		border-color: var(--ink);
+		color: var(--paper);
+	}
+	.book-days :global(button[aria-pressed='true'] small) {
+		color: inherit;
+		opacity: 0.7;
+	}
+</style>
+
+<script>
+	type Strings = Record<string, string>;
+	type TurnstileApi = { render: (el: HTMLElement, o: Record<string, unknown>) => string; reset: (id: string) => void };
+
+	const root = document.querySelector<HTMLElement>('[data-book]');
+	if (root) {
+		const t = JSON.parse(root.dataset.strings!) as Strings;
+		const $ = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
+		const step = (name: string) => root.querySelectorAll<HTMLElement>('[data-step]').forEach((el) => (el.hidden = el.dataset.step !== name));
+		const status = $('[data-status]');
+		const days = $('[data-days]');
+		const times = $('[data-times]');
+		const form = $<HTMLFormElement>('[data-step="form"]');
+		const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+		const error = $('[data-error]');
+		const locale = t.lang === 'pt' ? 'pt-BR' : 'en';
+		const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const source = new URLSearchParams(location.search).get('source') ?? '';
+		$('[data-zone]').textContent = `${t.zone}: ${zone.replace(/_/g, ' ')}`;
+
+		const dayKey = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+		const fmtDay = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+		const fmtDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' });
+		const fmtTime = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' });
+		const fmtFull = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+
+		let chosen = '';
+		let token = '';
+		let widget: string | undefined;
+
+		const showDay = (key: string, slots: string[]) => {
+			days.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.day === key)));
+			times.replaceChildren(
+				...slots.map((s) => {
+					const b = document.createElement('button');
+					b.type = 'button';
+					b.textContent = fmtTime.format(new Date(s));
+					b.addEventListener('click', () => pick(s));
+					return b;
+				}),
+			);
+		};
+
+		const load = async () => {
+			step('pick');
+			status.hidden = false;
+			status.textContent = t.loading;
+			days.hidden = true;
+			times.replaceChildren();
+			try {
+				const r = await fetch('/api/book/slots');
+				if (!r.ok) throw new Error();
+				const { slots } = (await r.json()) as { slots: string[] };
+				if (!slots.length) return void (status.textContent = t.none);
+				const byDay = new Map<string, string[]>();
+				for (const s of slots) {
+					const k = dayKey.format(new Date(s));
+					byDay.set(k, [...(byDay.get(k) ?? []), s]);
+				}
+				days.replaceChildren(
+					...[...byDay].map(([k, list]) => {
+						const b = document.createElement('button');
+						b.type = 'button';
+						b.dataset.day = k;
+						const d = new Date(list[0]);
+						b.innerHTML = `${fmtDay.format(d)}<small>${fmtDate.format(d)}</small>`;
+						b.addEventListener('click', () => showDay(k, list));
+						return b;
+					}),
+				);
+				status.hidden = true;
+				days.hidden = false;
+				const [first, list] = [...byDay][0];
+				showDay(first, list);
+			} catch {
+				status.textContent = t.failed;
+			}
+		};
+
+		const turnstile = () =>
+			new Promise<TurnstileApi>((resolve) => {
+				const w = window as unknown as { turnstile?: TurnstileApi };
+				if (w.turnstile) return resolve(w.turnstile);
+				const s = document.createElement('script');
+				s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+				s.async = true;
+				s.onload = () => resolve(w.turnstile!);
+				document.head.append(s);
+			});
+
+		const pick = async (slot: string) => {
+			chosen = slot;
+			$('[data-when]').textContent = fmtFull.format(new Date(slot));
+			error.classList.add('hidden');
+			step('form');
+			form.querySelector<HTMLInputElement>('#book-name')!.focus();
+			const api = await turnstile();
+			if (widget) return api.reset(widget);
+			widget = api.render($('[data-turnstile]'), {
+				sitekey: root.dataset.sitekey,
+				theme: 'auto',
+				size: 'flexible',
+				callback: (v: string) => ((token = v), (submit.disabled = false)),
+				'expired-callback': () => ((token = ''), (submit.disabled = true)),
+			});
+		};
+
+		$('[data-back]').addEventListener('click', load);
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+			submit.disabled = true;
+			submit.classList.add('is-busy');
+			$('[data-label]').textContent = t.booking;
+			error.classList.add('hidden');
+			try {
+				const r = await fetch('/api/book', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ ...data, start: chosen, source, lang: t.lang, turnstile: token }),
+				});
+				const j = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string; meet?: string };
+				if (r.status === 409) {
+					await load();
+					status.hidden = false;
+					status.textContent = t.taken;
+					return;
+				}
+				if (!r.ok || !j.ok) throw new Error();
+				$('[data-done-when]').textContent = fmtFull.format(new Date(chosen));
+				$('[data-done-text]').textContent = t.doneText.replace('{email}', data.email);
+				const meet = $<HTMLAnchorElement>('[data-meet]');
+				if (j.meet) (meet.href = j.meet), (meet.hidden = false);
+				step('done');
+			} catch {
+				error.textContent = t.error;
+				error.classList.remove('hidden');
+			} finally {
+				submit.classList.remove('is-busy');
+				$('[data-label]').textContent = t.book;
+				token = '';
+				if (widget) (window as unknown as { turnstile: TurnstileApi }).turnstile.reset(widget);
+			}
+		});
+
+		load();
+	}
+</script>

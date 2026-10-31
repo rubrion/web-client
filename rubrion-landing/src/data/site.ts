@@ -155,6 +155,8 @@ const en = {
 		response: 'Within 24 hours',
 		deployLabel: 'Typical delivery',
 		deploy: '6–10 weeks to production',
+		callLabel: 'Video call',
+		call: 'Book 30 minutes',
 	},
 	products: {
 		kicker: 'Products',
@@ -392,6 +394,8 @@ const pt: typeof en = {
 		response: 'Em até 24 horas',
 		deployLabel: 'Entrega típica',
 		deploy: '6 a 10 semanas até a produção',
+		callLabel: 'Videochamada',
+		call: 'Agende 30 minutos',
 	},
 	products: {
 		kicker: 'Produtos',
