@@ -54,8 +54,8 @@ export const work: Work[] = [
 		type: 'platform',
 		kind: { en: 'Your own AI agent, on your infrastructure', pt: 'Seu próprio agente de IA, na sua infraestrutura' },
 		summary: {
-			en: 'Build an AI agent for your business from an open-source template, or have us build it. It runs in your own Cloudflare account, on the model you choose; rubry.ai is where you test it, next to our agents, and share it on the Agent Hub.',
-			pt: 'Crie um agente de IA para o seu negócio a partir de um template de código aberto, ou deixe a gente criar. Ele roda na sua própria conta da Cloudflare, no modelo que você escolher; o rubry.ai é onde você testa, ao lado dos nossos agentes, e compartilha no Hub de agentes.',
+			en: 'An AI agent for your business, on your own infrastructure: we build it in your cloud or on-premise, on the model you choose, or you build it yourself from an open-source template on Cloudflare. rubry.ai is where you test it, next to our agents, and share it on the Agent Hub.',
+			pt: 'Um agente de IA para o seu negócio, na sua própria infraestrutura: construímos na sua nuvem ou on-premise, no modelo que você escolher, ou você mesmo cria a partir de um template de código aberto na Cloudflare. O rubry.ai é onde você testa, ao lado dos nossos agentes, e compartilha no Hub de agentes.',
 		},
 		problem: {
 			en: 'Businesses want agents that know their work, without handing their data to someone else’s platform or standing up servers, and want to try them in a real chat before committing to a build.',
