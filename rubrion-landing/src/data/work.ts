@@ -52,14 +52,14 @@ export const work: Work[] = [
 		name: { en: 'Rubry', pt: 'Rubry' },
 		credit: 'rubrion',
 		type: 'platform',
-		kind: { en: 'Our AI agent platform', pt: 'Nossa plataforma de agentes de IA' },
+		kind: { en: 'Your own AI agent, on your infrastructure', pt: 'Seu próprio agente de IA, na sua infraestrutura' },
 		summary: {
-			en: 'A free chat with our AI agents, and an open-source template to build your own: connect your agent to rubry.ai with an endpoint and a key, and it runs on your model, outside our limits.',
-			pt: 'Um chat gratuito com nossos agentes de IA e um template de código aberto para criar os seus: conecte seu agente ao rubry.ai com um endpoint e uma chave, e ele roda no seu modelo, fora dos nossos limites.',
+			en: 'Build an AI agent for your business from an open-source template, or have us build it. It runs in your own Cloudflare account, on the model you choose; rubry.ai is where you test it, next to our agents, and share it on the Agent Hub.',
+			pt: 'Crie um agente de IA para o seu negócio a partir de um template de código aberto, ou deixe a gente criar. Ele roda na sua própria conta da Cloudflare, no modelo que você escolher; o rubry.ai é onde você testa, ao lado dos nossos agentes, e compartilha no Hub de agentes.',
 		},
 		problem: {
-			en: 'Teams want agents that know their business, without standing up servers, and want to try them in a real chat before committing to a build.',
-			pt: 'Equipes querem agentes que conheçam o negócio delas, sem manter servidores, e querem testá-los num chat de verdade antes de investir num projeto.',
+			en: 'Businesses want agents that know their work, without handing their data to someone else’s platform or standing up servers, and want to try them in a real chat before committing to a build.',
+			pt: 'Empresas querem agentes que conheçam o trabalho delas, sem entregar seus dados à plataforma de outra empresa nem manter servidores, e querem testá-los num chat de verdade antes de investir num projeto.',
 		},
 		built: {
 			en: 'The chat (rubry.ai) with streaming, tools, voice and per-agent sessions, guarded by Turnstile and a daily budget; the Agent Hub (rubry.ai/agents), where the community lists the agents it builds; and the rubry template: a middleware Worker (API keys, provider, settings page) and Mastra agents on Workers with automatic routing, on our open-source library @rubrion/mastra-cloudflare. Docs at docs.rubry.ai. Brad and Equânime run on their own stacks and answer in the same chat.',

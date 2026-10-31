@@ -1,0 +1,82 @@
+---
+// Privacy policy for rubrion.ai / rubrion.com.br, written for both Brazil's
+// LGPD and the EU/UK GDPR. Facts here must match the code: the contact form
+// (Contact.astro → support-email-worker: forwarded to our Gmail inboxes, an
+// automatic reply sent by Resend), the newsletter (worker/index.ts →
+// EdgeLetter, double opt-in, sent by Resend), Turnstile on both forms, the
+// theme in localStorage, and no analytics. Rubry has its own policy.
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { c, email } from '../data/site';
+import { l } from '../data/locale';
+
+const COMPANY = 'RUBRION TECH LTDA (Rubrion), CNPJ 57.637.752/0001-85';
+const ADDRESS = 'Avenida Paulista, 777, 15º andar, conj. 15, sala 2279, Bela Vista, São Paulo/SP, 01311-914';
+
+const t = l({
+	en: {
+		kicker: 'Updated October 31, 2026',
+		title: 'Privacy policy',
+		lead: 'What this site collects when you write to us or subscribe, why, for how long, and your rights under Brazil’s LGPD and the EU’s and UK’s GDPR.',
+		sections: [
+			['Who is responsible', [`The controller of your data is ${COMPANY}, ${ADDRESS}, Brazil. Our contact for anything about your data (the data protection officer’s channel under the LGPD) is ${email}.`]],
+			['What we collect, and why', [
+				'The contact form: your name, email, company (optional) and message. We use them to answer you and to discuss the project you describe (steps before a contract, at your request: GDPR Art. 6(1)(b); LGPD Art. 7, V). The message is forwarded to our inboxes by email, and you get an automatic confirmation. We keep it while we talk and, if we work together, for as long as the contract and accounting law require; otherwise for up to 2 years, unless you ask us to delete it sooner.',
+				'The newsletter: your email, which you confirm by clicking a link we send (consent: GDPR Art. 6(1)(a); LGPD Art. 7, I). We use it only to send our posts. Every email has a link to unsubscribe, and withdrawing consent is as easy as giving it.',
+				'Both forms use Cloudflare Turnstile to tell people from bots (our legitimate interest in stopping spam: GDPR Art. 6(1)(f); LGPD Art. 7, IX). Like any website, our servers see your network address with each request; Cloudflare keeps technical logs for a few days.',
+				'In your browser we store only your theme choice (light or dark). We use no analytics, advertising or tracking cookies.',
+			]],
+			['Who else processes it', [
+				'Cloudflare hosts this site, runs the human check and forwards the contact form by email; Google (Gmail) holds our inbox; Resend sends the automatic reply and the newsletter. They act on our instructions. Our newsletter list is kept in EdgeLetter, our own system on Cloudflare.',
+				'We do not sell your data or share it for advertising.',
+			]],
+			['Where your data goes', ['Rubrion is in Brazil, and these providers work in several countries, including the United States. We use providers that offer the European Commission’s standard contractual clauses or an equivalent safeguard for transfers out of the EU.']],
+			['Your rights', [
+				`You may ask whether we process your data, see it and get a copy in a portable format, correct it, delete it, restrict or object to its use, and withdraw consent at any time. Write to ${email}; we answer within 15 days.`,
+				'You may also complain to Brazil’s data protection authority (ANPD, gov.br/anpd) or, in the European Economic Area or the UK, to the supervisory authority where you live or work.',
+			]],
+			['Rubry', ['Rubry (rubry.ai), our AI agent platform, has its own privacy policy at rubry.ai/privacy.']],
+			['Changes', ['We update this page when what we collect changes; the date at the top is the latest version.']],
+		],
+	},
+	pt: {
+		kicker: 'Atualizada em 31 de outubro de 2026',
+		title: 'Política de privacidade',
+		lead: 'O que este site coleta quando você escreve para nós ou assina a newsletter, por quê, por quanto tempo, e seus direitos pela LGPD e pelo GDPR da União Europeia e do Reino Unido.',
+		sections: [
+			['Quem é o responsável', [`A controladora dos seus dados é a ${COMPANY}, ${ADDRESS}, Brasil. O canal do encarregado pelo tratamento de dados (LGPD) é ${email}.`]],
+			['O que coletamos, e por quê', [
+				'O formulário de contato: seu nome, e-mail, empresa (opcional) e mensagem. Usamos para responder e conversar sobre o projeto que você descreve (procedimentos preliminares a um contrato, a seu pedido: LGPD art. 7º, V; GDPR art. 6(1)(b)). A mensagem é encaminhada às nossas caixas de e-mail, e você recebe uma confirmação automática. Guardamos enquanto conversamos e, se trabalharmos juntos, pelo tempo que o contrato e a lei contábil exigirem; caso contrário, por até 2 anos, a menos que você peça para apagar antes.',
+				'A newsletter: seu e-mail, que você confirma clicando num link que enviamos (consentimento: LGPD art. 7º, I; GDPR art. 6(1)(a)). Usamos só para enviar nossos posts. Todo e-mail tem um link para cancelar, e revogar o consentimento é tão fácil quanto dá-lo.',
+				'Os dois formulários usam o Cloudflare Turnstile para distinguir pessoas de robôs (nosso legítimo interesse em evitar spam: LGPD art. 7º, IX; GDPR art. 6(1)(f)). Como em qualquer site, nossos servidores veem seu endereço de rede a cada requisição; a Cloudflare guarda registros técnicos por alguns dias.',
+				'No seu navegador guardamos só a escolha de tema (claro ou escuro). Não usamos cookies de análise, publicidade ou rastreamento.',
+			]],
+			['Quem mais trata seus dados', [
+				'A Cloudflare hospeda este site, faz a verificação humana e encaminha o formulário de contato por e-mail; o Google (Gmail) guarda nossa caixa de entrada; a Resend envia a resposta automática e a newsletter. Elas agem segundo nossas instruções. Nossa lista da newsletter fica no EdgeLetter, nosso próprio sistema na Cloudflare.',
+				'Não vendemos seus dados nem os compartilhamos para publicidade.',
+			]],
+			['Para onde seus dados vão', ['A Rubrion fica no Brasil, e esses prestadores atuam em vários países, incluindo os Estados Unidos. Usamos prestadores que oferecem as cláusulas contratuais padrão da Comissão Europeia ou garantia equivalente para transferências para fora da UE.']],
+			['Seus direitos', [
+				`Você pode confirmar se tratamos seus dados, acessá-los e receber uma cópia em formato portável, corrigi-los, apagá-los, limitar ou se opor ao uso deles e revogar o consentimento a qualquer momento. Escreva para ${email}; respondemos em até 15 dias.`,
+				'Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD, gov.br/anpd) ou, no Espaço Econômico Europeu ou no Reino Unido, à autoridade de proteção de dados de onde você mora ou trabalha.',
+			]],
+			['Rubry', ['O Rubry (rubry.ai), nossa plataforma de agentes de IA, tem a própria política de privacidade em rubry.ai/pt/privacy.']],
+			['Mudanças', ['Atualizamos esta página quando o que coletamos muda; a data no topo indica a versão mais recente.']],
+		],
+	},
+});
+---
+
+<Layout title={t.title} description={t.lead}>
+	<PageHero kicker={t.kicker} title={t.title} lead={t.lead} crumbs={[{ label: c.footer.privacy }]} />
+	<article class="bg-paper px-5 pb-24 md:px-8">
+		<div class="prose-r mx-auto max-w-2xl">
+			{t.sections.map(([h, ps]) => (
+				<>
+					<h2>{h}</h2>
+					{(ps as string[]).length > 1 ? <ul>{(ps as string[]).map((p) => <li>{p}</li>)}</ul> : <p>{ps[0]}</p>}
+				</>
+			))}
+		</div>
+	</article>
+</Layout>

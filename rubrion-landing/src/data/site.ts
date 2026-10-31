@@ -166,7 +166,7 @@ const en = {
 		whitelabel: 'White-label',
 		agents: 'AI agents',
 		platform: 'Agent platform',
-		rubotText: 'The platform our agents run on, an Agent Hub for the community’s, and an open-source template to build your own. Do it yourself with our libraries on npm, or hire us to build, connect and run your agents under your brand.',
+		rubotText: 'Your own AI agent, on your infrastructure: it runs in your Cloudflare account, on the model you choose. Build it free from our open-source template, test it in the chat and share it on the Agent Hub, or have us build and run it under your brand.',
 		bradText: 'Marketing: briefs, social copy and on-brand banners, over WhatsApp.',
 		equanimeText: 'Conflict-of-interest checks for academic boards, from a chat.',
 		moreAgents: 'More in the Agent Hub',
@@ -198,6 +198,7 @@ const en = {
 		follow: 'Follow',
 		rights: 'All rights reserved.',
 		brand: 'Brand guide',
+		privacy: 'Privacy',
 	},
 	chat: {
 		open: 'Chat with us',
@@ -402,7 +403,7 @@ const pt: typeof en = {
 		whitelabel: 'White-label',
 		agents: 'Agentes de IA',
 		platform: 'Plataforma de agentes',
-		rubotText: 'A plataforma onde nossos agentes rodam, um Agent Hub para os da comunidade e um template de código aberto para criar os seus. Faça você mesmo com nossas bibliotecas no npm, ou contrate a gente para construir, conectar e operar seus agentes com a sua marca.',
+		rubotText: 'Seu próprio agente de IA, na sua infraestrutura: ele roda na sua conta da Cloudflare, no modelo que você escolher. Crie de graça com nosso template de código aberto, teste no chat e compartilhe no Hub de agentes, ou deixe a gente construir e operar com a sua marca.',
 		bradText: 'Marketing: briefings, textos para redes e banners com a sua marca, pelo WhatsApp.',
 		equanimeText: 'Conflito de interesses em bancas acadêmicas, a partir de um chat.',
 		moreAgents: 'Mais no Agent Hub',
@@ -434,6 +435,7 @@ const pt: typeof en = {
 		follow: 'Siga',
 		rights: 'Todos os direitos reservados.',
 		brand: 'Guia de marca',
+		privacy: 'Privacidade',
 	},
 	chat: {
 		open: 'Fale com a gente',
