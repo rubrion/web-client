@@ -1,11 +1,11 @@
 /**
  * Booking a call on Samuel's Google Calendar, for /book on both sites.
  *
- * GET  /api/book/slots  the open slots for the next HORIZON_DAYS, as UTC ISO
- *                       strings: every half hour, day and night (clients are
- *                       anywhere), minus whatever any of Samuel's calendars
- *                       has busy (free/busy only: event details never leave
- *                       Google).
+ * GET  /api/book/slots  every slot for the next HORIZON_DAYS ({ at: UTC ISO,
+ *                       free }): every half hour, day and night on weekdays
+ *                       (clients are anywhere); `free` is false where any of Samuel's
+ *                       calendars is busy (free/busy only: event details
+ *                       never leave Google).
  * POST /api/book        { start, name, email, company?, note?, source?, lang,
  *                       turnstile } → checks Turnstile and that the slot is
  *                       still free, then creates the event with a Google Meet
@@ -31,10 +31,11 @@ export interface BookingEnv {
 }
 
 // Bookable hours, in São Paulo time. Brazil dropped daylight saving in 2019,
-// so São Paulo is UTC-3 all year and a fixed offset is enough. Open around the
-// clock for now; narrow DAYS or the hours to block some off.
+// so São Paulo is UTC-3 all year and a fixed offset is enough. Weekdays around
+// the clock, so clients anywhere find a time; São Paulo's Saturday and Sunday
+// are off.
 const OFFSET_H = -3;
-const DAYS = [0, 1, 2, 3, 4, 5, 6];
+const DAYS = [1, 2, 3, 4, 5]; // Monday to Friday
 const OPEN_H = 0;
 const CLOSE_H = 24;
 const CALL_MIN = 30;
@@ -112,7 +113,7 @@ async function slots(req: Request, env: BookingEnv, ctx: ExecutionContext) {
 	const to = Date.now() + HORIZON_DAYS * 86_400_000;
 	const taken = await busy(env, from, to);
 	const res = Response.json(
-		{ call: CALL_MIN, slots: grid(from, to).filter((s) => free(s, taken)).map((s) => new Date(s).toISOString()) },
+		{ call: CALL_MIN, slots: grid(from, to).map((s) => ({ at: new Date(s).toISOString(), free: free(s, taken) })) },
 		{ headers: { 'cache-control': 'public, max-age=60' } },
 	);
 	ctx.waitUntil(cache.put(key, res.clone()));

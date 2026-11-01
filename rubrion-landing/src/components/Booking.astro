@@ -1,5 +1,6 @@
 ---
-// Book a call: open slots from Samuel's Google Calendar (worker/booking.ts),
+// Book a call: slots from Samuel's Google Calendar (worker/booking.ts), busy
+// ones shown disabled,
 // shown in the visitor's own time zone, then a short form. The booking creates
 // the event with a Google Meet link and Google emails the invite. `?source=`
 // (rubry, demo:<label>…) travels into the event so we know where it came from.
@@ -12,7 +13,7 @@ const t = l({
 	en: {
 		lang: 'en',
 		pick: 'Pick a time',
-		zone: 'Times in your time zone',
+		zone: 'Times shown in your time zone:',
 		loading: 'Loading open times…',
 		none: 'No open times in the next two weeks. Write to us instead.',
 		failed: 'Couldn’t load the calendar. Try again in a minute, or write to us.',
@@ -34,7 +35,7 @@ const t = l({
 	pt: {
 		lang: 'pt',
 		pick: 'Escolha um horário',
-		zone: 'Horários no seu fuso',
+		zone: 'Horários no seu fuso horário:',
 		loading: 'Carregando horários livres…',
 		none: 'Sem horários livres nas próximas duas semanas. Escreva para nós.',
 		failed: 'Não deu para carregar a agenda. Tente de novo em um minuto, ou escreva para nós.',
@@ -62,8 +63,12 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 		<div data-step="pick">
 			<div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-hair pb-4">
 				<h2 class="display text-[1.4rem]">{t.pick}</h2>
-				<p class="meta">{t.minutes} · <span data-zone>{t.zone}</span></p>
+				<p class="meta">{t.minutes}</p>
 			</div>
+			<label class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.88rem] text-ink-soft">
+				<span>{t.zone}</span>
+				<select class="book-zone" data-zone aria-label={t.zone}></select>
+			</label>
 			<p class="mt-8 text-ink-soft" data-status role="status" aria-live="polite">{t.loading}</p>
 			<div class="book-days mt-8" data-days hidden></div>
 			<div class="book-times mt-6" data-times></div>
@@ -97,6 +102,14 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 </section>
 
 <style>
+	.book-zone {
+		max-width: 100%;
+		border-bottom: 1px solid var(--hair);
+		background: transparent;
+		padding: 0.2rem 0;
+		font-weight: 700;
+		color: var(--ink);
+	}
 	.book-days {
 		display: flex;
 		gap: 0.5rem;
@@ -129,9 +142,16 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 		font-weight: 400;
 		color: var(--ink-soft);
 	}
-	.book-days :global(button:hover),
-	.book-times :global(button:hover) {
+	.book-days :global(button:hover:not(:disabled)),
+	.book-times :global(button:hover:not(:disabled)) {
 		border-color: var(--ink);
+	}
+	.book-days :global(button:disabled),
+	.book-times :global(button:disabled) {
+		cursor: not-allowed;
+		color: var(--ink-faint, var(--ink-soft));
+		text-decoration: line-through;
+		opacity: 0.45;
 	}
 	.book-days :global(button[aria-pressed='true']) {
 		background: var(--ink);
@@ -160,32 +180,81 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 		const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 		const error = $('[data-error]');
 		const locale = t.lang === 'pt' ? 'pt-BR' : 'en';
-		const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		const source = new URLSearchParams(location.search).get('source') ?? '';
-		$('[data-zone]').textContent = `${t.zone}: ${zone.replace(/_/g, ' ')}`;
 
-		const dayKey = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
-		const fmtDay = new Intl.DateTimeFormat(locale, { weekday: 'short' });
-		const fmtDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short' });
-		const fmtTime = new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' });
-		const fmtFull = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+		// Times show in the visitor's own time zone, detected by the browser; the
+		// list lets them pick another (travelling, booking for a colleague).
+		const select = root.querySelector('[data-zone]') as unknown as HTMLSelectElement;
+		let zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const zones = (Intl as unknown as { supportedValuesOf?: (k: string) => string[] }).supportedValuesOf?.('timeZone') ?? [];
+		select.replaceChildren(
+			...[...new Set([zone, ...zones])].sort().map((z) => {
+				const o = document.createElement('option');
+				o.value = z;
+				o.textContent = z.replace(/_/g, ' ');
+				o.selected = z === zone;
+				return o;
+			}),
+		);
+
+		const fmt = (z: string) => ({
+			day: new Intl.DateTimeFormat('en-CA', { timeZone: z, year: 'numeric', month: '2-digit', day: '2-digit' }),
+			weekday: new Intl.DateTimeFormat(locale, { timeZone: z, weekday: 'short' }),
+			date: new Intl.DateTimeFormat(locale, { timeZone: z, day: 'numeric', month: 'short' }),
+			time: new Intl.DateTimeFormat(locale, { timeZone: z, hour: '2-digit', minute: '2-digit' }),
+			full: new Intl.DateTimeFormat(locale, { timeZone: z, weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }),
+		});
+		let f = fmt(zone);
 
 		let chosen = '';
 		let token = '';
 		let widget: string | undefined;
 
-		const showDay = (key: string, slots: string[]) => {
+		type Slot = { at: string; free: boolean };
+		let slots: Slot[] = [];
+
+		const showDay = (key: string, list: Slot[]) => {
 			days.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.day === key)));
 			times.replaceChildren(
-				...slots.map((s) => {
+				...list.map((s) => {
 					const b = document.createElement('button');
 					b.type = 'button';
-					b.textContent = fmtTime.format(new Date(s));
-					b.addEventListener('click', () => pick(s));
+					b.textContent = f.time.format(new Date(s.at));
+					b.disabled = !s.free;
+					b.addEventListener('click', () => pick(s.at));
 					return b;
 				}),
 			);
 		};
+
+		/** Group the slots into days in the chosen zone, and open the first day with a free slot. */
+		const render = () => {
+			const byDay = new Map<string, Slot[]>();
+			for (const s of slots) {
+				const k = f.day.format(new Date(s.at));
+				byDay.set(k, [...(byDay.get(k) ?? []), s]);
+			}
+			days.replaceChildren(
+				...[...byDay].map(([k, list]) => {
+					const b = document.createElement('button');
+					b.type = 'button';
+					b.dataset.day = k;
+					const d = new Date(list[0].at);
+					b.disabled = !list.some((s) => s.free);
+					b.innerHTML = `${f.weekday.format(d)}<small>${f.date.format(d)}</small>`;
+					b.addEventListener('click', () => showDay(k, list));
+					return b;
+				}),
+			);
+			const [first, list] = [...byDay].find(([, l]) => l.some((s) => s.free))!;
+			showDay(first, list);
+		};
+
+		select.addEventListener('change', () => {
+			zone = select.value;
+			f = fmt(zone);
+			if (slots.length) render();
+		});
 
 		const load = async () => {
 			step('pick');
@@ -196,28 +265,11 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 			try {
 				const r = await fetch('/api/book/slots');
 				if (!r.ok) throw new Error();
-				const { slots } = (await r.json()) as { slots: string[] };
-				if (!slots.length) return void (status.textContent = t.none);
-				const byDay = new Map<string, string[]>();
-				for (const s of slots) {
-					const k = dayKey.format(new Date(s));
-					byDay.set(k, [...(byDay.get(k) ?? []), s]);
-				}
-				days.replaceChildren(
-					...[...byDay].map(([k, list]) => {
-						const b = document.createElement('button');
-						b.type = 'button';
-						b.dataset.day = k;
-						const d = new Date(list[0]);
-						b.innerHTML = `${fmtDay.format(d)}<small>${fmtDate.format(d)}</small>`;
-						b.addEventListener('click', () => showDay(k, list));
-						return b;
-					}),
-				);
+				slots = ((await r.json()) as { slots: Slot[] }).slots;
+				if (!slots.some((s) => s.free)) return void (status.textContent = t.none);
 				status.hidden = true;
 				days.hidden = false;
-				const [first, list] = [...byDay][0];
-				showDay(first, list);
+				render();
 			} catch {
 				status.textContent = t.failed;
 			}
@@ -231,12 +283,12 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 				s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 				s.async = true;
 				s.onload = () => resolve(w.turnstile!);
-				document.head.append(s);
+				document.head.appendChild(s);
 			});
 
 		const pick = async (slot: string) => {
 			chosen = slot;
-			$('[data-when]').textContent = fmtFull.format(new Date(slot));
+			$('[data-when]').textContent = f.full.format(new Date(slot));
 			error.classList.add('hidden');
 			step('form');
 			form.querySelector<HTMLInputElement>('#book-name')!.focus();
@@ -274,7 +326,7 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 					return;
 				}
 				if (!r.ok || !j.ok) throw new Error();
-				$('[data-done-when]').textContent = fmtFull.format(new Date(chosen));
+				$('[data-done-when]').textContent = f.full.format(new Date(chosen));
 				$('[data-done-text]').textContent = t.doneText.replace('{email}', data.email);
 				const meet = $<HTMLAnchorElement>('[data-meet]');
 				if (j.meet) (meet.href = j.meet), (meet.hidden = false);
