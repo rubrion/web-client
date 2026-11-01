@@ -9,7 +9,8 @@
  * POST /api/subscribe is the newsletter form: Turnstile is checked here, then
  * the address goes to EdgeLetter (the blog and newsletter backend, where posts
  * are written and sent) over a service binding, as a trusted subscribe. The
- * list, double opt-in and dispatch all stay in EdgeLetter.
+ * list, double opt-in and dispatch all stay in EdgeLetter. Posts are written
+ * here (src/content/blog) and copied into EdgeLetter by tools/sync-edgeletter.mjs.
  *
  * /api/book/* books a call on Samuel's Google Calendar (worker/booking.ts).
  */
@@ -42,7 +43,8 @@ async function subscribe(req: Request, env: Env) {
 	const res = await env.EDGELETTER.fetch('https://edgeletter.rubrion.ai/api/subscribe', {
 		method: 'POST',
 		headers: { 'content-type': 'application/json', 'x-subscribe-key': env.SUBSCRIBE_API_KEY, 'cf-connecting-ip': req.headers.get('cf-connecting-ip') ?? '' },
-		body: JSON.stringify({ email }),
+		// Which site they signed up on: EdgeLetter sends them only posts in that language.
+		body: JSON.stringify({ email, lang: PT_HOST.test(new URL(req.url).hostname) ? 'pt' : 'en' }),
 	});
 	return new Response(res.body, { status: res.status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 }
