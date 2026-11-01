@@ -183,12 +183,16 @@ const label = 'text-[0.7rem] font-bold tracking-[0.2em] uppercase text-ink-soft'
 		const source = new URLSearchParams(location.search).get('source') ?? '';
 
 		// Times show in the visitor's own time zone, detected by the browser; the
-		// list lets them pick another (travelling, booking for a colleague).
+		// list lets them pick another (travelling, booking for a colleague). A
+		// browser that hides its zone (no answer, or a bare UTC as privacy modes
+		// report) gets São Paulo's, where Samuel is.
+		const HOME = 'America/Sao_Paulo';
 		const select = root.querySelector('[data-zone]') as unknown as HTMLSelectElement;
-		let zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		let zone = !detected || /^(Etc\/)?(UTC|Unknown)$/.test(detected) ? HOME : detected;
 		const zones = (Intl as unknown as { supportedValuesOf?: (k: string) => string[] }).supportedValuesOf?.('timeZone') ?? [];
 		select.replaceChildren(
-			...[...new Set([zone, ...zones])].sort().map((z) => {
+			...[...new Set([zone, HOME, 'UTC', ...zones])].sort().map((z) => {
 				const o = document.createElement('option');
 				o.value = z;
 				o.textContent = z.replace(/_/g, ' ');
