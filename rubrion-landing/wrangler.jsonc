@@ -27,7 +27,8 @@
 	// Secrets: NEWSLETTER_TURNSTILE_SECRET (the "edgepress" widget, same as
 	// EdgeLetter's; /book uses the same widget) and SUBSCRIBE_API_KEY (shared
 	// with EdgeLetter). Booking (worker/booking.ts): GOOGLE_CLIENT_ID,
-	// GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, set by tools/google-auth.mjs.
+	// GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, set by tools/google-auth.mjs,
+	// and BOOKING_CALENDARS (which calendars count as busy).
 	"observability": {
 		"enabled": true
 	}

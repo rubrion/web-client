@@ -2,7 +2,8 @@
  * Booking a call on Samuel's Google Calendar, for /book on both sites.
  *
  * GET  /api/book/slots  the open slots for the next HORIZON_DAYS, as UTC ISO
- *                       strings: working hours minus whatever the calendar
+ *                       strings: every half hour, day and night (clients are
+ *                       anywhere), minus whatever any of Samuel's calendars
  *                       has busy (free/busy only: event details never leave
  *                       Google).
  * POST /api/book        { start, name, email, company?, note?, source?, lang,
@@ -14,20 +15,28 @@
  * calendar.freebusy and calendar.events scopes (tools/google-auth.mjs makes
  * it). The OAuth app is Internal to the rubrion.ai Workspace, so the token
  * doesn't expire after a week as a testing-mode app's would.
+ *
+ * BOOKING_CALENDARS (a secret, since this repo is public) lists the calendars
+ * checked for busy times, comma-separated: `primary` plus the other Google
+ * accounts, each of which shares its free/busy with samuel@rubrion.ai. One
+ * that can't be read (sharing revoked) fails the whole check rather than risk
+ * a double booking. Events are always created on `primary`.
  */
 export interface BookingEnv {
 	GOOGLE_CLIENT_ID: string;
 	GOOGLE_CLIENT_SECRET: string;
 	GOOGLE_REFRESH_TOKEN: string;
 	NEWSLETTER_TURNSTILE_SECRET: string;
+	BOOKING_CALENDARS?: string;
 }
 
-// Working hours, in São Paulo time. Brazil dropped daylight saving in 2019, so
-// São Paulo is UTC-3 all year and a fixed offset is enough.
+// Bookable hours, in São Paulo time. Brazil dropped daylight saving in 2019,
+// so São Paulo is UTC-3 all year and a fixed offset is enough. Open around the
+// clock for now; narrow DAYS or the hours to block some off.
 const OFFSET_H = -3;
-const DAYS = [1, 2, 3, 4, 5]; // Monday to Friday
-const OPEN_H = 9;
-const CLOSE_H = 17;
+const DAYS = [0, 1, 2, 3, 4, 5, 6];
+const OPEN_H = 0;
+const CLOSE_H = 24;
 const CALL_MIN = 30;
 const BUFFER_MIN = 15; // kept clear around other events
 const NOTICE_H = 12; // earliest bookable slot from now
@@ -65,11 +74,16 @@ const google = async (env: BookingEnv, path: string, body: unknown) =>
 		body: JSON.stringify(body),
 	});
 
+const calendars = (env: BookingEnv) => (env.BOOKING_CALENDARS || 'primary').split(',').map((id) => ({ id: id.trim() })).filter((c) => c.id);
+
 async function busy(env: BookingEnv, from: number, to: number) {
-	const res = await google(env, '/freeBusy', { timeMin: new Date(from).toISOString(), timeMax: new Date(to).toISOString(), items: [{ id: 'primary' }] });
+	const res = await google(env, '/freeBusy', { timeMin: new Date(from).toISOString(), timeMax: new Date(to).toISOString(), items: calendars(env) });
 	if (!res.ok) throw new Error(`google freebusy ${res.status}`);
-	const j = (await res.json()) as { calendars: { primary: { busy: { start: string; end: string }[] } } };
-	return j.calendars.primary.busy.map((b) => [Date.parse(b.start) - BUFFER_MIN * MIN, Date.parse(b.end) + BUFFER_MIN * MIN]);
+	const j = (await res.json()) as { calendars: Record<string, { busy?: { start: string; end: string }[]; errors?: { reason: string }[] }> };
+	const all = Object.entries(j.calendars);
+	const broken = all.filter(([, c]) => c.errors?.length);
+	if (broken.length) throw new Error(`google freebusy: can't read ${broken.map(([id, c]) => `${id} (${c.errors![0].reason})`).join(', ')}`);
+	return all.flatMap(([, c]) => c.busy ?? []).map((b) => [Date.parse(b.start) - BUFFER_MIN * MIN, Date.parse(b.end) + BUFFER_MIN * MIN]);
 }
 
 /** Every slot start in working hours from `from` to `to`, before removing busy times. */
@@ -158,5 +172,5 @@ async function book(req: Request, env: BookingEnv, ctx: ExecutionContext) {
 export function booking(req: Request, env: BookingEnv, ctx: ExecutionContext, pathname: string) {
 	const run = pathname === '/api/book/slots' && req.method === 'GET' ? slots : pathname === '/api/book' && req.method === 'POST' ? book : null;
 	if (!run) return new Response(null, { status: 405 });
-	return run(req, env, ctx).catch(() => reply({ error: 'calendar' }, 502));
+	return run(req, env, ctx).catch((e) => (console.error(String(e)), reply({ error: 'calendar' }, 502)));
 }
