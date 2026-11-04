@@ -1,6 +1,8 @@
 ---
-// Brand guide: palette, type, mark, components and motion, rendered with the
-// live tokens so it can't drift from the site.
+// Brand guide in two tabs: the visual identity (palette, type, mark,
+// components and motion, rendered with the live tokens so it can't drift from
+// the site) and ready-to-paste descriptions of the business, in both
+// languages on either domain, for social profiles and payment gateways.
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import Mark from '../assets/rubrion-mark.svg';
@@ -37,6 +39,44 @@ const motion = l({
 		['Cabeçalho recolhível', 'Some ao descer a página e volta ao subir'],
 	],
 });
+const tabs = l({
+	en: { visual: 'Visual identity', about: 'Descriptions', copy: 'Copy', copied: 'Copied' },
+	pt: { visual: 'Identidade visual', about: 'Descrições', copy: 'Copiar', copied: 'Copiado' },
+});
+// Facts only: never "GDPR compliant". Keep the gateway text in step with what
+// is actually charged (Rubry sells credits, not subscriptions).
+const about: { t: string; hint: string; en: string; pt: string }[] = [
+	{
+		t: l({ en: 'One line', pt: 'Uma linha' }),
+		hint: l({ en: 'Bios, about 150 characters', pt: 'Bios, cerca de 150 caracteres' }),
+		en: 'Rubrion builds custom software and AI agents that run on your own infrastructure. Your data stays yours. Based in São Paulo, working worldwide.',
+		pt: 'A Rubrion cria software e agentes de IA sob medida que rodam na sua infraestrutura. Seus dados continuam seus. De São Paulo para o mundo.',
+	},
+	{
+		t: l({ en: 'Short', pt: 'Curta' }),
+		hint: l({ en: 'LinkedIn tagline, X or Instagram bio', pt: 'Tagline do LinkedIn, bio do X ou Instagram' }),
+		en: 'Custom software & AI agents · Your infrastructure, your data · rubrion.ai',
+		pt: 'Software e agentes de IA sob medida · Sua infraestrutura, seus dados · rubrion.com.br',
+	},
+	{
+		t: l({ en: 'Medium', pt: 'Média' }),
+		hint: l({ en: 'LinkedIn “About”, Google Business, GitHub', pt: '“Sobre” do LinkedIn, Google Meu Negócio, GitHub' }),
+		en: 'Rubrion is a software company based in São Paulo, Brazil. We design and build custom software and AI agents for businesses, along with the consulting around them. The agents are trained on the client’s own documents and connected to their systems. Each one runs on the client’s own infrastructure, in their cloud or on-premise, so the data stays theirs. We also make Rubry (rubry.ai), a platform for building and running AI agents. Our aim is high-quality software on lean infrastructure, at a fair price.',
+		pt: 'A Rubrion é uma empresa de software de São Paulo. Projetamos e construímos software e agentes de IA sob medida para empresas, junto com a consultoria em torno deles. Os agentes são treinados com os documentos do próprio cliente e conectados aos sistemas dele. Cada um roda na infraestrutura do cliente, na nuvem dele ou on-premise, para que os dados continuem dele. Também criamos o Rubry (rubry.ai), uma plataforma para criar e operar agentes de IA. Nosso objetivo é software de alta qualidade, em infraestrutura enxuta, por um preço justo.',
+	},
+	{
+		t: l({ en: 'Payment gateways', pt: 'Gateways de pagamento' }),
+		hint: l({ en: 'Stripe, Asaas, Paddle and similar. Category: software / IT services (MCC 7372)', pt: 'Stripe, Asaas, Paddle e afins. Categoria: software / serviços de TI (MCC 7372)' }),
+		en: `RUBRION TECH LTDA (CNPJ 57.637.752/0001-85) develops software and provides IT services to businesses. We sell two things:
+1. Custom software and AI agent projects, plus consulting. Each project is quoted in a written proposal or contract and invoiced by milestone or monthly, as agreed. The work is delivered digitally: source code, deployments and documentation.
+2. Rubry (rubry.ai), an AI agent platform. Customers buy usage credits online and spend them as their agents run. Delivery is immediate, in the customer’s account. There are no physical goods.
+Customers are businesses in Brazil and abroad. Terms: rubrion.ai/terms and rubry.ai/terms. Refunds: rubry.ai/refund. Privacy: rubrion.ai/privacy. Support: hello@rubrion.ai.`,
+		pt: `A RUBRION TECH LTDA (CNPJ 57.637.752/0001-85) desenvolve software e presta serviços de TI para empresas. Vendemos duas coisas:
+1. Projetos de software e agentes de IA sob medida, e consultoria. Cada projeto é orçado em proposta ou contrato por escrito e faturado por etapa ou mensalmente, conforme acordado. A entrega é digital: código-fonte, implantações e documentação.
+2. Rubry (rubry.ai), uma plataforma de agentes de IA. Os clientes compram créditos de uso online e os consomem conforme seus agentes funcionam. A entrega é imediata, na conta do cliente. Não há produtos físicos.
+Os clientes são empresas no Brasil e no exterior. Termos: rubrion.com.br/terms e rubry.ai/pt/terms. Reembolsos: rubry.ai/pt/refund. Privacidade: rubrion.com.br/privacy. Suporte: ola@rubrion.com.br.`,
+	},
+];
 const head = (n: string, t: string) => ({ n, t });
 const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Mark'), head('04', 'Components'), head('05', 'Motion')];
 ---
@@ -52,7 +92,14 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'M
 		crumbs={[{ label: 'Brand' }]}
 	/>
 
-	<div class="mx-auto max-w-5xl space-y-28 px-5 pb-32 md:px-8">
+	<div class="mx-auto max-w-5xl px-5 md:px-8">
+		<div role="tablist" class="mb-16 flex gap-8 border-b border-hair" data-tabs>
+			<button type="button" role="tab" id="tab-visual" aria-controls="visual" aria-selected="true" class="tab">{tabs.visual}</button>
+			<button type="button" role="tab" id="tab-descriptions" aria-controls="descriptions" aria-selected="false" tabindex="-1" class="tab">{tabs.about}</button>
+		</div>
+	</div>
+
+	<div id="visual" role="tabpanel" aria-labelledby="tab-visual" class="mx-auto max-w-5xl space-y-28 px-5 pb-32 md:px-8">
 		<section>
 			<h2 class="mb-10 flex items-baseline gap-4 border-b border-hair pb-4"><span class="meta">{sections[0].n}</span><span class="display text-3xl">{sections[0].t}</span></h2>
 			<div class="grid grid-cols-2 gap-5 sm:grid-cols-3">
@@ -135,4 +182,79 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'M
 			</ul>
 		</section>
 	</div>
+
+	<div id="descriptions" role="tabpanel" aria-labelledby="tab-descriptions" hidden class="mx-auto max-w-5xl space-y-20 px-5 pb-32 md:px-8">
+		{about.map((d, i) => (
+			<section>
+				<h2 class="mb-8 flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-hair pb-4"><span class="meta">{`0${i + 1}`}</span><span class="display text-3xl">{d.t}</span><span class="text-sm text-ink-faint">{d.hint}</span></h2>
+				<div class="grid gap-5 md:grid-cols-2">
+					{(['en', 'pt'] as const).map((lang) => (
+						<div class="card flex flex-col p-6">
+							<div class="mb-4 flex items-center justify-between">
+								<span class="meta">{lang === 'en' ? 'English' : 'Português'}</span>
+								<button type="button" class="link-arrow text-sm" data-copy data-done={tabs.copied}>{tabs.copy}</button>
+							</div>
+							<p class="whitespace-pre-line text-[0.98rem] leading-relaxed text-ink-soft" lang={lang === 'en' ? 'en' : 'pt-BR'}>{d[lang]}</p>
+						</div>
+					))}
+				</div>
+			</section>
+		))}
+	</div>
 </Layout>
+
+<style>
+	.tab {
+		margin-bottom: -1px;
+		padding: 0.9rem 0;
+		border-bottom: 2px solid transparent;
+		font-weight: 700;
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.tab:hover { color: var(--ink); }
+	.tab[aria-selected='true'] {
+		color: var(--ink);
+		border-bottom-color: var(--color-brand-500);
+	}
+</style>
+
+<script>
+	// Tabs (#descriptions opens the second, so it can be linked) and copy buttons.
+	const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-tabs] [role=tab]')];
+	const show = (tab: HTMLButtonElement) => {
+		for (const t of tabs) {
+			const on = t === tab;
+			t.setAttribute('aria-selected', String(on));
+			t.tabIndex = on ? 0 : -1;
+			document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+		}
+	};
+	tabs.forEach((t, i) => {
+		t.addEventListener('click', () => {
+			show(t);
+			history.replaceState(null, '', i ? `#${t.getAttribute('aria-controls')}` : location.pathname);
+		});
+		t.addEventListener('keydown', (e) => {
+			const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+			if (!step) return;
+			const next = tabs[(i + step + tabs.length) % tabs.length];
+			next.click();
+			next.focus();
+		});
+	});
+	const fromHash = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
+	if (fromHash) show(fromHash);
+
+	for (const b of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+		const label = b.textContent;
+		b.addEventListener('click', async () => {
+			const text = b.closest('.card')!.querySelector('p:last-child')!.textContent ?? '';
+			try {
+				await navigator.clipboard.writeText(text);
+				b.textContent = b.dataset.done!;
+				setTimeout(() => (b.textContent = label), 1500);
+			} catch {}
+		});
+	}
+</script>
