@@ -79,8 +79,19 @@ Customers are businesses in Brazil and abroad. Terms: rubrion.ai/terms and rubry
 Os clientes são empresas no Brasil e no exterior. Termos: rubrion.com.br/terms e rubry.ai/pt/terms. Reembolsos: rubry.ai/pt/refund. Privacidade: rubrion.com.br/privacy. Suporte: ola@rubrion.com.br.`,
 	},
 ];
+// Files in public/brand: the logo (mark + outlined wordmark), the mark alone,
+// and square avatars for profiles and gateways. Each as SVG and PNG.
+const kit = l({
+	en: { logo: 'Logo', mark: 'Mark', avatar: 'Avatar', ink: 'Ink', white: 'White', red: 'Red', paper: 'Paper', square: 'Square, 1024 px PNG: profile photos, payment gateways, app icons', note: 'Use ink on light backgrounds and white on dark ones; keep red for occasional accents. Keep clear space around it of at least half the mark’s height, and don’t stretch, recolour or add effects.' },
+	pt: { logo: 'Logo', mark: 'Símbolo', avatar: 'Avatar', ink: 'Tinta', white: 'Branco', red: 'Vermelho', paper: 'Papel', square: 'Quadrado, PNG de 1024 px: fotos de perfil, gateways de pagamento, ícones de app', note: 'Use tinta em fundos claros e branco em fundos escuros; deixe o vermelho para destaques ocasionais. Deixe uma margem livre de pelo menos metade da altura do símbolo, e não estique, mude a cor nem aplique efeitos.' },
+});
+const files = [
+	{ kind: 'logo', variants: [['ink', '#F3F2EE'], ['white', '#141413'], ['red', '#F3F2EE']] },
+	{ kind: 'mark', variants: [['ink', '#F3F2EE'], ['white', '#141413'], ['red', '#F3F2EE']] },
+	{ kind: 'avatar', variants: [['paper'], ['ink'], ['red']] },
+] as const;
 const head = (n: string, t: string) => ({ n, t });
-const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Mark'), head('04', 'Components'), head('05', 'Motion')];
+const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Logo'), head('04', 'Components'), head('05', 'Motion')];
 ---
 
 <Layout title="Brand guide" description="Rubrion brand: palette, type, mark, components and motion.">
@@ -156,6 +167,31 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'M
 				<div class="flex items-center justify-center rounded-md bg-[#141413] p-12">
 					<span class="flex items-center gap-2 text-[#f3f2ee]"><Mark class="h-8 w-8" /><span class="display text-xl">Rubrion</span></span>
 				</div>
+			</div>
+			<p class="mt-6 max-w-2xl text-sm text-ink-soft">{kit.note}</p>
+			<div class="mt-12 space-y-10">
+				{files.map(({ kind, variants }) => (
+					<div>
+						<p class="meta mb-4">{kit[kind]}</p>
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+							{variants.map(([v, bg]) => {
+								const f = `/brand/rubrion-${kind}-${v}`;
+								return (
+									<div class="card overflow-hidden">
+										<div class="flex h-32 items-center justify-center p-6" style={bg ? `background:${bg}` : undefined}>
+											<img src={`${f}.svg`} alt={`Rubrion ${kit[kind].toLowerCase()}, ${kit[v].toLowerCase()}`} class={kind === 'logo' ? 'h-10 w-auto' : kind === 'mark' ? 'h-14 w-auto' : 'h-full w-auto rounded-md'} loading="lazy" />
+										</div>
+										<div class="flex items-center justify-between border-t border-hair px-4 py-3 text-sm">
+											<span class="font-bold">{kit[v]}</span>
+											<span class="flex gap-4"><a href={`${f}.svg`} download class="link-arrow">SVG</a><a href={`${f}.png`} download class="link-arrow">PNG</a></span>
+										</div>
+									</div>
+								);
+							})}
+						</div>
+						{kind === 'avatar' && <p class="mt-3 text-xs text-ink-faint">{kit.square}</p>}
+					</div>
+				))}
 			</div>
 		</section>
 
