@@ -1,0 +1,123 @@
+---
+// Terms of service for rubrion.ai / rubrion.com.br: the website, Rubrion's
+// services (each under its own proposal or contract) and its products (each
+// under its own terms, listed in PRODUCTS). Same layout as privacy.astro;
+// paragraphs may carry links, so they are rendered as HTML (static text only).
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { c, email } from '../data/site';
+import { l, type L } from '../data/locale';
+
+const COMPANY = 'RUBRION TECH LTDA (Rubrion), CNPJ 57.637.752/0001-85';
+const ADDRESS = 'Avenida Paulista, 777, 15º andar, conj. 15, sala 2279, Bela Vista, São Paulo/SP, 01311-914';
+
+const a = (href: string, text = href.replace(/^https:\/\//, '')) => `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
+const mail = `<a href="mailto:${email}">${email}</a>`;
+const privacy = (text: string) => `<a href="/privacy">${text}</a>`;
+
+// Rubrion's products, each with its own terms. Add one here when it launches.
+const PRODUCTS: { name: string; site: string; desc: L; terms: L; refund?: L }[] = [
+	{
+		name: 'Rubry',
+		site: 'https://rubry.ai',
+		desc: { en: 'our AI agent platform', pt: 'nossa plataforma de agentes de IA' },
+		terms: { en: 'https://rubry.ai/terms', pt: 'https://rubry.ai/pt/terms' },
+		refund: { en: 'https://rubry.ai/refund', pt: 'https://rubry.ai/pt/refund' },
+	},
+];
+const products = (lang: 'en' | 'pt') =>
+	PRODUCTS.map((p) =>
+		lang === 'en'
+			? `${p.name} (${a(p.site)}), ${p.desc.en}: its terms are at ${a(p.terms.en)}${p.refund ? `, and its refund policy at ${a(p.refund.en)}` : ''}.`
+			: `${p.name} (${a(p.site)}), ${p.desc.pt}: os termos estão em ${a(p.terms.pt)}${p.refund ? `, e a política de reembolso em ${a(p.refund.pt)}` : ''}.`,
+	);
+
+const t = l({
+	en: {
+		kicker: 'Updated November 4, 2026',
+		title: 'Terms of service',
+		lead: 'The rules for using this site and for working with Rubrion: what applies to our services and products, payments, intellectual property, AI output, liability and the law that governs it all.',
+		sections: [
+			['Who we are', [`These terms are offered by ${COMPANY}, ${ADDRESS}, Brazil. You can reach us at ${mail}.`]],
+			['What these terms cover', [
+				'This website (rubrion.ai and rubrion.com.br): browsing it, contacting us, subscribing to the newsletter and booking a call.',
+				'Our services: custom software and AI agents built for clients, consulting and related work. Each engagement is governed by its own proposal or contract, which sets the scope, price, deadlines, payment terms, ownership of deliverables and confidentiality.',
+				'Our products, each under its own terms, which take precedence for that product:',
+				...products('en'),
+				'If they conflict, the order is: a signed contract or accepted proposal first, then a product’s own terms, then these terms.',
+			]],
+			['Using the website', ['Use this site lawfully. Don’t attack it or try to break its security, don’t scrape or automate requests in a way that harms or overloads it, and don’t impersonate Rubrion or anyone else, in our forms or elsewhere.']],
+			['Services', ['We deliver services under a proposal or contract agreed in writing. What the website, our chat assistant or a call says about scope, prices or timelines is informational until it is agreed in writing.']],
+			['Payments', [
+				'Services are invoiced under their contract, on the terms it sets.',
+				'Product purchases are processed by Stripe under each product’s terms. Your card details go to Stripe and never reach us.',
+				'Prices are in the currency stated in the proposal or on the product page.',
+			]],
+			['Intellectual property', [
+				'The Rubrion name, logo, brand and this site’s content are ours.',
+				'Ownership of what we build for a client follows that client’s contract. [TODO: owner to confirm the default, e.g. whether ownership of deliverables passes to the client on full payment, and what we keep (reusable tools, libraries, know-how).]',
+			]],
+			['Confidentiality', ['We keep our clients’ non-public information confidential, as detailed in each contract.']],
+			['AI output', ['AI systems, including the agents we build, can be wrong or incomplete. Review their results before relying on them. Nothing an AI system of ours produces is legal, medical, financial or other professional advice.']],
+			['Third-party services', ['We rely on other providers, such as hosting, AI model providers and payment processors, and their own terms apply to their services. Our privacy policy lists the ones that handle data from this site.']],
+			['Liability', [
+				'As far as the law allows, we are not liable for indirect or consequential losses, such as lost profits, revenue or data, and our total liability for a service is limited to what you paid us for that service in the 12 months before the claim.',
+				'Nothing in these terms limits rights you have as a consumer under the law of your country, including, in Brazil, the Consumer Defense Code (Código de Defesa do Consumidor).',
+			]],
+			['Changes to these terms', ['When we update these terms, we change the date at the top. We announce material changes on this site.']],
+			['Law and courts', ['These terms are governed by the laws of Brazil, and disputes go to the courts of the city of São Paulo, except where a consumer has the right to bring or defend a claim in the courts of where they live.']],
+			['Privacy', [`How we handle personal data is explained in our ${privacy('privacy policy')}.`]],
+		],
+	},
+	pt: {
+		kicker: 'Atualizados em 4 de novembro de 2026',
+		title: 'Termos de uso',
+		lead: 'As regras para usar este site e para trabalhar com a Rubrion: o que vale para nossos serviços e produtos, pagamentos, propriedade intelectual, resultados de IA, responsabilidade e a lei que rege tudo isso.',
+		sections: [
+			['Quem somos', [`Estes termos são oferecidos pela ${COMPANY}, ${ADDRESS}, Brasil. Fale com a gente em ${mail}.`]],
+			['O que estes termos cobrem', [
+				'Este site (rubrion.ai e rubrion.com.br): navegar, entrar em contato, assinar a newsletter e agendar uma conversa.',
+				'Nossos serviços: software e agentes de IA sob medida para clientes, consultoria e trabalhos relacionados. Cada projeto é regido pela própria proposta ou contrato, que define escopo, preço, prazos, condições de pagamento, titularidade das entregas e confidencialidade.',
+				'Nossos produtos, cada um com os próprios termos, que prevalecem para aquele produto:',
+				...products('pt'),
+				'Em caso de conflito, a ordem é: contrato assinado ou proposta aceita primeiro, depois os termos próprios de um produto, depois estes termos.',
+			]],
+			['Uso do site', ['Use este site de forma lícita. Não o ataque nem tente burlar a segurança dele, não faça raspagem de dados ou requisições automatizadas que o prejudiquem ou sobrecarreguem, e não se passe pela Rubrion nem por outra pessoa, em nossos formulários ou em qualquer lugar.']],
+			['Serviços', ['Prestamos serviços conforme uma proposta ou contrato acordado por escrito. O que o site, nosso assistente de chat ou uma conversa diz sobre escopo, preços ou prazos é informativo até ser acordado por escrito.']],
+			['Pagamentos', [
+				'Serviços são faturados conforme o contrato, nas condições que ele define.',
+				'Compras de produtos são processadas pela Stripe, conforme os termos de cada produto. Os dados do seu cartão vão para a Stripe e nunca chegam até nós.',
+				'Os preços estão na moeda indicada na proposta ou na página do produto.',
+			]],
+			['Propriedade intelectual', [
+				'O nome, o logotipo e a marca Rubrion, e o conteúdo deste site, são nossos.',
+				'A titularidade do que construímos para um cliente segue o contrato desse cliente. [TODO: dono confirmar o padrão, por ex. se a titularidade das entregas passa ao cliente com o pagamento integral, e o que mantemos (ferramentas, bibliotecas e conhecimento reutilizáveis).]',
+			]],
+			['Confidencialidade', ['Mantemos em sigilo as informações não públicas dos nossos clientes, conforme detalhado em cada contrato.']],
+			['Resultados de IA', ['Sistemas de IA, incluindo os agentes que construímos, podem errar ou ser incompletos. Revise os resultados antes de confiar neles. Nada do que um sistema de IA nosso produz é aconselhamento jurídico, médico, financeiro ou profissional.']],
+			['Serviços de terceiros', ['Usamos outros prestadores, como hospedagem, provedores de modelos de IA e processadores de pagamento, e os termos deles valem para os serviços deles. Nossa política de privacidade lista os que tratam dados deste site.']],
+			['Responsabilidade', [
+				'Na medida permitida pela lei, não respondemos por danos indiretos ou consequentes, como lucros cessantes, perda de receita ou de dados, e nossa responsabilidade total por um serviço se limita ao que você nos pagou por esse serviço nos 12 meses anteriores à reclamação.',
+				'Nada nestes termos limita os direitos que você tem como consumidor pela lei do seu país, incluindo, no Brasil, o Código de Defesa do Consumidor.',
+			]],
+			['Mudanças nestes termos', ['Quando atualizamos estes termos, mudamos a data no topo. Anunciamos mudanças relevantes neste site.']],
+			['Lei e foro', ['Estes termos são regidos pelas leis do Brasil, e disputas vão ao foro da comarca de São Paulo/SP, exceto quando um consumidor tem o direito de propor ou se defender de uma ação no foro do seu domicílio.']],
+			['Privacidade', [`Como tratamos dados pessoais está explicado na nossa ${privacy('política de privacidade')}.`]],
+		],
+	},
+});
+---
+
+<Layout title={t.title} description={t.lead}>
+	<PageHero kicker={t.kicker} title={t.title} lead={t.lead} crumbs={[{ label: c.footer.terms }]} />
+	<article class="bg-paper px-5 pb-24 md:px-8">
+		<div class="prose-r mx-auto max-w-2xl">
+			{t.sections.map(([h, ps]) => (
+				<>
+					<h2>{h}</h2>
+					{(ps as string[]).length > 1 ? <ul>{(ps as string[]).map((p) => <li set:html={p} />)}</ul> : <p set:html={ps[0]} />}
+				</>
+			))}
+		</div>
+	</article>
+</Layout>

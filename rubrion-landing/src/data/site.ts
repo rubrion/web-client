@@ -201,6 +201,7 @@ const en = {
 		rights: 'All rights reserved.',
 		brand: 'Brand guide',
 		privacy: 'Privacy',
+		terms: 'Terms',
 	},
 	chat: {
 		open: 'Chat with us',
@@ -440,6 +441,7 @@ const pt: typeof en = {
 		rights: 'Todos os direitos reservados.',
 		brand: 'Guia de marca',
 		privacy: 'Privacidade',
+		terms: 'Termos',
 	},
 	chat: {
 		open: 'Fale com a gente',
