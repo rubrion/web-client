@@ -16,10 +16,12 @@ const surfaces = [
 	['Ink soft', '--ink-soft', '#57564F'],
 	['Slab', '--slab', '#141413'],
 ];
+// The tokens are OKLCH; the hex is the same colour in sRGB, for tools that
+// only take hex.
 const reds = [
-	['Spark 400', 'bg-brand-400', 'oklch(.71 .19 22)'],
-	['Spark 500', 'bg-brand-500', 'oklch(.60 .22 26)'],
-	['Spark 600', 'bg-brand-600', 'oklch(.54 .22 27)'],
+	['Spark 400', 'bg-brand-400', '--color-brand-400', '#FF666A', 'oklch(.71 .19 22)', l({ en: 'Bright coral', pt: 'Coral bem vivo' })],
+	['Spark 500', 'bg-brand-500', '--color-brand-500', '#E62B30', 'oklch(.60 .22 26)', l({ en: 'The core red', pt: 'Vermelho central' })],
+	['Spark 600', 'bg-brand-600', '--color-brand-600', '#D00016', 'oklch(.54 .22 27)', l({ en: 'Deeper red', pt: 'Vermelho mais fechado' })],
 ];
 const motion = l({
 	en: [
@@ -111,11 +113,12 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'M
 					</div>
 				))}
 			</div>
-			<div class="mt-10 grid grid-cols-3 gap-5">
-				{reds.map(([name, cls, v]) => (
+			<div class="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3">
+				{reds.map(([name, cls, token, hex, v, note]) => (
 					<div>
 						<div class={`h-14 rounded-md ${cls}`}></div>
-						<p class="mt-3 text-sm font-bold">{name}</p>
+						<p class="mt-3 text-sm font-bold">{name} <span class="font-normal text-ink-soft">· {note}</span></p>
+						<p class="text-xs text-ink-faint">{token} · {hex}</p>
 						<p class="text-xs text-ink-faint">{v}</p>
 					</div>
 				))}
