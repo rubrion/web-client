@@ -13,7 +13,7 @@ import { credits, kinds, work, type Credit, type Kind } from '../data/work';
 const p = c.products;
 const by = (Object.keys(credits) as Credit[]).map((k) => ({ k, name: credits[k].name, n: work.filter((w) => w.credit === k).length }));
 // The platform's open-source pieces, and the agents Rubrion runs on it.
-const repos = ['rubry', 'mastra-cloudflare', 'agent-kit'];
+const repos = ['rubry', 'mastra-cloudflare', 'beholder'];
 const agents = [
 	{ name: 'Brad', logo: '/logos/brad.svg', url: 'https://brad.rubrion.ai', text: p.bradText },
 	{ name: 'Equânime', logo: '/logos/equanime.svg', url: 'https://equanime.rubrion.ai', text: p.equanimeText },

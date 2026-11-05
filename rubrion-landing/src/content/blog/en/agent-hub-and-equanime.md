@@ -33,6 +33,6 @@ Equânime runs on its own stack, not on Rubry's: a Worker API driving a durable 
 - Agent Hub: [rubry.ai/agents](https://rubry.ai/agents) · [docs](https://docs.rubry.ai)
 - Equânime source: [github.com/rubenszinho/equanime](https://github.com/rubenszinho/equanime)
 - Template: [github.com/rubrion/rubry](https://github.com/rubrion/rubry)
-- Libraries: [github.com/rubrion/agent-kit](https://github.com/rubrion/agent-kit) · [github.com/rubrion/mastra-cloudflare](https://github.com/rubrion/mastra-cloudflare)
+- Libraries: [github.com/rubrion/beholder](https://github.com/rubrion/beholder) · [github.com/rubrion/mastra-cloudflare](https://github.com/rubrion/mastra-cloudflare)
 
 Have a process that would work better as an agent? [Tell us about it](/#contact).

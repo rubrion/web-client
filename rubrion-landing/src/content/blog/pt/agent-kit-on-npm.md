@@ -7,6 +7,8 @@ minutes: 4
 cover: /work/cerne-1600.webp
 ---
 
+> **Atualização, novembro de 2026:** o agent-kit agora se chama **[Beholder](/work/beholder)**, publicado como `@rubrion/beholder-server` e `@rubrion/beholder-react`. A API é a mesma; só os nomes dos pacotes mudaram.
+
 Colocar um assistente dentro de um produto é mais do que chamar um modelo. Alguém precisa decidir quem está perguntando, quais dados de qual cliente essa pessoa pode ver, se o orçamento estourou, e o chat precisa mostrar o que o agente está fazendo. Fizemos tudo isso para o assistente do [Cerne](/work/cerne), e depois fizemos de novo no projeto seguinte. Então tiramos de lá.
 
 O **[agent-kit](https://github.com/rubrion/agent-kit)** é de código aberto (MIT) e está no npm em dois pacotes:
@@ -66,6 +68,6 @@ O repositório traz um app funcionando, `template/`, com as duas metades: o Work
 
 - Código (MIT): [github.com/rubrion/agent-kit](https://github.com/rubrion/agent-kit)
 - npm: [@rubrion/agent-kit-server](https://www.npmjs.com/package/@rubrion/agent-kit-server) · [@rubrion/agent-kit-react](https://www.npmjs.com/package/@rubrion/agent-kit-react)
-- Case: [agent-kit](/work/agent-kit)
+- Case: [agent-kit](/work/beholder)
 
 Quer um assistente dentro do seu produto? [Vamos conversar](/#contact).

@@ -68,6 +68,7 @@ export default {
 		// MT2 Allocation (once Dynamication) is no longer a case.
 		if (/^\/work\/(dynamication|mt2-allocation)(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work', req.url).href, 301);
 		// Animally is now told inside the vet clinic template's case.
+		if (/^\/work\/agent-kit(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work/beholder', req.url).href, 301);
 		if (/^\/work\/animally(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work/vet-clinic-template', req.url).href, 301);
 		if (pathname === PREFIX || pathname.startsWith(`${PREFIX}/`)) return new Response('Not found', { status: 404 });
 		if (!PT_HOST.test(hostname)) return env.ASSETS.fetch(req);

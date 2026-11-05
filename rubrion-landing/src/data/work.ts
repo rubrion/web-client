@@ -308,10 +308,10 @@ export const work: Work[] = [
 			pt: 'Conferir cada par de avaliadores em busca de coautoria e vínculos em comum eram horas de leitura cruzada manual.',
 		},
 		built: {
-			en: 'A Worker API driving a durable Workflow: Lattes XML uploads or a private collector, deterministic rules and PDF reports in R2; a web app with Google sign-in; and the Análise de Banca agent, built on our agent-kit and mastra-cloudflare libraries, which runs an analysis from a chat on rubry.ai or OpenWebUI and keeps each person’s analyses apart.',
-			pt: 'Uma API em Worker que dispara um Workflow durável: envio do XML do Lattes ou um coletor privado, regras determinísticas e relatórios em PDF no R2; um app web com login Google; e o agente Análise de Banca, feito com nossas bibliotecas agent-kit e mastra-cloudflare, que roda uma análise a partir de um chat no rubry.ai ou no OpenWebUI e mantém as análises de cada pessoa separadas.',
+			en: 'A Worker API driving a durable Workflow: Lattes XML uploads or a private collector, deterministic rules and PDF reports in R2; a web app with Google sign-in; and the Análise de Banca agent, built on our Beholder and mastra-cloudflare libraries, which runs an analysis from a chat on rubry.ai or OpenWebUI and keeps each person’s analyses apart.',
+			pt: 'Uma API em Worker que dispara um Workflow durável: envio do XML do Lattes ou um coletor privado, regras determinísticas e relatórios em PDF no R2; um app web com login Google; e o agente Análise de Banca, feito com nossas bibliotecas Beholder e mastra-cloudflare, que roda uma análise a partir de um chat no rubry.ai ou no OpenWebUI e mantém as análises de cada pessoa separadas.',
 		},
-		stack: ['Cloudflare Workflows', 'D1', 'R2', 'agent-kit', 'Mastra'],
+		stack: ['Cloudflare Workflows', 'D1', 'R2', 'Beholder', 'Mastra'],
 		services: ['data', 'agents'],
 		url: 'https://equanime.rubrion.ai',
 		mock: 'report',
@@ -342,11 +342,11 @@ export const work: Work[] = [
 		mock: 'chat',
 	},
 	{
-		slug: 'agent-kit',
-		name: { en: 'agent-kit', pt: 'agent-kit' },
+		slug: 'beholder',
+		name: { en: 'Beholder', pt: 'Beholder' },
 		credit: 'rubrion',
 		type: 'library',
-		kind: { en: 'Open-source in-app assistant, on npm', pt: 'Assistente para dentro do app, de código aberto, no npm' },
+		kind: { en: 'Open-source agent kit for in-app assistants, on npm', pt: 'Kit de agentes de código aberto para assistentes dentro do app, no npm' },
 		summary: {
 			en: 'An AI assistant you can drop into any Cloudflare app: an agent Worker, a gateway for your API and a React chat that streams the agent’s thinking, tool calls and answer.',
 			pt: 'Um assistente de IA para colocar em qualquer app na Cloudflare: um Worker de agentes, um gateway para a sua API e um chat em React que mostra o raciocínio, as chamadas de ferramenta e a resposta do agente em tempo real.',
@@ -356,13 +356,13 @@ export const work: Work[] = [
 			pt: 'Colocar um assistente dentro de um produto envolve identidade, clientes, orçamento e uma interface de chat, e cada app reconstruía tudo isso em volta dos seus agentes.',
 		},
 		built: {
-			en: 'Extracted from the Cerne assistant into two npm packages: @rubrion/agent-kit-server (createAgentWorker: Mastra agents with D1 memory, per-tenant context and token cost; createAgentGateway: Hono routes that decide who may ask, with budgets, plans and bring-your-own-key) and @rubrion/agent-kit-react (a floating ChatBox and a full AssistantScreen, with file attachments the agent reads through the gateway), plus a deployable template behind Cloudflare Access. MIT.',
-			pt: 'Extraído do assistente do Cerne em dois pacotes no npm: @rubrion/agent-kit-server (createAgentWorker: agentes Mastra com memória no D1, contexto por cliente e custo em tokens; createAgentGateway: rotas Hono que decidem quem pode perguntar, com orçamento, planos e chave própria) e @rubrion/agent-kit-react (um ChatBox flutuante e uma AssistantScreen de página inteira, com anexos que o agente lê pelo gateway), mais um template pronto para publicar atrás do Cloudflare Access. MIT.',
+			en: 'Extracted from the Cerne assistant into two npm packages: @rubrion/beholder-server (createAgentWorker: Mastra agents with D1 memory, per-tenant context and token cost; createAgentGateway: Hono routes that decide who may ask, with budgets, plans and bring-your-own-key) and @rubrion/beholder-react (a floating ChatBox and a full AssistantScreen, with file attachments the agent reads through the gateway, and the Beholder mascot whose eyes follow the cursor), plus a deployable template behind Cloudflare Access. MIT.',
+			pt: 'Extraído do assistente do Cerne em dois pacotes no npm: @rubrion/beholder-server (createAgentWorker: agentes Mastra com memória no D1, contexto por cliente e custo em tokens; createAgentGateway: rotas Hono que decidem quem pode perguntar, com orçamento, planos e chave própria) e @rubrion/beholder-react (um ChatBox flutuante e uma AssistantScreen de página inteira, com anexos que o agente lê pelo gateway, e o mascote Beholder, cujos olhos seguem o cursor), mais um template pronto para publicar atrás do Cloudflare Access. MIT.',
 		},
 		stack: ['Mastra', 'Cloudflare Workers', 'D1', 'Hono', 'React'],
 		services: ['agents'],
-		url: 'https://www.npmjs.com/package/@rubrion/agent-kit-server',
-		repo: 'https://github.com/rubrion/agent-kit',
+		url: 'https://www.npmjs.com/package/@rubrion/beholder-server',
+		repo: 'https://github.com/rubrion/beholder',
 		mock: 'chat',
 	},
 	{
@@ -584,7 +584,7 @@ export const kinds: Record<Kind, L> = {
 /** The home page's examples per service: Rubrion's own work only (see ownWork). */
 export const serviceCases: Record<Service, string[]> = {
 	platforms: ['cerne', 'curriclean', 'bioexame'],
-	agents: ['rubry', 'brad', 'agent-kit'],
+	agents: ['rubry', 'brad', 'beholder'],
 	data: ['equanime', 'cerne'],
 	sites: ['advogue', 'vet-clinic-template', 'mondesa'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
