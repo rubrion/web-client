@@ -581,12 +581,12 @@ export const kinds: Record<Kind, L> = {
 	library: { en: 'Libraries', pt: 'Bibliotecas' },
 };
 
-/** Cases shown under each service, in this order. */
+/** The home page's examples per service: Rubrion's own work only (see ownWork). */
 export const serviceCases: Record<Service, string[]> = {
-	platforms: ['cerne', 'avilink', 'mvm-war-room', 'bioexame'],
-	agents: ['rubry', 'brad', 'colmeia'],
-	data: ['dexplan', 'equanime'],
-	sites: ['bccc', 'advogue', 'vet-clinic-template'],
+	platforms: ['cerne', 'curriclean', 'bioexame'],
+	agents: ['rubry', 'brad', 'agent-kit'],
+	data: ['equanime', 'cerne'],
+	sites: ['advogue', 'vet-clinic-template', 'mondesa'],
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
