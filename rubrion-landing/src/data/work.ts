@@ -38,6 +38,8 @@ export interface Work {
 	single?: boolean;
 	/** A different picture for the hero (public/work/<heroImage>-{1600,900}.webp). */
 	heroImage?: string;
+	/** A showcase of other entries (their slugs): its page links to them, and it stays out of the catalogue and counts. */
+	parts?: string[];
 }
 
 export const credits: Record<Credit, { name: string; url?: string; note: L }> = {
@@ -73,6 +75,33 @@ export const work: Work[] = [
 		heroImage: 'rubry-hero',
 		hero: 0,
 		single: true,
+	},
+	{
+		slug: 'agent-libraries',
+		name: { en: 'Open-source agent libraries', pt: 'Bibliotecas de agentes de código aberto' },
+		credit: 'rubrion',
+		type: 'library',
+		kind: { en: 'mastra-cloudflare and Beholder, on npm', pt: 'mastra-cloudflare e Beholder, no npm' },
+		summary: {
+			en: 'The libraries under our agents, open source on npm: @rubrion/mastra-cloudflare runs Mastra agents on Cloudflare Workers, and Beholder puts an assistant inside any app, from the agent Worker to the React chat.',
+			pt: 'As bibliotecas por trás dos nossos agentes, de código aberto no npm: @rubrion/mastra-cloudflare roda agentes Mastra nos Workers da Cloudflare, e o Beholder coloca um assistente dentro de qualquer app, do Worker de agentes ao chat em React.',
+		},
+		problem: {
+			en: 'Every agent we built started with the same plumbing: an API the chat clients understand, memory, routing between agents, identity, budgets and a chat UI. Rewriting it per project was slow and left each one slightly different.',
+			pt: 'Todo agente que construímos começava com o mesmo encanamento: uma API que os clientes de chat entendem, memória, roteamento entre agentes, identidade, orçamento e uma interface de chat. Reescrever isso a cada projeto era lento e deixava cada um um pouco diferente.',
+		},
+		built: {
+			en: 'Two layers. @rubrion/mastra-cloudflare (GPL-3.0) is the base: agents as config, an OpenAI-compatible server with streaming, a planner across agents, Mastra memory on D1, Workers AI or any OpenAI-compatible model, and opt-in tools to read files, browse and run background jobs. Beholder (MIT) builds on it for in-app assistants: @rubrion/beholder-server adds the agent Worker and a gateway that decides who may ask, with budgets and plans; @rubrion/beholder-react adds the floating chat, the full assistant screen and the Beholder mascot. They power rubry.ai, Cerne and Equânime.',
+			pt: 'Duas camadas. @rubrion/mastra-cloudflare (GPL-3.0) é a base: agentes como configuração, um servidor compatível com a OpenAI com streaming, um planejador entre agentes, memória Mastra no D1, Workers AI ou qualquer modelo compatível com a OpenAI, e ferramentas opcionais para ler arquivos, navegar e rodar tarefas em segundo plano. O Beholder (MIT) se apoia nela para assistentes dentro do app: @rubrion/beholder-server traz o Worker de agentes e um gateway que decide quem pode perguntar, com orçamento e planos; @rubrion/beholder-react traz o chat flutuante, a tela de assistente completa e o mascote Beholder. Elas sustentam o rubry.ai, o Cerne e o Equânime.',
+		},
+		stack: ['Mastra', 'Cloudflare Workers', 'Workers AI', 'D1', 'Hono', 'React', 'TypeScript'],
+		services: ['agents'],
+		url: 'https://www.npmjs.com/org/rubrion',
+		image: 'agent-libraries',
+		heroImage: 'agent-libraries-hero',
+		hero: 1,
+		single: true,
+		parts: ['mastra-cloudflare', 'beholder'],
 	},
 	{
 		slug: 'advogue',
@@ -193,7 +222,6 @@ export const work: Work[] = [
 		services: ['agents', 'platforms'],
 		url: 'https://curriclean.rubrion.ai',
 		image: 'curriclean',
-		hero: 5,
 		repo: 'https://github.com/rubrion/curriclean',
 	},
 	{
@@ -218,7 +246,6 @@ export const work: Work[] = [
 		services: ['products', 'sites'],
 		url: 'https://edgeletter.rubrion.ai',
 		image: 'edgeletter',
-		hero: 6,
 		repo: 'https://github.com/rubrion/edgeletter',
 	},
 	{
@@ -339,7 +366,7 @@ export const work: Work[] = [
 		services: ['agents'],
 		url: 'https://www.npmjs.com/package/@rubrion/mastra-cloudflare',
 		repo: 'https://github.com/rubrion/mastra-cloudflare',
-		mock: 'chat',
+		image: 'mastra-cloudflare',
 	},
 	{
 		slug: 'beholder',
@@ -363,7 +390,7 @@ export const work: Work[] = [
 		services: ['agents'],
 		url: 'https://www.npmjs.com/package/@rubrion/beholder-server',
 		repo: 'https://github.com/rubrion/beholder',
-		mock: 'chat',
+		image: 'beholder',
 	},
 	{
 		slug: 'rubry-template',
@@ -590,6 +617,9 @@ export const serviceCases: Record<Service, string[]> = {
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
+/** The catalogue and the counts: everything but showcases of other entries. */
+export const catalogWork = work.filter((w) => !w.parts);
 /** The home page shows only Rubrion's own work: consulting builds stay in /work. */
 export const ownWork = work.filter((w) => w.credit === 'rubrion');
+/** The home hero and grid: Rubrion's featured work, in hero order. */
 export const heroWork = ownWork.filter((w) => w.hero !== undefined && w.image).sort((a, b) => a.hero! - b.hero!);

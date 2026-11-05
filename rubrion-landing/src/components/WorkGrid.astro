@@ -1,8 +1,8 @@
 ---
-// The home page's work teaser: the first n of Rubrion's own cases, two to a row and large.
+// The home page's work teaser: the first n of Rubrion's featured cases, in hero order, two to a row and large.
 // The full, grouped catalogue is /work (WorkCatalog.astro).
 import WorkCard from './WorkCard.astro';
-import { ownWork as work } from '../data/work';
+import { heroWork as work } from '../data/work';
 
 interface Props {
 	limit?: number;

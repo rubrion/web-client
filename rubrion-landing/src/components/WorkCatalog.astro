@@ -8,7 +8,7 @@ import Mockup from './Mockup.astro';
 import Rubry from './Rubry.astro';
 import { l } from '../data/locale';
 import { c } from '../data/site';
-import { credits, kinds, work, type Credit, type Kind } from '../data/work';
+import { credits, kinds, catalogWork as work, type Credit, type Kind } from '../data/work';
 
 const p = c.products;
 const by = (Object.keys(credits) as Credit[]).map((k) => ({ k, name: credits[k].name, n: work.filter((w) => w.credit === k).length }));

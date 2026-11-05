@@ -67,6 +67,7 @@ const en = {
 		source: 'Source on GitHub',
 		demo: 'Template demo',
 		npm: 'View on npm',
+		parts: 'The libraries',
 	},
 	build: {
 		kicker: 'How we build',
@@ -307,6 +308,7 @@ const pt: typeof en = {
 		source: 'Código no GitHub',
 		demo: 'Demo do template',
 		npm: 'Ver no npm',
+		parts: 'As bibliotecas',
 	},
 	build: {
 		kicker: 'Como construímos',

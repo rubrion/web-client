@@ -77,6 +77,14 @@ const ld = {
 					</div>
 				</aside>
 			</div>
+			{w.parts && (
+				<div class="mt-20" data-reveal>
+					<h2 class="eyebrow">{c.work.parts}</h2>
+					<ul class="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
+						{w.parts.map((slug) => work.find((x) => x.slug === slug)!).map((p) => <li><WorkCard work={p} index={work.indexOf(p)} large /></li>)}
+					</ul>
+				</div>
+			)}
 		</div>
 	</section>
 
