@@ -332,8 +332,8 @@ export const work: Work[] = [
 			pt: 'A maioria das stacks de agentes pressupõe um servidor ligado o dia todo, e cada projeto reescreve a mesma cola de API, roteamento e memória.',
 		},
 		built: {
-			en: 'One package: agents as config, an OpenAI-compatible server with real streaming and a planner that splits a request across agents, Mastra memory on D1, and Workers AI or any OpenAI-compatible model, with extra headers for remote agents. Since 0.2, how many agents a request may use and how many tool rounds a reply may take are set per environment, and every reply carries its token usage. GPL-3.0, published on npm as @rubrion/mastra-cloudflare; reference at docs.rubry.ai/library.',
-			pt: 'Um pacote: agentes como configuração, um servidor compatível com a OpenAI com streaming de verdade e um planejador que divide um pedido entre agentes, memória Mastra no D1, e Workers AI ou qualquer modelo compatível com a OpenAI, com cabeçalhos extras para agentes remotos. Desde a 0.2, quantos agentes um pedido pode usar e quantas rodadas de ferramentas uma resposta pode fazer são definidos por ambiente, e toda resposta traz o uso de tokens. GPL-3.0, publicado no npm como @rubrion/mastra-cloudflare; referência em docs.rubry.ai/library.',
+			en: 'One package: agents as config, an OpenAI-compatible server with real streaming and a planner that splits a request across agents, Mastra memory on D1, and Workers AI or any OpenAI-compatible model, with extra headers for remote agents. Since 0.2, how many agents a request may use and how many tool rounds a reply may take are set per environment, and every reply carries its token usage. Since 0.3, opt-in tools let an agent read long files (PDF, Word, Excel, CSV) a piece at a time, browse the web and run background jobs, and each agent lists its capabilities in /v1/models. GPL-3.0, published on npm as @rubrion/mastra-cloudflare; reference at docs.rubry.ai/library.',
+			pt: 'Um pacote: agentes como configuração, um servidor compatível com a OpenAI com streaming de verdade e um planejador que divide um pedido entre agentes, memória Mastra no D1, e Workers AI ou qualquer modelo compatível com a OpenAI, com cabeçalhos extras para agentes remotos. Desde a 0.2, quantos agentes um pedido pode usar e quantas rodadas de ferramentas uma resposta pode fazer são definidos por ambiente, e toda resposta traz o uso de tokens. Desde a 0.3, ferramentas opcionais deixam um agente ler arquivos longos (PDF, Word, Excel, CSV) aos poucos, navegar na web e rodar tarefas em segundo plano, e cada agente lista suas capacidades em /v1/models. GPL-3.0, publicado no npm como @rubrion/mastra-cloudflare; referência em docs.rubry.ai/library.',
 		},
 		stack: ['Mastra', 'Cloudflare Workers', 'Workers AI', 'D1', 'TypeScript'],
 		services: ['agents'],
@@ -356,8 +356,8 @@ export const work: Work[] = [
 			pt: 'Colocar um assistente dentro de um produto envolve identidade, clientes, orçamento e uma interface de chat, e cada app reconstruía tudo isso em volta dos seus agentes.',
 		},
 		built: {
-			en: 'Extracted from the Cerne assistant into two npm packages: @rubrion/agent-kit-server (createAgentWorker: Mastra agents with D1 memory, per-tenant context and token cost; createAgentGateway: Hono routes that decide who may ask, with budgets, plans and bring-your-own-key) and @rubrion/agent-kit-react (a floating ChatBox and a full AssistantScreen), plus a deployable template behind Cloudflare Access. MIT.',
-			pt: 'Extraído do assistente do Cerne em dois pacotes no npm: @rubrion/agent-kit-server (createAgentWorker: agentes Mastra com memória no D1, contexto por cliente e custo em tokens; createAgentGateway: rotas Hono que decidem quem pode perguntar, com orçamento, planos e chave própria) e @rubrion/agent-kit-react (um ChatBox flutuante e uma AssistantScreen de página inteira), mais um template pronto para publicar atrás do Cloudflare Access. MIT.',
+			en: 'Extracted from the Cerne assistant into two npm packages: @rubrion/agent-kit-server (createAgentWorker: Mastra agents with D1 memory, per-tenant context and token cost; createAgentGateway: Hono routes that decide who may ask, with budgets, plans and bring-your-own-key) and @rubrion/agent-kit-react (a floating ChatBox and a full AssistantScreen, with file attachments the agent reads through the gateway), plus a deployable template behind Cloudflare Access. MIT.',
+			pt: 'Extraído do assistente do Cerne em dois pacotes no npm: @rubrion/agent-kit-server (createAgentWorker: agentes Mastra com memória no D1, contexto por cliente e custo em tokens; createAgentGateway: rotas Hono que decidem quem pode perguntar, com orçamento, planos e chave própria) e @rubrion/agent-kit-react (um ChatBox flutuante e uma AssistantScreen de página inteira, com anexos que o agente lê pelo gateway), mais um template pronto para publicar atrás do Cloudflare Access. MIT.',
 		},
 		stack: ['Mastra', 'Cloudflare Workers', 'D1', 'Hono', 'React'],
 		services: ['agents'],
@@ -590,4 +590,6 @@ export const serviceCases: Record<Service, string[]> = {
 	products: ['edgeletter', 'rubrion-store', 'lms'],
 };
 
-export const heroWork = work.filter((w) => w.hero !== undefined && w.image).sort((a, b) => a.hero! - b.hero!);
+/** The home page shows only Rubrion's own work: consulting builds stay in /work. */
+export const ownWork = work.filter((w) => w.credit === 'rubrion');
+export const heroWork = ownWork.filter((w) => w.hero !== undefined && w.image).sort((a, b) => a.hero! - b.hero!);
