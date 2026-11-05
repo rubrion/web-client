@@ -73,6 +73,7 @@ export const work: Work[] = [
 		services: ['agents', 'products'],
 		url: 'https://rubry.ai',
 		image: 'rubry',
+		video: 'rubry',
 		repo: 'https://github.com/rubrion/rubry',
 		heroImage: 'rubry-hero',
 		hero: 0,
