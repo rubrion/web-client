@@ -101,6 +101,7 @@ export const work: Work[] = [
 		url: 'https://www.npmjs.com/org/rubrion',
 		image: 'agent-libraries',
 		video: 'agent-libraries',
+		demo: 'https://beholder.rubrion.ai',
 		heroImage: 'agent-libraries-hero',
 		hero: 1,
 		single: true,
@@ -396,6 +397,7 @@ export const work: Work[] = [
 		repo: 'https://github.com/rubrion/beholder',
 		image: 'beholder',
 		video: 'agent-libraries',
+		demo: 'https://beholder.rubrion.ai',
 	},
 	{
 		slug: 'rubry-template',
