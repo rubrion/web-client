@@ -40,6 +40,8 @@ export interface Work {
 	heroImage?: string;
 	/** A showcase of other entries (their slugs): its page links to them, and it stays out of the catalogue and counts. */
 	parts?: string[];
+	/** A video for the case page, in place of the picture (public/video/<video>-<lang>.{mp4,webp}). */
+	video?: string;
 }
 
 export const credits: Record<Credit, { name: string; url?: string; note: L }> = {
@@ -98,6 +100,7 @@ export const work: Work[] = [
 		services: ['agents'],
 		url: 'https://www.npmjs.com/org/rubrion',
 		image: 'agent-libraries',
+		video: 'agent-libraries',
 		heroImage: 'agent-libraries-hero',
 		hero: 1,
 		single: true,
@@ -367,6 +370,7 @@ export const work: Work[] = [
 		url: 'https://www.npmjs.com/package/@rubrion/mastra-cloudflare',
 		repo: 'https://github.com/rubrion/mastra-cloudflare',
 		image: 'mastra-cloudflare',
+		video: 'agent-libraries',
 	},
 	{
 		slug: 'beholder',
@@ -391,6 +395,7 @@ export const work: Work[] = [
 		url: 'https://www.npmjs.com/package/@rubrion/beholder-server',
 		repo: 'https://github.com/rubrion/beholder',
 		image: 'beholder',
+		video: 'agent-libraries',
 	},
 	{
 		slug: 'rubry-template',

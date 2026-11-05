@@ -1,0 +1,384 @@
+<!doctype html>
+<!--
+  The video on the open-source library pages (/work/agent-libraries,
+  /work/mastra-cloudflare, /work/beholder), drawn as pixel art in the style of
+  rubry.ai's. render.mjs opens this page, calls draw(t) for every frame and
+  encodes the frames with ffmpeg, once per language (?lang=pt). Scenes: the
+  title, the base layer (Cloudflare + Mastra into mastra-cloudflare), the kit
+  (Beholder's server and React halves), the assistant answering inside an app,
+  and how to install it.
+-->
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=block" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				margin: 0;
+				background: #000;
+			}
+			canvas {
+				display: block;
+				image-rendering: pixelated;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="out" width="1280" height="720"></canvas>
+		<script>
+			const W = 640, H = 360, FPS = 24;
+			const lang = new URLSearchParams(location.search).get('lang') === 'pt' ? 'pt' : 'en';
+			const T = {
+				en: {
+					title: ['Open-source libraries', 'for AI agents'],
+					base: 'THE BASE',
+					workers: 'Cloudflare Workers',
+					mastra: 'Mastra',
+					basePros: ['OpenAI-compatible API', 'Memory in D1', 'Reads files, browses'],
+					kit: 'THE KIT',
+					server: ['beholder-server', 'who may ask, budgets'],
+					react: ['beholder-react', 'chat box + screen'],
+					kitPros: ['A gateway: who may ask', 'Budgets, plans, your key', 'Chat streams every step'],
+					inApp: 'INSIDE YOUR APP',
+					app: 'Projects',
+					assistant: 'Assistant',
+					ask: "What's due this week?",
+					thinking: 'Thinking...',
+					tool: 'Checked the projects',
+					answer: ['3 projects: Alpha on Mon,', 'Beta on Wed, Gamma on Fri.'],
+					end: ['Free and open source', 'on npm'],
+					used: 'Powers rubry.ai, Cerne, Equânime',
+				},
+				pt: {
+					title: ['Bibliotecas abertas', 'para agentes de IA'],
+					base: 'A BASE',
+					workers: 'Cloudflare Workers',
+					mastra: 'Mastra',
+					basePros: ['API compatível c/ OpenAI', 'Memória no D1', 'Lê arquivos, navega'],
+					kit: 'O KIT',
+					server: ['beholder-server', 'quem pode perguntar'],
+					react: ['beholder-react', 'chat e tela inteira'],
+					kitPros: ['Gateway: quem pode perguntar', 'Orçamento, planos, sua chave', 'O chat mostra cada passo'],
+					inApp: 'DENTRO DO SEU APP',
+					app: 'Projetos',
+					assistant: 'Assistente',
+					ask: 'O que vence esta semana?',
+					thinking: 'Pensando...',
+					tool: 'Consultou os projetos',
+					answer: ['3 projetos: Alfa na seg,', 'Beta na qua, Gama na sex.'],
+					end: ['Grátis e de código aberto', 'no npm'],
+					used: 'Base do rubry.ai, Cerne, Equânime',
+				},
+			}[lang];
+
+			const C = {
+				night: '#141413', night2: '#1f1e1c', hair: '#3a3935', ink: '#f3f2ee', soft: '#a8a69e',
+				green: '#3ccf6e', amber: '#f2b33d', orange: '#f38020', grey: '#6d6b64',
+				violet: '#9d6fe0', violetDark: '#5a3290', body: '#3f2366', bodyDark: '#26153a', line: '#0b0612',
+				white: '#dbd1e8', iris: '#7b4cc4', pupil: '#12091c',
+			};
+
+			const low = document.createElement('canvas');
+			low.width = W;
+			low.height = H;
+			const g = low.getContext('2d');
+			const out = document.getElementById('out').getContext('2d');
+			out.imageSmoothingEnabled = false;
+
+			const rect = (x, y, w, h, c) => ((g.fillStyle = c), g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)));
+			const text = (s, x, y, size = 8, c = C.ink, align = 'left') => {
+				g.font = `${size}px "Press Start 2P"`;
+				g.fillStyle = c;
+				g.textAlign = align;
+				g.textBaseline = 'top';
+				g.fillText(s, Math.round(x), Math.round(y));
+			};
+			const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+			const ease = (v) => 1 - Math.pow(1 - clamp(v), 3);
+			const typed = (s, t, start, dur) => s.slice(0, Math.floor(s.length * clamp((t - start) / dur)));
+
+			// Cells inside an ellipse, on a grid of `px` pixels.
+			function blobCells(cx, cy, rx, ry, fn) {
+				for (let j = Math.floor(cy - ry); j <= Math.ceil(cy + ry); j++)
+					for (let i = Math.floor(cx - rx); i <= Math.ceil(cx + rx); i++) {
+						const dx = (i + 0.5 - cx) / rx, dy = (j + 0.5 - cy) / ry;
+						if (dx * dx + dy * dy <= 1) fn(i, j);
+					}
+			}
+
+			// Beholder: a flame-shaped body whose five tongues end in eyestalks, one big
+			// eye. (gx, gy) in -1..1 is where it looks; phase changes the eyes like the
+			// React component does: thinking looks up, a tool makes the stalks blink in
+			// turn, speaking pulses the iris.
+			function beholder(x, y, px, t, { gx = 0, gy = 0, phase = 'idle' } = {}) {
+				const bob = Math.round(Math.sin(t * 3) * px * 0.5);
+				const c = (i, j, col) => rect(x + i * px, y + bob + j * px, px, px, col);
+				if (phase === 'thinking') (gx = Math.sin(t * 2) * 0.6), (gy = -1);
+				if (phase === 'tool') gx = Math.sin(t * 6), gy = 0;
+				// The tongues, behind the body, leaning out like flames; each ends in an eyestalk.
+				const TONGUES = [
+					[[3, 8], [2, 7], [2, 6], [1, 5], [1, 4]],
+					[[6, 7], [5, 6], [5, 5], [5, 4], [4, 3], [4, 2]],
+					[[9, 7], [9, 6], [10, 5], [10, 4], [9, 3], [9, 2], [9, 1]],
+					[[13, 7], [14, 6], [14, 5], [14, 4], [15, 3], [15, 2]],
+					[[16, 8], [17, 7], [17, 6], [18, 5], [18, 4]],
+				];
+				for (const cells of TONGUES) for (const [i, j] of cells) for (let b = -1; b <= 1; b++) for (let a = -1; a <= 1; a++) c(i + a, j + b, C.line);
+				for (const cells of TONGUES) for (const [i, j] of cells) c(i, j, C.body);
+				// The body: outline, fill dark below and lighter above, an inner flame.
+				blobCells(9.5, 12, 8.5, 6.5, (i, j) => c(i, j, C.line));
+				blobCells(9.5, 12, 7.5, 5.5, (i, j) => c(i, j, j < 12 ? C.body : C.bodyDark));
+				blobCells(9.5, 12.5, 4.5, 4, (i, j) => c(i, j, C.violetDark));
+				// The stalk eyes, one past each tip; they blink on their own beats.
+				TONGUES.forEach((cells, k) => {
+					const [li, lj] = cells[cells.length - 1], [pi, pj] = cells[cells.length - 2];
+					const ex = li + (li - pi), ey = lj - 1;
+					const blink = phase === 'tool' ? Math.floor(t * 8) % 5 === k : (Math.floor(t * 10) + k * 7) % 41 === 0;
+					for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) c(ex + i, ey + j, C.line);
+					if (blink) return;
+					c(ex, ey, C.white);
+					rect(x + ex * px + (gx > 0.3 ? px / 2 : gx < -0.3 ? 0 : px / 4), y + bob + ey * px + (gy < -0.3 ? 0 : px / 4), px / 2, px / 2, C.pupil);
+				});
+				// The big eye: an almond, an iris that follows the gaze, a heavy upper lid.
+				const blink = phase === 'idle' && Math.floor(t * 10) % 37 === 0;
+				if (blink) {
+					for (let i = 5; i <= 13; i++) c(i, 12, C.line);
+				} else {
+					blobCells(9.5, 12, 5, 2.6, (i, j) => c(i, j, C.line));
+					blobCells(9.5, 12, 4.2, 1.8, (i, j) => c(i, j, C.white));
+					const ix = 9 + Math.round(gx * 2), iy = 11 + Math.round(gy * 0.6);
+					const pulse = phase === 'speaking' && Math.floor(t * 6) % 2 === 0;
+					for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) c(ix + i, iy + j, C.iris);
+					if (pulse) for (let i = -1; i <= 2; i++) c(ix + i, iy + (i < 0 || i > 1 ? 0 : -1 + 3 * 0), C.iris);
+					rect(x + (ix + 0.5) * px, y + bob + (iy + 0.5) * px, phase === 'thinking' ? px / 2 : px, phase === 'thinking' ? px / 2 : px, C.pupil);
+					for (let i = 5; i <= 14; i++) c(i, 10, C.line);
+				}
+			}
+
+			function stars(t) {
+				for (let i = 0; i < 40; i++) {
+					const sx = (i * 97) % W, sy = (i * 53) % 150;
+					if ((Math.floor(t * 2) + i) % 7) rect(sx, sy, 1, 1, C.hair);
+				}
+			}
+
+			// Cloudflare's orange cloud, in pixels.
+			function cfCloud(x, y) {
+				rect(x + 12, y, 22, 10, C.orange);
+				rect(x + 4, y + 8, 46, 12, C.orange);
+				rect(x + 32, y + 4, 12, 6, C.orange);
+				rect(x, y + 14, 56, 6, C.orange);
+			}
+			// Mastra's mark: a dark tile with a white pixel "M".
+			function mastraTile(x, y) {
+				rect(x, y, 30, 30, '#000');
+				rect(x, y, 30, 1, C.hair);
+				const M = ['W...W', 'WW.WW', 'W.W.W', 'W...W', 'W...W'];
+				M.forEach((r, j) => [...r].forEach((ch, i) => ch === 'W' && rect(x + 5 + i * 4, y + 5 + j * 4, 4, 4, C.ink)));
+			}
+
+			// A package box: name in mono-ish pixels, a line under it.
+			function box(x, y, w, name, sub, on = 1, accent = C.violet) {
+				rect(x, y, w, 40, C.night2);
+				rect(x, y, w, 1, on ? accent : C.hair);
+				rect(x, y + 39, w, 1, C.hair);
+				rect(x, y, 1, 40, C.hair);
+				rect(x + w - 1, y, 1, 40, C.hair);
+				text(name, x + 8, y + 9, 8, C.ink);
+				if (sub) text(sub, x + 8, y + 24, 8, C.soft);
+			}
+
+			// A wire from (x1, y1) down to (x2, y2): down, across, down; drawn up to
+			// `p` (0..1) of its length, with a pulse running along it when complete.
+			function wire(x1, y1, x2, y2, p, t, col = C.violet) {
+				const my = Math.round((y1 + y2) / 2);
+				const segs = [[x1, y1, x1, my], [x1, my, x2, my], [x2, my, x2, y2]];
+				const len = segs.reduce((s, [a, b, c2, d]) => s + Math.abs(c2 - a) + Math.abs(d - b), 0);
+				let left = len * clamp(p);
+				const pts = [];
+				for (const [a, b, c2, d] of segs) {
+					const l = Math.abs(c2 - a) + Math.abs(d - b);
+					const k = Math.min(1, left / (l || 1));
+					rect(Math.min(a, a + (c2 - a) * k), Math.min(b, b + (d - b) * k), Math.abs(c2 - a) * k + 2, Math.abs(d - b) * k + 2, C.hair);
+					pts.push([a, b, c2, d, l]);
+					left -= l;
+					if (left <= 0) break;
+				}
+				if (p >= 1) {
+					let at = ((t * 90) % len);
+					for (const [a, b, c2, d, l] of pts) {
+						if (at <= l) {
+							const k = at / (l || 1);
+							rect(a + (c2 - a) * k - 1, b + (d - b) * k - 1, 4, 4, col);
+							break;
+						}
+						at -= l;
+					}
+				}
+			}
+
+			const check = (x, y) => (rect(x, y + 4, 2, 2, C.green), rect(x + 2, y + 6, 2, 2, C.green), rect(x + 4, y + 4, 2, 2, C.green), rect(x + 6, y + 2, 2, 2, C.green), rect(x + 8, y, 2, 2, C.green));
+
+			function bubble(s, x, y, c = C.ink, bg = C.night2, align = 'left') {
+				g.font = '8px "Press Start 2P"';
+				const w = g.measureText(s).width + 12;
+				if (align === 'right') x -= w;
+				rect(x, y, w, 18, bg);
+				rect(x, y, w, 1, C.hair);
+				rect(x, y + 17, w, 1, C.hair);
+				text(s, x + 5, y + 5, 8, c);
+			}
+
+			// ---- Scenes ----
+			function title(t) {
+				stars(t);
+				beholder(W / 2 - 60, 30, 6, t, { gx: Math.sin(t * 1.6), gy: 0.3 });
+				const a = ease(t / 1);
+				text(T.title[0], W / 2, 190 + (1 - a) * 20, 16, C.ink, 'center');
+				text(T.title[1], W / 2, 218 + (1 - a) * 20, 16, C.violet, 'center');
+				text('npm · @rubrion', W / 2, 300, 8, C.soft, 'center');
+			}
+
+			// Cloudflare and Mastra wired into mastra-cloudflare, then what it gives.
+			function base(t) {
+				text(T.base, W / 2, 18, 12, C.violet, 'center');
+				const a = ease(t / 0.6), b = ease((t - 0.4) / 0.6);
+				g.globalAlpha = a;
+				cfCloud(150, 56);
+				text(T.workers, 178, 86, 8, C.soft, 'center');
+				g.globalAlpha = b;
+				mastraTile(440, 52);
+				text(T.mastra, 455, 90, 8, C.soft, 'center');
+				g.globalAlpha = 1;
+				wire(178, 104, 300, 150, (t - 0.9) / 0.8, t, C.orange);
+				wire(455, 104, 340, 150, (t - 1.1) / 0.8, t, C.ink);
+				if (t > 1.8) box(200, 150, 240, '@rubrion/mastra-cloudflare', 'GPL-3.0', ease((t - 1.8) / 0.3));
+				T.basePros.forEach((s, i) => {
+					if (t < 2.6 + i * 0.6) return;
+					check(200, 222 + i * 30);
+					text(s, 220, 222 + i * 30, 10, C.ink);
+				});
+			}
+
+			// mastra-cloudflare into Beholder's two halves; Beholder lands on the React one.
+			function kit(t) {
+				text(T.kit, W / 2, 18, 12, C.violet, 'center');
+				box(200, 46, 240, '@rubrion/mastra-cloudflare', null);
+				wire(280, 86, 150, 170, (t - 0.3) / 0.7, t);
+				wire(360, 86, 490, 170, (t - 0.5) / 0.7, t);
+				if (t > 1) box(40, 170, 220, '@rubrion/' + T.server[0], T.server[1], 1);
+				if (t > 1.3) box(380, 170, 220, '@rubrion/' + T.react[0], T.react[1], 1);
+				if (t > 1.9) {
+					const drop = ease((t - 1.9) / 0.5);
+					beholder(548, 40 + 72 * drop, 3, t, { gx: -0.6, gy: 0.6 });
+				}
+				T.kitPros.forEach((s2, i) => {
+					if (t < 2.6 + i * 0.6) return;
+					check(150, 238 + i * 30);
+					text(s2, 170, 238 + i * 30, 10, C.ink);
+				});
+			}
+
+			// The assistant inside an app: a question, thinking, a tool, the answer.
+			function inApp(t, d) {
+				text(T.inApp, W / 2, 18, 12, C.violet, 'center');
+				// The app behind: a window with rows.
+				rect(30, 44, 580, 290, C.night2);
+				rect(30, 44, 580, 16, C.hair);
+				[0, 1, 2].forEach((i) => rect(38 + i * 10, 49, 6, 6, C.night));
+				text(T.app, 70, 49, 8, C.soft);
+				for (let i = 0; i < 6; i++) {
+					rect(46, 76 + i * 34, 200, 8, C.hair);
+					rect(46, 90 + i * 34, 120, 6, '#2c2b28');
+				}
+				// The chat panel.
+				const px0 = 290, py0 = 70;
+				rect(px0, py0, 300, 250, C.night);
+				rect(px0, py0, 300, 1, C.violet);
+				const phase = t < 1.6 ? 'idle' : t < 3.4 ? 'thinking' : t < 5.2 ? 'tool' : 'speaking';
+				beholder(px0 + 8, py0 + 4, 2, t, { phase, gx: -0.4 });
+				text(T.assistant, px0 + 52, py0 + 18, 8, C.ink);
+				if (t > 0.4) bubble(typed(T.ask, t, 0.4, 1), px0 + 292, py0 + 56, C.ink, C.night2, 'right');
+				if (phase === 'thinking') text(T.thinking.slice(0, 8 + (Math.floor(t * 3) % 4)), px0 + 12, py0 + 90, 8, C.soft);
+				if (t > 3.4) {
+					check(px0 + 12, py0 + 90);
+					text(T.tool, px0 + 28, py0 + 90, 8, t < 5.2 ? C.ink : C.soft);
+				}
+				if (t > 5.2) {
+					text(typed(T.answer[0], t, 5.2, 1.2), px0 + 12, py0 + 116, 8, C.ink);
+					text(typed(T.answer[1], t, 6.4, 1.2), px0 + 12, py0 + 132, 8, C.ink);
+				}
+			}
+
+			function end(t) {
+				stars(t);
+				beholder(W / 2 - 60, 24, 6, t, { gx: Math.sin(t * 1.2) * 0.8 });
+				const a = ease(t / 0.8);
+				text(T.end[0], W / 2, 160 + (1 - a) * 16, 16, C.ink, 'center');
+				text(T.end[1], W / 2, 188 + (1 - a) * 16, 16, C.violet, 'center');
+				if (t > 0.8) bubble(typed('$ npm i @rubrion/beholder-react', t, 0.8, 1.2), W / 2 - 132, 228, C.green);
+				if (t > 2.2) text('github.com/rubrion/beholder', W / 2, 270, 8, C.ink, 'center');
+				if (t > 2.6) text(T.used, W / 2, 292, 8, C.soft, 'center');
+			}
+
+			const SCENES = [
+				[title, 3.5],
+				[base, 5.5],
+				[kit, 5.5],
+				[inApp, 9],
+				[end, 5],
+			];
+			const DURATION = SCENES.reduce((s, [, d]) => s + d, 0);
+
+			window.draw = (t) => {
+				rect(0, 0, W, H, C.night);
+				let start = 0;
+				for (const [scene, d] of SCENES) {
+					if (t < start + d) {
+						scene(t - start, d);
+						const edge = Math.min(t - start, start + d - t);
+						if (edge < 0.25) {
+							g.globalAlpha = 1 - edge / 0.25;
+							rect(0, 0, W, H, C.night);
+							g.globalAlpha = 1;
+						}
+						break;
+					}
+					start += d;
+				}
+				out.drawImage(low, 0, 0, 1280, 720);
+				return document.getElementById('out').toDataURL('image/png');
+			};
+
+			// The sound track's cues, [second, sound], from the timings above.
+			function cues() {
+				const at = (scene) => SCENES.slice(0, SCENES.findIndex(([f]) => f === scene)).reduce((s, [, d]) => s + d, 0);
+				const out = [];
+				const typing = (start, dur, chars) => {
+					for (let i = 0; i < chars; i += 2) out.push([start + (dur * i) / chars, i % 4 ? 'blip2' : 'blip']);
+				};
+				out.push([at(title) + 0.15, 'jingle']);
+				const b = at(base);
+				out.push([b + 0.1, 'pop'], [b + 0.5, 'pop'], [b + 1.8, 'ding']);
+				T.basePros.forEach((_, i) => out.push([b + 2.6 + i * 0.6, 'chime']));
+				const k = at(kit);
+				out.push([k + 1, 'tick'], [k + 1.3, 'tick'], [k + 1.9, 'hop'], [k + 2.4, 'pop']);
+				T.kitPros.forEach((_, i) => out.push([k + 2.6 + i * 0.6, 'chime']));
+				const a = at(inApp);
+				typing(a + 0.4, 1, T.ask.length);
+				out.push([a + 3.4, 'chime']);
+				typing(a + 5.2, 1.2, T.answer[0].length);
+				typing(a + 6.4, 1.2, T.answer[1].length);
+				const e = at(end);
+				out.push([e + 0.1, 'fanfare']);
+				typing(e + 0.8, 1.2, 30);
+				out.push([e + 2.2, 'ding']);
+				return out;
+			}
+
+			window.meta = { DURATION, FPS, cues: cues() };
+			window.ready = document.fonts.load('16px "Press Start 2P"').then(() => true);
+		</script>
+	</body>
+</html>
