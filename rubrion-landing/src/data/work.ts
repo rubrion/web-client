@@ -320,7 +320,7 @@ export const work: Work[] = [
 		stack: ['Cloudflare Workflows', 'D1', 'R2', 'Beholder', 'Mastra'],
 		services: ['data', 'agents'],
 		url: 'https://equanime.rubrion.ai',
-		mock: 'report',
+		image: 'equanime',
 		repo: 'https://github.com/rubenszinho/equanime',
 	},
 	{
