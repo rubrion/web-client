@@ -1,0 +1,223 @@
+---
+// Cookie consent for Google Analytics. Nothing from Google loads until the
+// visitor accepts: no gtag.js, no cookies, no request. The choice is kept in
+// localStorage (strictly necessary, so it needs no consent of its own) and
+// can be changed any time from `[data-consent-open]` (footer "Cookie
+// settings"). Declining after accepting turns GA off and clears its cookies.
+// Accept and decline carry equal weight, as the GDPR and the ANPD expect.
+// Renders nothing without this site's GA ID (`VITE_GA_ID_EN` / `_PT`).
+import { c } from '../data/site';
+import { GA_ID } from '../data/locale';
+
+const t = c.consent;
+---
+
+{
+	GA_ID && (
+		<>
+			<section class="consent" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-text" data-consent data-ga={GA_ID} hidden>
+				<p id="consent-title" class="consent__title">{t.title}</p>
+				<p id="consent-text" class="consent__text">
+					{t.text} <a href="/privacy">{t.more}</a>
+				</p>
+				<div class="consent__actions">
+					<button type="button" class="consent__btn consent__btn--ink" data-consent-choice="granted">{t.accept}</button>
+					<button type="button" class="consent__btn" data-consent-choice="denied">{t.decline}</button>
+				</div>
+			</section>
+			<script>
+				const KEY = 'rubrion-consent';
+				type Choice = 'granted' | 'denied';
+
+				const box = document.querySelector<HTMLElement>('[data-consent]');
+				const id = box?.dataset.ga;
+
+				const read = (): Choice | null => {
+					try {
+						const v = localStorage.getItem(KEY);
+						return v === 'granted' || v === 'denied' ? v : null;
+					} catch {
+						return null;
+					}
+				};
+				const save = (v: Choice) => {
+					try {
+						localStorage.setItem(KEY, v);
+					} catch {}
+				};
+
+				const w = window as unknown as { dataLayer: unknown[]; gtag: (...a: unknown[]) => void } & Record<string, unknown>;
+				let loaded = false;
+
+				const startGa = () => {
+					if (!id) return;
+					w[`ga-disable-${id}`] = false;
+					if (loaded) {
+						w.gtag('consent', 'update', { analytics_storage: 'granted' });
+						return;
+					}
+					loaded = true;
+					w.dataLayer = w.dataLayer || [];
+					w.gtag = function () {
+						// gtag needs the real `arguments` object, not an array.
+						// eslint-disable-next-line prefer-rest-params
+						w.dataLayer.push(arguments);
+					};
+					// Consent Mode v2: analytics only, never ads or personalisation.
+					w.gtag('consent', 'default', {
+						analytics_storage: 'granted',
+						ad_storage: 'denied',
+						ad_user_data: 'denied',
+						ad_personalization: 'denied',
+					});
+					w.gtag('js', new Date());
+					w.gtag('config', id, { allow_google_signals: false, allow_ad_personalization_signals: false });
+					const s = document.createElement('script');
+					s.async = true;
+					s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+					document.head.appendChild(s);
+				};
+
+				const stopGa = () => {
+					if (!id) return;
+					w[`ga-disable-${id}`] = true;
+					if (loaded) w.gtag('consent', 'update', { analytics_storage: 'denied' });
+					// Drop the _ga cookies on this host and its parent domains.
+					const parts = location.hostname.split('.');
+					const domains = parts.map((_, i) => parts.slice(i).join('.')).filter((d) => d.includes('.'));
+					for (const name of document.cookie.split(';').map((c) => c.split('=')[0].trim())) {
+						if (!name.startsWith('_ga')) continue;
+						for (const d of ['', ...domains.map((d) => `;domain=.${d}`)]) {
+							document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/${d}`;
+						}
+					}
+				};
+
+				const show = () => {
+					if (!box) return;
+					box.hidden = false;
+					requestAnimationFrame(() => box.classList.add('is-in'));
+				};
+				const hide = () => {
+					if (!box) return;
+					box.classList.remove('is-in');
+					setTimeout(() => (box.hidden = true), 250);
+				};
+
+				const choice = read();
+				if (choice === 'granted') startGa();
+				else if (!choice) show();
+
+				box?.addEventListener('click', (e) => {
+					const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-consent-choice]');
+					if (!btn) return;
+					const v = btn.dataset.consentChoice as Choice;
+					save(v);
+					v === 'granted' ? startGa() : stopGa();
+					hide();
+				});
+
+				document.addEventListener('click', (e) => {
+					if (!(e.target as HTMLElement).closest('[data-consent-open]')) return;
+					e.preventDefault();
+					show();
+					box?.querySelector<HTMLElement>(`[data-consent-choice="${read() ?? 'granted'}"]`)?.focus();
+				});
+			</script>
+		</>
+	)
+}
+
+<style>
+	.consent {
+		position: fixed;
+		left: clamp(0.75rem, 2vw, 1.5rem);
+		bottom: clamp(0.75rem, 2vw, 1.5rem);
+		z-index: 95;
+		width: min(24rem, calc(100vw - 1.5rem));
+		padding: 1.25rem 1.25rem 1.1rem;
+		border: 1px solid var(--hair);
+		border-radius: 0.5rem;
+		background: var(--surface);
+		color: var(--ink);
+		box-shadow: var(--shadow-soft);
+		opacity: 0;
+		transform: translateY(0.5rem);
+		transition:
+			opacity 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	.consent.is-in {
+		opacity: 1;
+		transform: none;
+	}
+
+	.consent__title {
+		font-size: 0.9rem;
+		font-weight: 700;
+	}
+
+	.consent__text {
+		margin-top: 0.4rem;
+		font-size: 0.82rem;
+		line-height: 1.55;
+		color: var(--ink-soft);
+	}
+
+	.consent__text a {
+		color: var(--ink);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.consent__actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.consent__btn {
+		padding: 0.7rem 0.9rem;
+		border: 1px solid var(--hair);
+		border-radius: 0.25rem;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: var(--ink);
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.consent__btn:hover {
+		border-color: var(--ink);
+	}
+
+	.consent__btn--ink {
+		border-color: var(--ink);
+		background: var(--ink);
+		color: var(--paper);
+	}
+
+	.consent__btn--ink:hover {
+		border-color: var(--color-brand-600);
+		background: var(--color-brand-600);
+		color: #fff;
+	}
+
+	/* Phones: full width, lifted clear of the chat launcher. */
+	@media (max-width: 640px) {
+		.consent {
+			bottom: 4.25rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.consent {
+			transition: none;
+		}
+	}
+</style>

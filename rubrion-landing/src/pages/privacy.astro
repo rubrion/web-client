@@ -5,7 +5,8 @@
 // automatic reply sent by Resend), the newsletter (worker/index.ts →
 // EdgeLetter, double opt-in, sent by Resend), booking a call (worker/booking.ts →
 // an event on our Google Calendar), Turnstile on the forms, the
-// theme in localStorage, and no analytics. Rubry has its own policy.
+// theme and cookie choice in localStorage, and Google Analytics only after
+// consent (CookieConsent.astro). Rubry has its own policy.
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import { c, email } from '../data/site';
@@ -16,7 +17,7 @@ const ADDRESS = 'Avenida Paulista, 777, 15º andar, conj. 15, sala 2279, Bela Vi
 
 const t = l({
 	en: {
-		kicker: 'Updated October 31, 2026',
+		kicker: 'Updated November 12, 2026',
 		title: 'Privacy policy',
 		lead: 'What this site collects when you write to us, book a call or subscribe, why, for how long, and your rights under Brazil’s LGPD and the EU’s and UK’s GDPR.',
 		sections: [
@@ -26,10 +27,11 @@ const t = l({
 				'The newsletter: your email, which you confirm by clicking a link we send (consent: GDPR Art. 6(1)(a); LGPD Art. 7, I). We use it only to send our posts. Every email has a link to unsubscribe, and withdrawing consent is as easy as giving it.',
 				'Booking a call: your name, email, company (optional), what you’d like to talk about and the time you pick. They become an event on our Google Calendar with a Google Meet link, and Google emails the invite to you and to us (steps before a contract, at your request: GDPR Art. 6(1)(b); LGPD Art. 7, V). The booking page shows only which times are free or busy, never what is on our calendar. We keep the event like a contact message: up to 2 years unless we work together or you ask us to delete it sooner.',
 				'These forms use Cloudflare Turnstile to tell people from bots (our legitimate interest in stopping spam: GDPR Art. 6(1)(f); LGPD Art. 7, IX). Like any website, our servers see your network address with each request; Cloudflare keeps technical logs for a few days.',
-				'In your browser we store only your theme choice (light or dark). We use no analytics, advertising or tracking cookies.',
+				'Analytics: if you accept in the cookie banner, Google Analytics records which pages you visit, roughly where from (country or city, from a shortened network address), your device and browser type and how you arrived, using first-party cookies (_ga, _ga_*) kept for up to 14 months (consent: GDPR Art. 6(1)(a); LGPD Art. 7, I). We use it only to understand which pages are read; Google signals and ad personalisation are off. Nothing from Google loads until you accept, and you can change your mind at any time with “Cookie settings” at the bottom of every page, which also deletes these cookies.',
+				'In your browser we also store your theme choice (light or dark) and your cookie choice. We use no advertising cookies.',
 			]],
 			['Who else processes it', [
-				'Cloudflare hosts this site, runs the human check and forwards the contact form by email; Google holds our inbox (Gmail) and calendar (Google Calendar and Meet); Resend sends the automatic reply and the newsletter. They act on our instructions. Our newsletter list is kept in EdgeLetter, our own system on Cloudflare.',
+				'Cloudflare hosts this site, runs the human check and forwards the contact form by email; Google holds our inbox (Gmail) and calendar (Google Calendar and Meet) and, if you accept, runs Google Analytics; Resend sends the automatic reply and the newsletter. They act on our instructions. Our newsletter list is kept in EdgeLetter, our own system on Cloudflare.',
 				'We do not sell your data or share it for advertising.',
 			]],
 			['Where your data goes', ['Rubrion is in Brazil, and these providers work in several countries, including the United States. We use providers that offer the European Commission’s standard contractual clauses or an equivalent safeguard for transfers out of the EU.']],
@@ -42,7 +44,7 @@ const t = l({
 		],
 	},
 	pt: {
-		kicker: 'Atualizada em 31 de outubro de 2026',
+		kicker: 'Atualizada em 12 de novembro de 2026',
 		title: 'Política de privacidade',
 		lead: 'O que este site coleta quando você escreve para nós, agenda uma conversa ou assina a newsletter, por quê, por quanto tempo, e seus direitos pela LGPD e pelo GDPR da União Europeia e do Reino Unido.',
 		sections: [
@@ -52,10 +54,11 @@ const t = l({
 				'A newsletter: seu e-mail, que você confirma clicando num link que enviamos (consentimento: LGPD art. 7º, I; GDPR art. 6(1)(a)). Usamos só para enviar nossos posts. Todo e-mail tem um link para cancelar, e revogar o consentimento é tão fácil quanto dá-lo.',
 				'Agendar uma conversa: seu nome, e-mail, empresa (opcional), o assunto e o horário que você escolhe. Eles viram um evento na nossa Google Agenda com um link do Google Meet, e o Google envia o convite a você e a nós (procedimentos preliminares a um contrato, a seu pedido: LGPD art. 7º, V; GDPR art. 6(1)(b)). A página de agendamento mostra só quais horários estão livres ou ocupados, nunca o que está na agenda. Guardamos o evento como uma mensagem de contato: até 2 anos, a menos que trabalhemos juntos ou você peça para apagar antes.',
 				'Esses formulários usam o Cloudflare Turnstile para distinguir pessoas de robôs (nosso legítimo interesse em evitar spam: LGPD art. 7º, IX; GDPR art. 6(1)(f)). Como em qualquer site, nossos servidores veem seu endereço de rede a cada requisição; a Cloudflare guarda registros técnicos por alguns dias.',
-				'No seu navegador guardamos só a escolha de tema (claro ou escuro). Não usamos cookies de análise, publicidade ou rastreamento.',
+				'Análise de acesso: se você aceitar no aviso de cookies, o Google Analytics registra quais páginas você visita, de onde aproximadamente (país ou cidade, a partir de um endereço de rede encurtado), o tipo de aparelho e navegador e como você chegou, com cookies próprios (_ga, _ga_*) guardados por até 14 meses (consentimento: LGPD art. 7º, I; GDPR art. 6(1)(a)). Usamos só para entender quais páginas são lidas; os sinais do Google e a personalização de anúncios ficam desligados. Nada do Google carrega antes de você aceitar, e você pode mudar de ideia a qualquer momento em “Configurar cookies”, no rodapé de toda página, o que também apaga esses cookies.',
+				'No seu navegador guardamos também a escolha de tema (claro ou escuro) e a sua escolha sobre cookies. Não usamos cookies de publicidade.',
 			]],
 			['Quem mais trata seus dados', [
-				'A Cloudflare hospeda este site, faz a verificação humana e encaminha o formulário de contato por e-mail; o Google guarda nossa caixa de entrada (Gmail) e agenda (Google Agenda e Meet); a Resend envia a resposta automática e a newsletter. Elas agem segundo nossas instruções. Nossa lista da newsletter fica no EdgeLetter, nosso próprio sistema na Cloudflare.',
+				'A Cloudflare hospeda este site, faz a verificação humana e encaminha o formulário de contato por e-mail; o Google guarda nossa caixa de entrada (Gmail) e agenda (Google Agenda e Meet) e, se você aceitar, opera o Google Analytics; a Resend envia a resposta automática e a newsletter. Elas agem segundo nossas instruções. Nossa lista da newsletter fica no EdgeLetter, nosso próprio sistema na Cloudflare.',
 				'Não vendemos seus dados nem os compartilhamos para publicidade.',
 			]],
 			['Para onde seus dados vão', ['A Rubrion fica no Brasil, e esses prestadores atuam em vários países, incluindo os Estados Unidos. Usamos prestadores que oferecem as cláusulas contratuais padrão da Comissão Europeia ou garantia equivalente para transferências para fora da UE.']],

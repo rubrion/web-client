@@ -17,6 +17,7 @@ import Seo from '../components/Seo.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import ChatWidget from '../components/ChatWidget.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import type { JsonLd } from '../data/seo';
 import { DEFAULT_DESCRIPTION } from '../data/seo';
 import { HTML_LANG } from '../data/locale';
@@ -118,6 +119,7 @@ const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | u
 		</main>
 		<Footer />
 		<ChatWidget />
+		<CookieConsent />
 		<script>
 			import { initDiagonal } from '../scripts/diagonal';
 			import { initAmbient } from '../scripts/ambient';

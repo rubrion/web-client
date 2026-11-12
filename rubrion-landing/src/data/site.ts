@@ -50,7 +50,7 @@ const en = {
 	work: {
 		kicker: 'Selected work',
 		title: 'Work in <em>production</em>',
-		lead: 'Our own products and client builds, some directly and some through our partners MT2 Data and Sennatech.',
+		lead: 'Our own products and client builds, some directly and some through our partner Sennatech.',
 		all: 'All',
 		allWork: 'All work',
 		problem: 'The problem',
@@ -204,6 +204,14 @@ const en = {
 		brand: 'Brand guide',
 		privacy: 'Privacy',
 		terms: 'Terms',
+		cookies: 'Cookie settings',
+	},
+	consent: {
+		title: 'Cookies',
+		text: 'We’d like to use Google Analytics to see which pages people read, so we can make the site better. It sets cookies only if you accept. No ads, no selling data.',
+		more: 'Privacy policy',
+		accept: 'Accept',
+		decline: 'Decline',
 	},
 	chat: {
 		open: 'Chat with us',
@@ -292,7 +300,7 @@ const pt: typeof en = {
 	work: {
 		kicker: 'Trabalhos',
 		title: 'Trabalho em <em>produção</em>',
-		lead: 'Nossos produtos e projetos para clientes, alguns diretos e alguns com nossos parceiros MT2 Data e Sennatech.',
+		lead: 'Nossos produtos e projetos para clientes, alguns diretos e alguns com nossa parceira Sennatech.',
 		all: 'Todos',
 		allWork: 'Todos os trabalhos',
 		problem: 'O problema',
@@ -446,6 +454,14 @@ const pt: typeof en = {
 		brand: 'Guia de marca',
 		privacy: 'Privacidade',
 		terms: 'Termos',
+		cookies: 'Configurar cookies',
+	},
+	consent: {
+		title: 'Cookies',
+		text: 'Queremos usar o Google Analytics para ver quais páginas as pessoas leem e melhorar o site. Ele só grava cookies se você aceitar. Sem anúncios, sem venda de dados.',
+		more: 'Política de privacidade',
+		accept: 'Aceitar',
+		decline: 'Recusar',
 	},
 	chat: {
 		open: 'Fale com a gente',

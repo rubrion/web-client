@@ -20,6 +20,9 @@ export const OG_LOCALE_ALT = pt ? 'en_US' : 'pt_BR';
 // The canonical EN URL — used for hreflang x-default regardless of current locale.
 export const EN_URL = 'https://rubrion.ai';
 
+// GA4 web stream for this site (Rubrion EN / Rubrion PT); empty turns GA and the cookie banner off.
+export const GA_ID = ((pt ? import.meta.env.VITE_GA_ID_PT : import.meta.env.VITE_GA_ID_EN) as string | undefined) || undefined;
+
 export const SUPPORT_EMAIL = pt ? 'ola@rubrion.com.br' : 'hello@rubrion.ai';
 export const LANG_LABEL = pt ? 'PT' : 'EN';
 export const ALT_LANG_LABEL = pt ? 'EN' : 'PT';

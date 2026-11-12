@@ -65,8 +65,8 @@ export default {
 		if (pathname === '/api/subscribe') return req.method === 'POST' ? subscribe(req, env) : new Response(null, { status: 405, headers: { allow: 'POST' } });
 		// /products merged into /work.
 		if (pathname === '/products' || pathname === '/products.html') return Response.redirect(new URL('/work', req.url).href, 301);
-		// MT2 Allocation (once Dynamication) is no longer a case.
-		if (/^\/work\/(dynamication|mt2-allocation)(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work', req.url).href, 301);
+		// Retired cases: MT2 Allocation (once Dynamication), the MT2 Data builds and the LMS.
+		if (/^\/work\/(dynamication|mt2-allocation|mt2-data-site|colmeia|dexplan|lms)(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work', req.url).href, 301);
 		// Animally is now told inside the vet clinic template's case.
 		if (/^\/work\/agent-kit(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work/beholder', req.url).href, 301);
 		if (/^\/work\/animally(\.html)?$/.test(pathname)) return Response.redirect(new URL('/work/vet-clinic-template', req.url).href, 301);

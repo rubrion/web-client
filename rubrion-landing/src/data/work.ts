@@ -1,14 +1,13 @@
 // Portfolio: everything Rubrion has actually built, by who it was built for.
 // Folder layout in ~/rubrion is the source of truth: projects at the root were
-// built by Rubrion directly, `mt2data/*` (plus Dexplan) as consulting through
-// MT2 Data, `sennatech/*` through Sennatech.
+// built by Rubrion directly, `sennatech/*` through Sennatech.
 //
 // Public sites show a real screenshot (`image`, from
 // public/work/<image>-{1600,900}.webp); private apps and internal tools show a
 // drawn mockup of their kind (`mock`) instead, never real data.
 import type { L } from './locale';
 
-export type Credit = 'rubrion' | 'mt2' | 'sennatech';
+export type Credit = 'rubrion' | 'sennatech';
 export type Service = 'platforms' | 'agents' | 'data' | 'sites' | 'products';
 /** What the work is, for grouping and filtering. */
 export type Kind = 'saas' | 'platform' | 'site' | 'library';
@@ -46,7 +45,6 @@ export interface Work {
 
 export const credits: Record<Credit, { name: string; url?: string; note: L }> = {
 	rubrion: { name: 'Rubrion', note: { en: 'Built by Rubrion', pt: 'Feito pela Rubrion' } },
-	mt2: { name: 'MT2 Data', url: 'https://mt2data.cloud', note: { en: 'Consulting via MT2 Data', pt: 'Consultoria via MT2 Data' } },
 	sennatech: { name: 'Sennatech', url: 'https://www.linkedin.com/company/sennatechnology', note: { en: 'Delivered with Sennatech', pt: 'Entregue com a Sennatech' } },
 };
 
@@ -156,30 +154,6 @@ export const work: Work[] = [
 		demo: 'https://vet.rubrion.ai',
 		image: 'animally',
 		hero: 2,
-	},
-	{
-		slug: 'mt2-data-site',
-		name: { en: 'MT2 Data website', pt: 'Site da MT2 Data' },
-		credit: 'mt2',
-		type: 'site',
-		kind: { en: 'Data-science consultancy site', pt: 'Site de consultoria em ciência de dados' },
-		summary: {
-			en: 'The consultancy’s bilingual site, with an insights section its team publishes to directly.',
-			pt: 'O site bilíngue da consultoria, com uma seção de artigos que a própria equipe publica.',
-		},
-		problem: {
-			en: 'Case studies and articles lived in decks; the site had to carry them and be easy for consultants to update.',
-			pt: 'Cases e artigos viviam em apresentações; o site precisava carregá-los e ser fácil de atualizar pelos consultores.',
-		},
-		built: {
-			en: 'An Astro site on a Cloudflare Worker, mostly prerendered, with server-rendered insight pages and an admin backed by D1.',
-			pt: 'Um site em Astro num Worker da Cloudflare, quase todo pré-renderizado, com páginas de artigos renderizadas no servidor e um painel apoiado em D1.',
-		},
-		stack: ['Astro', 'Cloudflare Workers', 'D1'],
-		services: ['sites'],
-		url: 'https://mt2data.cloud',
-		image: 'mt2data',
-		hero: 3,
 	},
 	{
 		slug: 'brad',
@@ -425,51 +399,6 @@ export const work: Work[] = [
 		image: 'rubry-template',
 	},
 	{
-		slug: 'colmeia',
-		name: { en: 'Colmeia', pt: 'Colmeia' },
-		credit: 'mt2',
-		type: 'saas',
-		kind: { en: 'Farm decisions over WhatsApp', pt: 'Decisões do campo pelo WhatsApp' },
-		summary: {
-			en: 'Specialised agents answer machine health, slaughter timing and crop forecasting questions in plain language.',
-			pt: 'Agentes especializados respondem sobre saúde de máquinas, ponto de abate e previsão de safra em linguagem natural.',
-		},
-		problem: {
-			en: 'Farm data sat in half a dozen platforms; managers wanted answers, not dashboards.',
-			pt: 'Os dados da fazenda estavam espalhados em várias plataformas; os gestores queriam respostas, não painéis.',
-		},
-		built: {
-			en: 'One agent per decision domain behind a WhatsApp sender, with guardrails, shared memory and Grafana monitoring.',
-			pt: 'Um agente por domínio de decisão atrás de um disparador de WhatsApp, com guardrails, memória compartilhada e monitoramento no Grafana.',
-		},
-		stack: ['Python', 'LLM agents', 'WhatsApp', 'Grafana'],
-		services: ['agents', 'data'],
-		url: 'https://colmeia.agr.br',
-		image: 'colmeia',
-	},
-	{
-		slug: 'dexplan',
-		name: { en: 'Dexplan', pt: 'Dexplan' },
-		credit: 'mt2',
-		type: 'platform',
-		kind: { en: 'Production planning optimiser', pt: 'Otimizador de planejamento de produção' },
-		summary: {
-			en: 'Allocates orders to production days with a MILP solver, respecting capacity and seller quotas.',
-			pt: 'Distribui pedidos entre dias de produção com um solver MILP, respeitando capacidade e cotas de vendedores.',
-		},
-		problem: {
-			en: 'Planning by spreadsheet left capacity idle on some days and orders late on others.',
-			pt: 'Planejar em planilha deixava capacidade ociosa em alguns dias e pedidos atrasados em outros.',
-		},
-		built: {
-			en: 'An optimisation service with split orders and soft or hard quotas, plus a web shell where planners review and track the plan.',
-			pt: 'Um serviço de otimização com pedidos fracionados e cotas flexíveis ou rígidas, mais uma interface web para os planejadores revisarem e acompanharem o plano.',
-		},
-		stack: ['Python', 'MILP', 'React', 'pnpm monorepo'],
-		services: ['data', 'platforms'],
-		mock: 'table',
-	},
-	{
 		slug: 'avilink',
 		name: { en: 'Avilink', pt: 'Avilink' },
 		credit: 'sennatech',
@@ -563,28 +492,6 @@ export const work: Work[] = [
 		image: 'bioexame',
 	},
 	{
-		slug: 'lms',
-		name: { en: 'LMS', pt: 'LMS' },
-		credit: 'rubrion',
-		type: 'platform',
-		kind: { en: 'LGPD training for a clinical lab', pt: 'Treinamento em LGPD para laboratório clínico' },
-		summary: {
-			en: 'A training platform that takes a lab’s staff through data protection practice, step by step.',
-			pt: 'Uma plataforma de treinamento que conduz a equipe de um laboratório pelas práticas de proteção de dados, passo a passo.',
-		},
-		problem: {
-			en: 'Complying with Brazil’s data protection law (LGPD) meant every employee had to be trained, and the lab had to show it.',
-			pt: 'Cumprir a LGPD exigia treinar todos os funcionários, e o laboratório precisava comprovar isso.',
-		},
-		built: {
-			en: 'A customised learning platform with structured internal courses on the lab’s own data handling, progress per employee and a record of completion for compliance.',
-			pt: 'Uma plataforma de aprendizagem sob medida, com cursos internos estruturados sobre o tratamento de dados do próprio laboratório, progresso por funcionário e registro de conclusão para a conformidade.',
-		},
-		stack: ['LMS', 'Course builder', 'Progress tracking', 'LGPD'],
-		services: ['products', 'platforms'],
-		mock: 'dashboard',
-	},
-	{
 		slug: 'acme-business-template',
 		name: { en: 'Acme Advisory', pt: 'Acme Advisory' },
 		credit: 'rubrion',
@@ -622,7 +529,7 @@ export const serviceCases: Record<Service, string[]> = {
 	agents: ['rubry', 'brad', 'beholder'],
 	data: ['equanime', 'cerne'],
 	sites: ['advogue', 'vet-clinic-template', 'mondesa'],
-	products: ['edgeletter', 'rubrion-store', 'lms'],
+	products: ['edgeletter', 'rubrion-store'],
 };
 
 /** The catalogue and the counts: everything but showcases of other entries. */
