@@ -90,27 +90,34 @@ const files = [
 	{ kind: 'mark', variants: [['ink', '#F3F2EE'], ['white', '#141413'], ['red', '#F3F2EE']] },
 	{ kind: 'avatar', variants: [['paper'], ['ink'], ['red']] },
 ] as const;
-// public/brand/social, rendered by tools/social.mjs: one file per size and
-// language (-en: rubrion.ai, -pt: rubrion.com.br), text kept inside each
-// platform's safe area. Google Play's developer page takes 24-bit images.
+// public/brand/social, rendered by tools/social.mjs: one JPEG per size, theme
+// and language (-en: rubrion.ai, -pt: rubrion.com.br), text kept inside each
+// platform's safe area; the icon as 512 and 1024 PNG. All 24-bit, as Google
+// Play's developer page requires. The theme switch swaps every file.
 const social = [
-	['google-play-header', 'jpg', 4096, 2304, { en: 'Google Play developer page: header', pt: 'Página do desenvolvedor no Google Play: cabeçalho' }],
-	['open-graph', 'png', 1200, 630, { en: 'Link previews, LinkedIn and Facebook posts', pt: 'Prévias de links, posts no LinkedIn e Facebook' }],
-	['github-social', 'png', 1280, 640, { en: 'GitHub social preview', pt: 'Prévia social do GitHub' }],
-	['linkedin-company-cover', 'png', 1128, 191, { en: 'LinkedIn company page cover', pt: 'Capa da página da empresa no LinkedIn' }],
-	['linkedin-personal-banner', 'png', 1584, 396, { en: 'LinkedIn profile banner', pt: 'Banner do perfil no LinkedIn' }],
-	['x-header', 'png', 1500, 500, { en: 'X (Twitter) header', pt: 'Cabeçalho do X (Twitter)' }],
-	['facebook-cover', 'png', 1640, 624, { en: 'Facebook page cover', pt: 'Capa da página no Facebook' }],
-	['youtube-banner', 'png', 2560, 1440, { en: 'YouTube channel banner', pt: 'Banner do canal no YouTube' }],
-	['reddit-banner', 'png', 1920, 384, { en: 'Reddit banner, desktop', pt: 'Banner do Reddit, desktop' }],
-	['reddit-mobile-banner', 'png', 1600, 480, { en: 'Reddit banner, mobile', pt: 'Banner do Reddit, celular' }],
-	['post-square', 'png', 1080, 1080, { en: 'Instagram, LinkedIn and Facebook square post', pt: 'Post quadrado no Instagram, LinkedIn e Facebook' }],
-	['post-portrait', 'png', 1080, 1350, { en: 'Instagram portrait post', pt: 'Post retrato no Instagram' }],
-	['story', 'png', 1080, 1920, { en: 'Stories, Reels, Shorts, WhatsApp status', pt: 'Stories, Reels, Shorts, status do WhatsApp' }],
+	['google-play-header', 4096, 2304, { en: 'Google Play developer page: header', pt: 'Página do desenvolvedor no Google Play: cabeçalho' }],
+	['open-graph', 1200, 630, { en: 'Link previews, LinkedIn and Facebook posts', pt: 'Prévias de links, posts no LinkedIn e Facebook' }],
+	['github-social', 1280, 640, { en: 'GitHub social preview', pt: 'Prévia social do GitHub' }],
+	['linkedin-company-cover', 1128, 191, { en: 'LinkedIn company page cover', pt: 'Capa da página da empresa no LinkedIn' }],
+	['linkedin-personal-banner', 1584, 396, { en: 'LinkedIn profile banner', pt: 'Banner do perfil no LinkedIn' }],
+	['x-header', 1500, 500, { en: 'X (Twitter) header', pt: 'Cabeçalho do X (Twitter)' }],
+	['facebook-cover', 1640, 624, { en: 'Facebook page cover', pt: 'Capa da página no Facebook' }],
+	['youtube-banner', 2560, 1440, { en: 'YouTube channel banner', pt: 'Banner do canal no YouTube' }],
+	['reddit-banner', 1920, 384, { en: 'Reddit banner, desktop', pt: 'Banner do Reddit, desktop' }],
+	['reddit-mobile-banner', 1600, 480, { en: 'Reddit banner, mobile', pt: 'Banner do Reddit, celular' }],
+	['post-square', 1080, 1080, { en: 'Instagram, LinkedIn and Facebook square post', pt: 'Post quadrado no Instagram, LinkedIn e Facebook' }],
+	['post-portrait', 1080, 1350, { en: 'Instagram portrait post', pt: 'Post retrato no Instagram' }],
+	['story', 1080, 1920, { en: 'Stories, Reels, Shorts, WhatsApp status', pt: 'Stories, Reels, Shorts, status do WhatsApp' }],
+] as const;
+const socialThemes = [
+	['spark', l({ en: 'Spark', pt: 'Faísca' })],
+	['ink', l({ en: 'Ink', pt: 'Tinta' })],
+	['paper', l({ en: 'Paper', pt: 'Papel' })],
+	['red', l({ en: 'Red', pt: 'Vermelho' })],
 ] as const;
 const socialText = l({
-	en: { icon: 'Google Play developer icon, and any profile photo: 512 px, no transparency', lang: 'English for rubrion.ai, Portuguese for rubrion.com.br.' },
-	pt: { icon: 'Ícone de desenvolvedor do Google Play e qualquer foto de perfil: 512 px, sem transparência', lang: 'Inglês para rubrion.ai, português para rubrion.com.br.' },
+	en: { icon: 'Icon: Google Play developer icon (512) and profile photos (1024)', lang: 'English for rubrion.ai, Portuguese for rubrion.com.br. Pick a theme; every file below follows it.', theme: 'Theme' },
+	pt: { icon: 'Ícone: ícone de desenvolvedor do Google Play (512) e fotos de perfil (1024)', lang: 'Inglês para rubrion.ai, português para rubrion.com.br. Escolha um tema; todos os arquivos abaixo seguem a escolha.', theme: 'Tema' },
 });
 const head = (n: string, t: string) => ({ n, t });
 const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Logo'), head('04', 'Components'), head('05', 'Motion'), head('06', l({ en: 'Social & stores', pt: 'Redes e lojas' }))];
@@ -245,24 +252,31 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'L
 
 		<section id="social">
 			<h2 class="mb-4 flex items-baseline gap-4 border-b border-hair pb-4"><span class="meta">{sections[5].n}</span><span class="display text-3xl">{sections[5].t}</span></h2>
-			<p class="mb-10 max-w-2xl text-sm text-ink-soft">{socialText.lang}</p>
-			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-				{social.map(([id, ext, w, h, use]) => (
+			<p class="mb-6 max-w-2xl text-sm text-ink-soft">{socialText.lang}</p>
+			<div role="radiogroup" aria-label={socialText.theme} class="mb-10 flex flex-wrap gap-2" data-social-themes>
+				{socialThemes.map(([t, name], i) => (
+					<button type="button" role="radio" aria-checked={i === 0 ? 'true' : 'false'} data-theme-pick={t} class="swatch">
+						<span class={`swatch__dot swatch__dot--${t}`} aria-hidden="true"></span>{name}
+					</button>
+				))}
+			</div>
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2" data-social>
+				{social.map(([id, w, h, use]) => (
 					<div class="card flex flex-col overflow-hidden">
 						<div class="flex flex-1 items-center justify-center bg-[#141413] p-4">
-							<img src={`/brand/social/preview/rubrion-${id}.webp`} alt={l(use)} width={w} height={h} class="h-auto max-h-56 w-auto max-w-full" loading="lazy" decoding="async" />
+							<img src={`/brand/social/preview/rubrion-${id}-spark.webp`} data-t={`/brand/social/preview/rubrion-${id}-{t}.webp`} alt={l(use)} width={w} height={h} class="h-auto max-h-56 w-auto max-w-full" loading="lazy" decoding="async" />
 						</div>
 						<div class="flex items-center justify-between gap-4 border-t border-hair px-4 py-3 text-sm">
 							<span><span class="font-bold">{l(use)}</span><span class="block text-xs text-ink-faint">{w} × {h}</span></span>
-							<span class="flex flex-none gap-4"><a href={`/brand/social/rubrion-${id}-en.${ext}`} download class="link-arrow">EN</a><a href={`/brand/social/rubrion-${id}-pt.${ext}`} download class="link-arrow">PT</a></span>
+							<span class="flex flex-none gap-4"><a href={`/brand/social/rubrion-${id}-spark-en.jpg`} data-t={`/brand/social/rubrion-${id}-{t}-en.jpg`} download class="link-arrow">EN</a><a href={`/brand/social/rubrion-${id}-spark-pt.jpg`} data-t={`/brand/social/rubrion-${id}-{t}-pt.jpg`} download class="link-arrow">PT</a></span>
 						</div>
 					</div>
 				))}
 				<div class="card flex flex-col overflow-hidden">
-					<div class="flex flex-1 items-center justify-center bg-[#141413] p-4"><img src="/brand/social/rubrion-google-play-icon.png" alt="" width="512" height="512" class="h-40 w-40 rounded-md" loading="lazy" /></div>
+					<div class="flex flex-1 items-center justify-center bg-[#141413] p-4"><img src="/brand/social/rubrion-icon-spark-512.png" data-t="/brand/social/rubrion-icon-{t}-512.png" alt="" width="512" height="512" class="h-40 w-40 rounded-md" loading="lazy" /></div>
 					<div class="flex items-center justify-between gap-4 border-t border-hair px-4 py-3 text-sm">
-						<span><span class="font-bold">{socialText.icon}</span><span class="block text-xs text-ink-faint">512 × 512</span></span>
-						<a href="/brand/social/rubrion-google-play-icon.png" download class="link-arrow flex-none">PNG</a>
+						<span><span class="font-bold">{socialText.icon}</span><span class="block text-xs text-ink-faint">PNG</span></span>
+						<span class="flex flex-none gap-4"><a href="/brand/social/rubrion-icon-spark-512.png" data-t="/brand/social/rubrion-icon-{t}-512.png" download class="link-arrow">512</a><a href="/brand/social/rubrion-icon-spark-1024.png" data-t="/brand/social/rubrion-icon-{t}-1024.png" download class="link-arrow">1024</a></span>
 					</div>
 				</div>
 			</div>
@@ -299,6 +313,25 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'L
 		cursor: pointer;
 	}
 	.tab:hover { color: var(--ink); }
+	.swatch {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.45rem 0.9rem;
+		border: 1px solid var(--hair);
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--ink-soft);
+		cursor: pointer;
+	}
+	.swatch:hover { color: var(--ink); }
+	.swatch[aria-checked='true'] { color: var(--ink); border-color: var(--ink); }
+	.swatch__dot { width: 0.9rem; height: 0.9rem; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--hair); }
+	.swatch__dot--spark { background: radial-gradient(circle, #e62b30 38%, #141413 42%); }
+	.swatch__dot--ink { background: radial-gradient(circle, #f3f2ee 38%, #141413 42%); }
+	.swatch__dot--paper { background: radial-gradient(circle, #e62b30 38%, #f3f2ee 42%); }
+	.swatch__dot--red { background: radial-gradient(circle, #ffffff 38%, #e62b30 42%); }
 	.tab[aria-selected='true'] {
 		color: var(--ink);
 		border-bottom-color: var(--color-brand-500);
@@ -329,6 +362,21 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'L
 			next.focus();
 		});
 	});
+	// The kit's theme: every preview and download follows it (data-t has {t}).
+	const picks = [...document.querySelectorAll<HTMLButtonElement>('[data-theme-pick]')];
+	const pick = (b: HTMLButtonElement) => {
+		for (const p of picks) p.setAttribute('aria-checked', String(p === b));
+		const t = b.dataset.themePick!;
+		for (const el of document.querySelectorAll<HTMLElement>('#social [data-t]')) {
+			const v = el.dataset.t!.replace('{t}', t);
+			if (el instanceof HTMLImageElement) el.src = v;
+			else el.setAttribute('href', v);
+		}
+		const ground = t === 'paper' ? '#e9e7e1' : '#141413';
+		for (const box of document.querySelectorAll<HTMLElement>('#social .card > div:first-child')) box.style.background = ground;
+	};
+	picks.forEach((b) => b.addEventListener('click', () => pick(b)));
+
 	const fromHash = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
 	if (fromHash) show(fromHash);
 
