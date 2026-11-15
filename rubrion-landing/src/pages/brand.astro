@@ -90,8 +90,30 @@ const files = [
 	{ kind: 'mark', variants: [['ink', '#F3F2EE'], ['white', '#141413'], ['red', '#F3F2EE']] },
 	{ kind: 'avatar', variants: [['paper'], ['ink'], ['red']] },
 ] as const;
+// public/brand/social, rendered by tools/social.mjs: one file per size and
+// language (-en: rubrion.ai, -pt: rubrion.com.br), text kept inside each
+// platform's safe area. Google Play's developer page takes 24-bit images.
+const social = [
+	['google-play-header', 'jpg', 4096, 2304, { en: 'Google Play developer page: header', pt: 'Página do desenvolvedor no Google Play: cabeçalho' }],
+	['open-graph', 'png', 1200, 630, { en: 'Link previews, LinkedIn and Facebook posts', pt: 'Prévias de links, posts no LinkedIn e Facebook' }],
+	['github-social', 'png', 1280, 640, { en: 'GitHub social preview', pt: 'Prévia social do GitHub' }],
+	['linkedin-company-cover', 'png', 1128, 191, { en: 'LinkedIn company page cover', pt: 'Capa da página da empresa no LinkedIn' }],
+	['linkedin-personal-banner', 'png', 1584, 396, { en: 'LinkedIn profile banner', pt: 'Banner do perfil no LinkedIn' }],
+	['x-header', 'png', 1500, 500, { en: 'X (Twitter) header', pt: 'Cabeçalho do X (Twitter)' }],
+	['facebook-cover', 'png', 1640, 624, { en: 'Facebook page cover', pt: 'Capa da página no Facebook' }],
+	['youtube-banner', 'png', 2560, 1440, { en: 'YouTube channel banner', pt: 'Banner do canal no YouTube' }],
+	['reddit-banner', 'png', 1920, 384, { en: 'Reddit banner, desktop', pt: 'Banner do Reddit, desktop' }],
+	['reddit-mobile-banner', 'png', 1600, 480, { en: 'Reddit banner, mobile', pt: 'Banner do Reddit, celular' }],
+	['post-square', 'png', 1080, 1080, { en: 'Instagram, LinkedIn and Facebook square post', pt: 'Post quadrado no Instagram, LinkedIn e Facebook' }],
+	['post-portrait', 'png', 1080, 1350, { en: 'Instagram portrait post', pt: 'Post retrato no Instagram' }],
+	['story', 'png', 1080, 1920, { en: 'Stories, Reels, Shorts, WhatsApp status', pt: 'Stories, Reels, Shorts, status do WhatsApp' }],
+] as const;
+const socialText = l({
+	en: { icon: 'Google Play developer icon, and any profile photo: 512 px, no transparency', lang: 'English for rubrion.ai, Portuguese for rubrion.com.br.' },
+	pt: { icon: 'Ícone de desenvolvedor do Google Play e qualquer foto de perfil: 512 px, sem transparência', lang: 'Inglês para rubrion.ai, português para rubrion.com.br.' },
+});
 const head = (n: string, t: string) => ({ n, t });
-const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Logo'), head('04', 'Components'), head('05', 'Motion')];
+const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'Logo'), head('04', 'Components'), head('05', 'Motion'), head('06', l({ en: 'Social & stores', pt: 'Redes e lojas' }))];
 ---
 
 <Layout title="Brand guide" description="Rubrion brand: palette, type, mark, components and motion.">
@@ -219,6 +241,31 @@ const sections = [head('01', 'Palette'), head('02', 'Typography'), head('03', 'L
 					</li>
 				))}
 			</ul>
+		</section>
+
+		<section id="social">
+			<h2 class="mb-4 flex items-baseline gap-4 border-b border-hair pb-4"><span class="meta">{sections[5].n}</span><span class="display text-3xl">{sections[5].t}</span></h2>
+			<p class="mb-10 max-w-2xl text-sm text-ink-soft">{socialText.lang}</p>
+			<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+				{social.map(([id, ext, w, h, use]) => (
+					<div class="card flex flex-col overflow-hidden">
+						<div class="flex flex-1 items-center justify-center bg-[#141413] p-4">
+							<img src={`/brand/social/preview/rubrion-${id}.webp`} alt={l(use)} width={w} height={h} class="h-auto max-h-56 w-auto max-w-full" loading="lazy" decoding="async" />
+						</div>
+						<div class="flex items-center justify-between gap-4 border-t border-hair px-4 py-3 text-sm">
+							<span><span class="font-bold">{l(use)}</span><span class="block text-xs text-ink-faint">{w} × {h}</span></span>
+							<span class="flex flex-none gap-4"><a href={`/brand/social/rubrion-${id}-en.${ext}`} download class="link-arrow">EN</a><a href={`/brand/social/rubrion-${id}-pt.${ext}`} download class="link-arrow">PT</a></span>
+						</div>
+					</div>
+				))}
+				<div class="card flex flex-col overflow-hidden">
+					<div class="flex flex-1 items-center justify-center bg-[#141413] p-4"><img src="/brand/social/rubrion-google-play-icon.png" alt="" width="512" height="512" class="h-40 w-40 rounded-md" loading="lazy" /></div>
+					<div class="flex items-center justify-between gap-4 border-t border-hair px-4 py-3 text-sm">
+						<span><span class="font-bold">{socialText.icon}</span><span class="block text-xs text-ink-faint">512 × 512</span></span>
+						<a href="/brand/social/rubrion-google-play-icon.png" download class="link-arrow flex-none">PNG</a>
+					</div>
+				</div>
+			</div>
 		</section>
 	</div>
 
