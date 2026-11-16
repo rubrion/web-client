@@ -24,8 +24,8 @@ ${services.join('\n')}
 
 ## ${c.products.kicker}
 
-- **EdgeLetter**: ${c.products.edgeletter} https://edgeletter.rubrion.ai
-- **CurriClean**: ${c.products.curriclean} https://curriclean.rubrion.ai
+- **EdgeLetter**: ${c.products.edgeletter} https://edgeletter.blog
+- **CurriClean**: ${c.products.curriclean} https://curriclean.com
 - **Rubry / Brad**: ${c.products.rubotText} https://rubry.ai, https://docs.rubry.ai, https://brad.rubrion.ai
 
 ## ${c.work.kicker}

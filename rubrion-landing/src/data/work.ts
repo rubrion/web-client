@@ -10,7 +10,7 @@ import type { L } from './locale';
 export type Credit = 'rubrion' | 'sennatech';
 export type Service = 'platforms' | 'agents' | 'data' | 'sites' | 'products';
 /** What the work is, for grouping and filtering. */
-export type Kind = 'saas' | 'platform' | 'site' | 'library';
+export type Kind = 'saas' | 'site' | 'library';
 export type Mock = 'dashboard' | 'chat' | 'site' | 'mobile' | 'table' | 'report';
 
 export interface Work {
@@ -53,7 +53,7 @@ export const work: Work[] = [
 		slug: 'rubry',
 		name: { en: 'Rubry', pt: 'Rubry' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'saas',
 		kind: { en: 'Your own AI agent, on your infrastructure', pt: 'Seu próprio agente de IA, na sua infraestrutura' },
 		summary: {
 			en: 'An AI agent for your business, on your own infrastructure: we build it in your cloud or on-premise, on the model you choose, or you build it yourself from an open-source template on Cloudflare. rubry.ai is where you test it, next to our agents, and share it on the Agent Hub.',
@@ -128,7 +128,7 @@ export const work: Work[] = [
 		services: ['sites'],
 		url: 'https://law.rubrion.ai',
 		image: 'law-demo',
-		hero: 1,
+		hero: 4,
 	},
 	{
 		slug: 'vet-clinic-template',
@@ -153,7 +153,7 @@ export const work: Work[] = [
 		url: 'https://animally.pet',
 		demo: 'https://vet.rubrion.ai',
 		image: 'animally',
-		hero: 2,
+		hero: 5,
 	},
 	{
 		slug: 'brad',
@@ -177,61 +177,62 @@ export const work: Work[] = [
 		services: ['agents'],
 		url: 'https://brad.rubrion.ai',
 		image: 'brad',
-		hero: 4,
 	},
 	{
 		slug: 'curriclean',
 		name: { en: 'CurriClean', pt: 'CurriClean' },
 		credit: 'rubrion',
 		type: 'saas',
-		kind: { en: 'CV scoring, SaaS', pt: 'Avaliação de currículos, SaaS' },
+		kind: { en: 'AI job-search assistant', pt: 'Assistente de busca de emprego com IA' },
 		summary: {
-			en: 'Paste a role and a CV, get a structured fit score with matched skills, gaps and a recommendation.',
-			pt: 'Cole a vaga e o currículo e receba uma nota de aderência com competências, lacunas e uma recomendação.',
+			en: 'Know how well your CV fits a job before you apply: a fit score, the gaps, a tailored CV and interview questions, then every application on one board.',
+			pt: 'Saiba quanto o seu currículo combina com a vaga antes de se candidatar: nota de aderência, lacunas, currículo adaptado e perguntas de entrevista, e todas as candidaturas em um só quadro.',
 		},
 		problem: {
-			en: 'Screening dozens of CVs by hand is slow, and inconsistent from one reviewer to the next.',
-			pt: 'Triar dezenas de currículos à mão é lento, e muda de um avaliador para outro.',
+			en: 'Job seekers send the same CV everywhere, never learn why it misses, and lose track of where they applied.',
+			pt: 'Quem procura emprego manda o mesmo currículo para todo lado, nunca sabe por que não passa e perde a conta de onde se candidatou.',
 		},
 		built: {
-			en: 'A FastAPI service with schema-validated LLM output stored as JSONB, a Next.js dashboard to track applications, and CV text that is never persisted.',
-			pt: 'Um serviço em FastAPI com saída de LLM validada por schema e guardada em JSONB, um painel em Next.js para acompanhar candidaturas, e o texto do currículo nunca é armazenado.',
+			en: 'A Hono API on Cloudflare Workers with D1 and KV, Workers AI for schema-validated analysis, PDF upload, and a Next.js 16 app on Workers with a drag-and-drop pipeline. Free credit every day, Stripe packs for more, sign-in by email or Google and GitHub, English and Portuguese. The CV is never stored, only a hash of it.',
+			pt: 'Uma API em Hono no Cloudflare Workers com D1 e KV, Workers AI para a análise validada por schema, upload de PDF, e um app em Next.js 16 no Workers com quadro de candidaturas arrastável. Crédito grátis todo dia, pacotes pelo Stripe para mais, login por e-mail ou Google e GitHub, em inglês e português. O currículo nunca é guardado, só um hash dele.',
 		},
-		stack: ['FastAPI', 'Next.js', 'PostgreSQL', 'instructor'],
-		services: ['agents', 'platforms'],
-		url: 'https://curriclean.rubrion.ai',
+		stack: ['Cloudflare Workers', 'Hono', 'D1', 'Workers AI', 'Next.js', 'Stripe'],
+		services: ['agents', 'products'],
+		url: 'https://curriclean.com',
 		image: 'curriclean',
 		repo: 'https://github.com/rubrion/curriclean',
+		hero: 3,
 	},
 	{
 		slug: 'edgeletter',
 		name: { en: 'EdgeLetter', pt: 'EdgeLetter' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'saas',
 		kind: { en: 'Newsletter & blog platform', pt: 'Plataforma de newsletter e blog' },
 		summary: {
-			en: 'Blog, editor, media and newsletter dispatch for a whole publication on one Worker.',
-			pt: 'Blog, editor, mídia e envio de newsletter de uma publicação inteira em um só Worker.',
+			en: 'Write it once, send it to everyone who asked: anyone gets a blog and a newsletter at their own address, free to start.',
+			pt: 'Escreva uma vez e envie para todos que pediram: qualquer pessoa ganha um blog e uma newsletter no próprio endereço, de graça para começar.',
 		},
 		problem: {
-			en: 'Publishing platforms charge more as your list grows. Writers pay a success tax.',
-			pt: 'Plataformas de publicação cobram mais conforme a lista cresce. Quem escreve paga um imposto pelo sucesso.',
+			en: 'Publishing platforms charge more as your list grows, and keep your readers on their domain. Writers pay a success tax.',
+			pt: 'Plataformas de publicação cobram mais conforme a lista cresce e prendem os leitores no domínio delas. Quem escreve paga um imposto pelo sucesso.',
 		},
 		built: {
-			en: 'Astro SSR with D1 and R2: public blog, admin editor, uploader and double opt-in newsletter, one deployment per white-label tenant.',
-			pt: 'Astro SSR com D1 e R2: blog público, editor, envio de mídia e newsletter com confirmação dupla, uma implantação por cliente white-label.',
+			en: 'A self-serve platform on one Cloudflare Worker (Astro SSR, D1, R2, Queues): sign-up gives <handle>.edgeletter.blog, a Markdown editor with media and an optional AI proofread, double opt-in and one-click unsubscribe, queued sending through Resend with a per-recipient ledger, open and click stats, Stripe plans, and custom domains on Pro through Cloudflare for SaaS.',
+			pt: 'Uma plataforma self-service em um só Worker da Cloudflare (Astro SSR, D1, R2, Queues): o cadastro dá <handle>.edgeletter.blog, um editor em Markdown com mídia e revisão opcional por IA, confirmação dupla e descadastro em um clique, envio em fila pela Resend com registro por destinatário, estatísticas de abertura e clique, planos pelo Stripe e domínio próprio no Pro via Cloudflare for SaaS.',
 		},
-		stack: ['Astro', 'Cloudflare Workers', 'D1', 'R2'],
+		stack: ['Astro', 'Cloudflare Workers', 'D1', 'R2', 'Queues', 'Resend', 'Stripe'],
 		services: ['products', 'sites'],
-		url: 'https://edgeletter.rubrion.ai',
+		url: 'https://edgeletter.blog',
 		image: 'edgeletter',
 		repo: 'https://github.com/rubrion/edgeletter',
+		hero: 2,
 	},
 	{
 		slug: 'rubrion-store',
 		name: { en: 'Rubrion Store', pt: 'Rubrion Store' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'site',
 		kind: { en: 'Multi-vendor marketplace', pt: 'Marketplace multivendedor' },
 		summary: {
 			en: 'A marketplace where independent sellers onboard, list and sell under one brand.',
@@ -248,7 +249,6 @@ export const work: Work[] = [
 		stack: ['Medusa', 'Mercur', 'Next.js', 'Docker'],
 		services: ['products'],
 		image: 'rubrion-store',
-		hero: 7,
 	},
 	{
 		slug: 'mondesa',
@@ -378,7 +378,7 @@ export const work: Work[] = [
 		slug: 'rubry-template',
 		name: { en: 'Rubry template', pt: 'Template Rubry' },
 		credit: 'rubrion',
-		type: 'platform',
+		type: 'library',
 		kind: { en: 'Open-source multi-agent template', pt: 'Template multiagente de código aberto' },
 		summary: {
 			en: 'Your own multi-agent assistant on Workers and Mastra: write agents and tools in TypeScript and get an OpenAI-compatible endpoint for rubry.ai, Open WebUI or your app.',
@@ -518,7 +518,6 @@ export const work: Work[] = [
 
 export const kinds: Record<Kind, L> = {
 	saas: { en: 'SaaS', pt: 'SaaS' },
-	platform: { en: 'White-label & tools', pt: 'White-label e ferramentas' },
 	site: { en: 'Websites & portals', pt: 'Sites e portais' },
 	library: { en: 'Libraries', pt: 'Bibliotecas' },
 };

@@ -203,8 +203,8 @@ check(!(await js(`!!document.querySelector(".dg") || document.documentElement.cl
 
 console.log("\nwork catalogue");
 await load("/work", 1440);
-const groups = await js(`[...document.querySelectorAll("[id='saas'],[id='platform'],[id='site'],[id='library']")].map((g) => g.id)`);
-check(groups.length === 4, "grouped by type", groups.join(", "));
+const groups = await js(`[...document.querySelectorAll("[id='saas'],[id='site'],[id='library']")].map((g) => g.id)`);
+check(groups.length === 3, "grouped by type", groups.join(", "));
 check(await js(`!!document.querySelector("#agents")`), "Rubry platform shown");
 const visible = `[...document.querySelectorAll("li[data-by]")].filter((el) => el.getClientRects().length).map((el) => el.dataset.by)`;
 const total = (await js(visible)).length;
