@@ -75,7 +75,6 @@ export const work: Work[] = [
 		repo: 'https://github.com/rubrion/rubry',
 		heroImage: 'rubry-hero',
 		hero: 0,
-		single: true,
 	},
 	{
 		slug: 'agent-libraries',
@@ -103,7 +102,6 @@ export const work: Work[] = [
 		demo: 'https://beholder.rubrion.ai',
 		heroImage: 'agent-libraries-hero',
 		hero: 1,
-		single: true,
 		parts: ['mastra-cloudflare', 'beholder'],
 	},
 	{
